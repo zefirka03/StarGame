@@ -2,39 +2,32 @@
 #include <entt.hpp>
 
 #include "../render/Renderer2d.h"
-#include "../render/Camera2d.h"
+
+#include "System.h"
 
 namespace air {
-
-	//class System {
-	//public:
-	//	virtual void update(float _deltaTime) = 0;
-	//
-	//private:
-	//	Scene* scn;
-	//};
-	//
-	//class System_Render : public System {
-	//public:
-	//	void update(float _deltaTime) override {
-	//		scn->reg
-	//	}
-	//};
-
 	class Entity;
 
 	class Scene {
-		friend class System;
 		friend class Entity;
 	public:
 		Scene();
 		Entity createEntity();
+
+		template<class T, class ...Args>
+		void addSystem(Args&&... args) {
+			systems.emplace_back(new T(std::forward<Args>(args)...));
+		}
+
 		void onStart();
-		void onUpdate(float _deltaTime, Camera2d& _cam);
+		void onUpdate(float _deltaTime);
+
 		~Scene();
 	private:
+		std::vector<std::shared_ptr<System>> systems;
 		entt::registry reg;
-		Renderer2d* render;
 	};
+
+
 
 }

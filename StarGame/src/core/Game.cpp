@@ -23,7 +23,7 @@ namespace air {
 
 		init_imgui();
 
-		glfwSwapInterval(0);
+		glfwSwapInterval(1);
 	}
 
 	Game& Game::getInstance() {
@@ -39,7 +39,7 @@ namespace air {
 		void OnUpdate(float deltaTime) {
 			if (Input::isKeyPressed(GLFW_KEY_SPACE)) {
 				t += deltaTime * 5;
-				getComponent<C_Sprite>().position += glm::vec2(sin(t) * 10, 0);
+				getComponent<C_Sprite>().position += glm::vec2(sin(t) * 500 * deltaTime, 0);
 			}
 		}
 
@@ -66,33 +66,49 @@ namespace air {
 
 	void Game::run() {
 		Scene scn;
+		Entity ent_camera = scn.createEntity();
+		auto& camera = ent_camera.addComponent<C_Camera2d>(1280.f, 720.f);
+		ent_camera.addScript<S_Camera2dController>();
+
 		//Entity ent1 = scn.createEntity();
 		//Entity ent2 = scn.createEntity();
+		//
 		//auto& sp1 = ent1.addComponent<C_Sprite>();
 		//auto& sp2 = ent2.addComponent<C_Sprite>();
 		//sp1 = { glm::vec2(100), glm::vec2(100), glm::vec4(1, 0, 0, 1)};
 		//sp2 = { glm::vec2(0), glm::vec2(100), glm::vec4(0, 1, 0, 1) };
+		//ent1.addScript<S_Controller>();
 
-		for (int i = 0; i < 500; ++i) {
-			for (int j = 0; j < 500; ++j) {
+		for (int i = 0; i < 360; ++i) {
+			for (int j = 0; j < 640; ++j) {
 				auto ent1 = scn.createEntity();
-				ent1.addComponent<C_Sprite>() = { glm::vec2(j * 5, i * 5), glm::vec2(2), glm::vec4(1, 0, 0, 1) };
+				ent1.addComponent<C_Sprite>() = { glm::vec2(j * 2 , i * 2), glm::vec2(1), glm::vec4(1, 0, 0, 1) };
 			}
 		}
 		
-
-		Camera2d cam(w, h);
+		bool swpInt = 1;
 
 		scn.onStart();
 
 		while (!glfwWindowShouldClose(window)) {
+			double deltaTime = ts.elapsed_ms() * 0.001f;
+			ts.restart();
+
 			glClear(GL_COLOR_BUFFER_BIT);
-			glfwPollEvents();
+			Input::pollEvents();
+
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
 
-			scn.onUpdate(1.f / 60.f, cam);
+			scn.onUpdate(deltaTime);
+
+			ImGui::Begin("debug");
+			{
+				if (ImGui::Checkbox("swapInterval", &swpInt))
+					glfwSwapInterval(swpInt);
+			}
+			ImGui::End();
 
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

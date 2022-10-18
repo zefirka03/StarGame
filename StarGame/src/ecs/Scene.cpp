@@ -1,11 +1,10 @@
 #include "Scene.h"
 #include "Entity.h"
-#include "../Components.h"
 #include "../core/debug.h"
 
 namespace air {
 	Scene::Scene() {
-		render = new Renderer2d(300000);
+		this->addSystem<_System_Render>(300000);
 	}
 
 	Entity Scene::createEntity() {
@@ -25,7 +24,7 @@ namespace air {
 		}
 	}
 
-	void Scene::onUpdate(float _deltaTime, Camera2d& _cam) {
+	void Scene::onUpdate(float _deltaTime) {
 		//Update scripts
 		{
 			//Timer t1("Update scripts");
@@ -36,25 +35,11 @@ namespace air {
 			});
 		}
 
-		//Render system
-		{
-
-			//Timer t1("Render system");
-			auto render_view = reg.view<C_Sprite>();
-			{
-				//Timer t2("Draw");
-				render_view.each([&](auto& sprite) {
-					render->draw({ sprite.position, sprite.size, sprite.color });
-				});
-			}
-			{
-				//Timer t2("Submit");
-				render->submit(_cam);
-			}
+		for (auto it = systems.begin(); it != systems.end(); ++it) {
+			(*it)->update(_deltaTime, reg);
 		}
 	}
 
 	Scene::~Scene() {
-		delete render;
 	}
 }

@@ -4,11 +4,18 @@
 
 #include "../ecs/air_ecs.h"
 #include "../render/air_render.h"
-
-#include "../Components.h"
+#include "../scripts/air_scripts.h"
 
 namespace air {
 	class Game {
+	private:
+		static Game* instance;
+
+		GLFWwindow* window;
+
+		const char* title;
+		int w, h;
+		TimeStep ts;
 	public:
 		Game(const char* _title, int _w, int _h);
 		void run();
@@ -18,13 +25,6 @@ namespace air {
 
 		~Game();
 	private:
-		static Game* instance;
-
-		GLFWwindow* window;
-
 		void init_imgui();
-
-		const char* title;
-		int w, h;
 	};
 }

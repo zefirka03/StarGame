@@ -147,6 +147,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\Input.cpp" />
+    <ClCompile Include="src\scripts\S_Camera2dController.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui_draw.cpp" />
@@ -154,7 +156,6 @@
     <ClCompile Include="src\third-party\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="src\render\Camera2d.cpp" />
     <ClCompile Include="src\render\Shader.cpp" />
     <ClCompile Include="src\render\Renderer2d.cpp" />
     <ClCompile Include="src\ecs\Scene.cpp" />
@@ -164,8 +165,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\air.h" />
-    <ClInclude Include="src\Components.h" />
     <ClInclude Include="src\core\Input.h" />
+    <ClInclude Include="src\ecs\System.h" />
     <ClInclude Include="src\glIncl.h" />
     <ClInclude Include="src\third-party\imgui\imconfig.h" />
     <ClInclude Include="src\third-party\imgui\imgui.h" />
@@ -175,7 +176,7 @@
     <ClInclude Include="src\third-party\imgui\imstb_rectpack.h" />
     <ClInclude Include="src\third-party\imgui\imstb_textedit.h" />
     <ClInclude Include="src\third-party\imgui\imstb_truetype.h" />
-    <ClInclude Include="src\render\Camera2d.h" />
+    <ClInclude Include="src\scripts\air_scripts.h" />
     <ClInclude Include="src\render\Shader.h" />
     <ClInclude Include="src\render\air_render.h" />
     <ClInclude Include="src\render\Renderer2d.h" />
