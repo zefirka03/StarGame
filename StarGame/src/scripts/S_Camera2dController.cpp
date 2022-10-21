@@ -9,7 +9,7 @@ namespace air {
 			delta_m = Input::getCursorPos() - prev_m;
 			prev_m = Input::getCursorPos();
 
-			cam_instance->move((glm::vec2(-1.f) / cam_instance->transform.scale) * delta_m);
+			cam_instance->move({ (glm::vec2(-1.f) / cam_instance->transform.scale) * delta_m, 0 });
 		}
 		else prev_m = Input::getCursorPos();
 

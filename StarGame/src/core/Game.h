@@ -17,6 +17,8 @@ namespace air {
 		int w, h;
 		TimeStep ts;
 	public:
+
+		TextureManager textureManager;
 		Game(const char* _title, int _w, int _h);
 		void run();
 

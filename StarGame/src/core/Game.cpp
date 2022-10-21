@@ -23,6 +23,9 @@ namespace air {
 
 		init_imgui();
 
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+
 		glfwSwapInterval(1);
 	}
 
@@ -34,21 +37,21 @@ namespace air {
 		return window;
 	}
 
-	class S_Controller : public Script {
-	public:
-		void OnUpdate(float deltaTime) {
-			if (Input::isKeyPressed(GLFW_KEY_SPACE)) {
-				t += deltaTime * 5;
-				getComponent<C_Sprite>().position += glm::vec2(sin(t) * 500 * deltaTime, 0);
-			}
-		}
-
-		void OnCreate()  {
-			getComponent<C_Sprite>().position = glm::vec2(300);
-		}
-	private:
-		float t = 0;
-	};
+	//class S_Controller : public Script {
+	//public:
+	//	void OnUpdate(float deltaTime) {
+	//		if (Input::isKeyPressed(GLFW_KEY_SPACE)) {
+	//			t += deltaTime * 5;
+	//			getComponent<C_Sprite>().position += glm::vec2(sin(t) * 500 * deltaTime, 0);
+	//		}
+	//	}
+	//
+	//	void OnCreate()  {
+	//		getComponent<C_Sprite>().position = glm::vec2(300);
+	//	}
+	//private:
+	//	float t = 0;
+	//};
 
 	class S_color : public Script {
 	public:
@@ -66,23 +69,28 @@ namespace air {
 
 	void Game::run() {
 		Scene scn;
+
 		Entity ent_camera = scn.createEntity();
 		auto& camera = ent_camera.addComponent<C_Camera2d>(1280.f, 720.f);
 		ent_camera.addScript<S_Camera2dController>();
 
 		//Entity ent1 = scn.createEntity();
 		//Entity ent2 = scn.createEntity();
-		//
+		
 		//auto& sp1 = ent1.addComponent<C_Sprite>();
 		//auto& sp2 = ent2.addComponent<C_Sprite>();
-		//sp1 = { glm::vec2(100), glm::vec2(100), glm::vec4(1, 0, 0, 1)};
-		//sp2 = { glm::vec2(0), glm::vec2(100), glm::vec4(0, 1, 0, 1) };
-		//ent1.addScript<S_Controller>();
+		//ent1.getComponent<C_Transform2d>() = { glm::vec2(0, 0), glm::vec2(100,100) };
+		//ent2.getComponent<C_Transform2d>() = { glm::vec2(100, 100), glm::vec2(100, 100) };
 
-		for (int i = 0; i < 360; ++i) {
-			for (int j = 0; j < 640; ++j) {
+		textureManager.loadTexture("img/person.png", "person1");
+		textureManager.loadTexture("img/1.png", "person2");
+		
+
+		for (int i = 0; i < 1000; ++i) {
+			for (int j = 0; j < 230; ++j) {
 				auto ent1 = scn.createEntity();
-				ent1.addComponent<C_Sprite>() = { glm::vec2(j * 2 , i * 2), glm::vec2(1), glm::vec4(1, 0, 0, 1) };
+				if(i%2)ent1.addComponent<C_Sprite>() = {glm::vec3(j * 2 , i * 2,0), glm::vec2(1) , glm::vec2(0), glm::vec2(1), 0.f, glm::vec4(1, 1, 1, 1), glm::vec4(0,0,1,1),textureManager.textures_names["person1"]};
+				else ent1.addComponent<C_Sprite>() = { glm::vec3(j * 2 , i * 2,0), glm::vec2(1) , glm::vec2(0), glm::vec2(1), 0.f, glm::vec4(1, 1, 1, 1), glm::vec4(0,0,1,1),textureManager.textures_names["person2"] };
 			}
 		}
 		

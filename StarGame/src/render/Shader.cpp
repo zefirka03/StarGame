@@ -151,27 +151,35 @@ namespace air {
 		this->_inited = true;
 	}
 
+	GLuint Shader::request_location(const char* path) {
+		GLuint loc;
+		if (locationsCache.find(path) != locationsCache.end())
+			loc = locationsCache[path];
+		else loc = locationsCache.insert({ path, glGetUniformLocation(this->prog_id, path) }).second;
+		return loc;
+	}
+
 	void Shader::setMatrix4f(glm::mat4 val, const char* path) {
 		this->use();
-		glUniformMatrix4fv(glGetUniformLocation(this->prog_id, path), 1, GL_FALSE, glm::value_ptr(val));
+		glUniformMatrix4fv(request_location(path), 1, GL_FALSE, glm::value_ptr(val));
 		this->unuse();
 	}
 
 	void Shader::setFloat(GLfloat val, const char* path) {
 		this->use();
-		glUniform1f(glGetUniformLocation(this->prog_id, path), val);
+		glUniform1f(glGetUniformLocation(request_location(path), path), val);
 		this->unuse();
 	}
 
 	void Shader::setVector2f(glm::vec2 val, const char* path) {
 		this->use();
-		glUniform2f(glGetUniformLocation(this->prog_id, path), val.x, val.y);
+		glUniform2f(glGetUniformLocation(request_location(path), path), val.x, val.y);
 		this->unuse();
 	}
 
 	void Shader::setVector4f(glm::vec4 val, const char* path) {
 		this->use();
-		glUniform4f(glGetUniformLocation(this->prog_id, path), val.r, val.g, val.b, val.a);
+		glUniform4f(glGetUniformLocation(request_location(path), path), val.r, val.g, val.b, val.a);
 		this->unuse();
 	}
 

@@ -7,6 +7,8 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <unordered_map>
+#include <string>
 
 #define AIR_DEBUG 
 
@@ -29,6 +31,7 @@ namespace air {
         bool isInited();
         GLuint getId();
 
+
         void setMatrix4f(glm::mat4 val, const char* path);
         void setVector2f(glm::vec2 val, const char* path);
         void setVector4f(glm::vec4 val, const char* path);
@@ -36,8 +39,12 @@ namespace air {
 
         ~Shader();
     private:
+        std::unordered_map<std::string_view, GLuint> locationsCache;
+
         GLuint prog_id = 0;
         bool _inited;
+
+        GLuint request_location(const char* path);
     };
 
 }

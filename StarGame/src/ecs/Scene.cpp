@@ -22,6 +22,10 @@ namespace air {
 				}
 			});
 		}
+
+		for (auto it = systems.begin(); it != systems.end(); ++it) {
+			(*it)->init(reg);
+		}
 	}
 
 	void Scene::onUpdate(float _deltaTime) {
@@ -36,7 +40,7 @@ namespace air {
 		}
 
 		for (auto it = systems.begin(); it != systems.end(); ++it) {
-			(*it)->update(_deltaTime, reg);
+			(*it)->update(_deltaTime);
 		}
 	}
 

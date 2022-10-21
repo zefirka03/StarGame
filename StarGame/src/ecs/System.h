@@ -8,7 +8,10 @@ namespace air {
 
 	class System {
 	public:
-		virtual void update(float _deltaTime, entt::registry& reg) = 0;
+		virtual void init(entt::registry& _reg) = 0;
+		virtual void update(float _deltaTime) = 0;
+	protected:
+		entt::registry* reg;
 	};
 
 
@@ -17,25 +20,33 @@ namespace air {
 		_System_Render(air_sprite_id sprite_count) {
 			render = new Renderer2d(sprite_count);
 		}
-		void update(float _deltaTime, entt::registry& reg) override {
+		void init(entt::registry& _reg) override{
+			reg = &_reg;
+		}
+		void update(float _deltaTime) override {
 
 			C_Camera2d* main_camera = nullptr;
 
-			reg.view<C_Camera2d>().each([&](auto& cam) {
+			reg->view<C_Camera2d>().each([&](auto& cam) {
 				main_camera = &cam;
 			});
-			//Timer t1("Render system");
-			auto render_view = reg.view<C_Sprite>();
 			{
-				//Timer t2("Draw");
-				render_view.each([&](auto& sprite) {
-					render->draw({ sprite.position, sprite.size, sprite.color });
-				});
+				//Timer t1("Render system");
+				auto reg_render = reg->view<C_Sprite>();
+				{
+					//Timer t2("Draw");
+					reg_render.each([&](C_Sprite& sprite) {
+						
+						//auto& transform = reg_render.get<C_Transform2d>(entity);
+						render->draw({ sprite.transform, sprite.color, sprite.textureRect, sprite.tex});
+					});
+				}
+				{
+					//Timer t2("Submit");
+					render->submit(*main_camera);
+				}
 			}
-			{
-				//Timer t2("Submit");
-				render->submit(*main_camera);
-			}
+			//std::cout << '\n';
 		}
 		~_System_Render() {
 			delete render;
