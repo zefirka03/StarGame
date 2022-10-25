@@ -1,7 +1,7 @@
 #pragma once
 #include "../glIncl.h"
 #include "../ecs/air_ecs.h"
-#include "../components/Transform2d.h"
+#include "../components/C_Transform2d.h"
 #include "../render/Renderer2d.h"
 #include "../core/Input.h"
 

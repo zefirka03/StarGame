@@ -6,9 +6,9 @@ namespace air {
 	class Component {
 		friend class Entity;
 	public:
-		Entity entity() {
+		Entity* entity() {
 			return _gameObject;
 		}
-		Entity _gameObject;
+		Entity* _gameObject;
 	};
 }

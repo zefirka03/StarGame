@@ -167,7 +167,8 @@
     <ClCompile Include="src\render\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\components\Transform2d.h" />
+    <ClInclude Include="src\components\air_components.h" />
+    <ClInclude Include="src\components\C_Transform2d.h" />
     <ClInclude Include="src\ecs\Component.h" />
     <ClInclude Include="src\physics\PhysicsQuadTree.h" />
     <ClInclude Include="src\air.h" />
@@ -175,6 +176,7 @@
     <ClInclude Include="src\ecs\System.h" />
     <ClInclude Include="src\glIncl.h" />
     <ClInclude Include="src\render\shaders\RectangleShader.shader" />
+    <ClInclude Include="src\systems\System_Render.h" />
     <ClInclude Include="src\third-party\imgui\imconfig.h" />
     <ClInclude Include="src\third-party\imgui\imgui.h" />
     <ClInclude Include="src\third-party\imgui\imgui_impl_glfw.h" />

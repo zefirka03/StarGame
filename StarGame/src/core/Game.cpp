@@ -95,7 +95,7 @@ namespace air {
 			bbox.transform.position = glm::vec3(Input::getCursorPos(), 0);
 			//std::cout << bbox.colliders.size() << '\n';
 			for (int i = 0; i < bbox.colliders.size(); i++) {
-				bbox.colliders[i]->_gameObject.getComponent<C_Sprite>().color = glm::vec4(0.5);
+				bbox.colliders[i]->_gameObject->getComponent<C_Sprite>().color = glm::vec4(0.5);
 				 //bbox.colliders[i]->_gameObject->getComponent<C_Transform2d>().transform.position = glm::vec3(0);
 			}
 		}
@@ -135,7 +135,7 @@ namespace air {
 		auto& bbx1 = ent1.addComponent<C_BoundingBox>(); 
 		
 		//sp1 = C_Sprite(glm::vec4(1, 1, 1, 1), glm::vec4(0,0,1,1), TM.getTexture("3"));
-		tr1.entity().getComponent<C_Sprite>() = C_Sprite(glm::vec4(1, 1, 1, 1), glm::vec4(0, 0, 1, 1), TM.getTexture("4"));
+		tr1.entity()->getComponent<C_Sprite>() = C_Sprite(glm::vec4(1, 1, 1, 1), glm::vec4(0, 0, 1, 1), TM.getTexture("4"));
 		tr1.transform = Transform2d( glm::vec3(0,  0, 0), glm::vec2(100, 100) );
 		bbx1.transform = Transform2d( glm::vec3(0, 0, 0), glm::vec2(100, 100) );
 

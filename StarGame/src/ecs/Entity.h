@@ -18,7 +18,7 @@ namespace air {
 			static_assert(std::is_base_of<Component, T>::value, "AIR: You are trying to add Class as Component to an Entity, but it is not inherited from Component!");
 
 			auto& it = scene->reg.emplace<T>(entity_handle, std::forward<Args>(args)...);
-			it._gameObject = Entity(entity_handle, _scene);
+			it._gameObject = this;
 			return it;
 		}
 

@@ -1,7 +1,7 @@
 #include "Scene.h"
 #include "Entity.h"
 #include "../core/debug.h"
-#include "../components/Transform2d.h"
+#include "../components/C_Transform2d.h"
 
 namespace air {
 	Scene::Scene() {
