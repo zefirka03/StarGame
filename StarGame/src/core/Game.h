@@ -5,6 +5,7 @@
 #include "../ecs/air_ecs.h"
 #include "../render/air_render.h"
 #include "../scripts/air_scripts.h"
+#include "../physics/PhysicsQuadTree.h"
 
 namespace air {
 	class Game {
@@ -17,8 +18,6 @@ namespace air {
 		int w, h;
 		TimeStep ts;
 	public:
-
-		TextureManager textureManager;
 		Game(const char* _title, int _w, int _h);
 		void run();
 

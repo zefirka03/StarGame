@@ -11,3 +11,5 @@
 #include <gtc/type_ptr.hpp>
 #include <gtx/transform.hpp> 
 #include <glm.hpp>
+
+#include <SOIL.h>

@@ -15,15 +15,23 @@ namespace air {
 		Entity createEntity();
 
 		template<class T, class ...Args>
-		void addSystem(Args&&... args) {
-			systems.emplace_back(new T(std::forward<Args>(args)...));
+		T* addSystem(Args&&... args) {
+			T* it = new T(std::forward<Args>(args)...);
+			it->reg = &reg;
+			it->scene = this;
+			systems.emplace_back(it);
+			return it;
 		}
 
 		void onStart();
 		void onUpdate(float _deltaTime);
 
+		TextureManager& getTextureManager();
+
 		~Scene();
+
 	private:
+		TextureManager textureManager;
 		std::vector<std::shared_ptr<System>> systems;
 		entt::registry reg;
 	};

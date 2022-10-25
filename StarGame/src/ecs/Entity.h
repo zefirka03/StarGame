@@ -1,6 +1,8 @@
 #pragma once
 #include <entt.hpp>
 #include "Scene.h"
+#include "Component.h"
+
 
 namespace air {
 	class Script;
@@ -13,7 +15,11 @@ namespace air {
 
 		template<class T, class ...Args>
 		T& addComponent(Args&&... args) {
-			return scene->reg.emplace<T>(entity_handle, std::forward<Args>(args)...);
+			static_assert(std::is_base_of<Component, T>::value, "AIR: You are trying to add Class as Component to an Entity, but it is not inherited from Component!");
+
+			auto& it = scene->reg.emplace<T>(entity_handle, std::forward<Args>(args)...);
+			it._gameObject = Entity(entity_handle, _scene);
+			return it;
 		}
 
 		template<class ...T>
@@ -44,7 +50,7 @@ namespace air {
 
 		~Entity();
 	private:
-		struct _C_NativeScriptComponent {
+		struct _C_NativeScriptComponent : public Component {
 			std::vector<std::shared_ptr<Script>> Instances;
 
 			template<typename T>

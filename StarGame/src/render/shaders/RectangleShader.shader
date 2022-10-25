@@ -6,7 +6,7 @@ layout(location = 2) in vec2 origin;
 layout(location = 3) in vec2 scale;
 layout(location = 4) in float rotation;
 layout(location = 5) in vec4 color;
-layout(location = 6) in vec4 texRect;
+layout(location = 6) in float borderThickness;
 
 out vec3 _position;
 out vec2 _size;
@@ -14,7 +14,7 @@ out vec4 _color;
 out vec2 _origin;
 out vec2 _scale;
 out float _rotation;
-out vec4 _texRect;
+out float _borderThickness;
 
 void main() {
     gl_Position = vec4(0, 0, 1.0, 1.0);
@@ -24,7 +24,7 @@ void main() {
     _scale = scale;
     _rotation = rotation;
     _color = color;
-    _texRect = texRect;
+    _borderThickness = borderThickness;
 }
 
 ~~geometry~~
@@ -38,12 +38,14 @@ in vec4 _color[];
 in vec2 _origin[];
 in vec2 _scale[];
 in float _rotation[];
-in vec4 _texRect[];
+in float _borderThickness[];
 
 uniform mat4 proj;
 
 out vec2 f_texture_coord;
 out vec4 f_color;
+out vec2 f_size;
+out float f_borderThickness;
 
 void main() {
     vec2 ps;
@@ -51,26 +53,34 @@ void main() {
         sin(_rotation[0]), cos(_rotation[0]));
 
     ps = gl_in[0].gl_Position.xy - _origin[0] + vec2(0.0, 0.0);
-    f_texture_coord = vec2(_texRect[0][0], _texRect[0][1]);
+    f_texture_coord = vec2(0, 0);
     f_color = _color[0];
+    f_size = _size[0];
+    f_borderThickness = _borderThickness[0];
     gl_Position = proj * vec4(_position[0].xy + rot_mat * (_scale[0] * ps), _position[0].z, 1);
     EmitVertex();
 
     ps = gl_in[0].gl_Position.xy - _origin[0] + vec2(_size[0].x, 0.0);
-    f_texture_coord = vec2(_texRect[0][0] + _texRect[0][2], _texRect[0][1]);
+    f_texture_coord = vec2(1, 0);
     f_color = _color[0];
+    f_size = _size[0];
+    f_borderThickness = _borderThickness[0];
     gl_Position = proj * vec4(_position[0].xy + rot_mat * (_scale[0] * ps), _position[0].z, 1);
     EmitVertex();
 
     ps = gl_in[0].gl_Position.xy - _origin[0] + vec2(0.0, _size[0].y);
-    f_texture_coord = vec2(_texRect[0][0], _texRect[0][1] + _texRect[0][3]);
+    f_texture_coord = vec2(0, 1);
     f_color = _color[0];
+    f_size = _size[0];
+    f_borderThickness = _borderThickness[0];
     gl_Position = proj * vec4(_position[0].xy + rot_mat * (_scale[0] * ps), _position[0].z, 1);
     EmitVertex();
 
     ps = gl_in[0].gl_Position.xy - _origin[0] + vec2(_size[0].x, _size[0].y);
-    f_texture_coord = vec2(_texRect[0][0] + _texRect[0][2], _texRect[0][1] + _texRect[0][3]);
+    f_texture_coord = vec2(1, 1);
     f_color = _color[0];
+    f_size = _size[0];
+    f_borderThickness = _borderThickness[0];
     gl_Position = proj * vec4(_position[0].xy + rot_mat * (_scale[0] * ps), _position[0].z, 1);
     EmitVertex();
 
@@ -84,8 +94,11 @@ uniform sampler2D tex;
 out vec4 out_color;
 in vec2 f_texture_coord;
 in vec4 f_color;
+in vec2 f_size;
+in float f_borderThickness;
 
 void main() {
-   // out_color = f_color;
-    out_color = f_color*texture(tex, f_texture_coord);
+    // out_color = f_color;
+    vec4 bordParams = vec4(vec2(f_borderThickness, f_borderThickness) / f_size, vec2(f_size.x - f_borderThickness,f_size.y - f_borderThickness)/ f_size);
+    out_color = vec4(f_color.xyz,((f_texture_coord.x < bordParams[0] || f_texture_coord.y < bordParams[1] || f_texture_coord.x > bordParams[2] || f_texture_coord.y > bordParams[3]) ? 1 : 0));
 }

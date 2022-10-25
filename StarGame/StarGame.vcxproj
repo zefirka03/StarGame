@@ -147,7 +147,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\physics\PhysicsQuadTree.cpp" />
     <ClCompile Include="src\core\Input.cpp" />
+    <ClCompile Include="src\render\Renderer2dRectangles.cpp" />
     <ClCompile Include="src\scripts\S_Camera2dController.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui_demo.cpp" />
@@ -162,12 +164,17 @@
     <ClCompile Include="src\ecs\Entity.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\render\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\components\Transform2d.h" />
+    <ClInclude Include="src\ecs\Component.h" />
+    <ClInclude Include="src\physics\PhysicsQuadTree.h" />
     <ClInclude Include="src\air.h" />
     <ClInclude Include="src\core\Input.h" />
     <ClInclude Include="src\ecs\System.h" />
     <ClInclude Include="src\glIncl.h" />
+    <ClInclude Include="src\render\shaders\RectangleShader.shader" />
     <ClInclude Include="src\third-party\imgui\imconfig.h" />
     <ClInclude Include="src\third-party\imgui\imgui.h" />
     <ClInclude Include="src\third-party\imgui\imgui_impl_glfw.h" />
@@ -185,9 +192,10 @@
     <ClInclude Include="src\ecs\air_ecs.h" />
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\ecs\Scene.h" />
+    <ClInclude Include="src\render\TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\render\shaders\shader.shader" />
+    <None Include="src\render\shaders\SpriteShader.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

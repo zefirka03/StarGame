@@ -2,43 +2,23 @@
 #include "../core/debug.h"
 #include "../glIncl.h"
 
-#include <SOIL.h>
 #include <vector>
 #include <map>
 #include <unordered_map>
 
 #include "Shader.h" 
+#include "TextureManager.h"
+#include "../ecs/System.h"
+
+#include "../components/C_Transform2d.h"
+#include "../ecs/Component.h"
 	
 typedef uint32_t	air_sprite_id;
-typedef GLuint		air_texture_id;
 
 constexpr air_sprite_id MAX_AVALIABLE_SPRITE_COUNT = 1500000;
 
-
 namespace air {
 	struct C_Camera2d;
-
-	struct Texture {
-		air_texture_id id;
-		uint32_t spritesCount = 0;
-	};
-
-	struct TextureManager {
-		void loadTexture(const char* path, const char* name);
-		std::unordered_map<std::string, Texture*> textures_path;
-		std::unordered_map<std::string, Texture*> textures_names;
-		~TextureManager();
-	private:
-		air_texture_id _last_id = 0;
-	};
-
-	struct Transform2d {
-		glm::vec3 position = glm::vec3(0);
-		glm::vec2 size = glm::vec2(1);
-		glm::vec2 origin = glm::vec2(0);
-		glm::vec2 scale = glm::vec2(1);
-		float rotation = 0;
-	};
 
 	class Renderer2d {
 		struct SpriteInstance;
@@ -64,8 +44,6 @@ namespace air {
 			Texture* tex;
 		};
 		
-		
-		
 		SpriteInstance* drawQueue;
 		//last id in drawQueue
 		size_t draw_it;
@@ -75,20 +53,45 @@ namespace air {
 		GLuint vbo_id;
 		GLuint vao_id;
 
-		Shader* shdr;
+		Shader* spriteShader;
 	};
 
-	struct C_Sprite {
-		Transform2d transform;
+	class Renderer2dRectangles {
+		struct RectangleInstance;
+	public:
+		Renderer2dRectangles(air_sprite_id _rectangles_count);
+		void draw(const RectangleInstance& _vert);
 
-		glm::vec4 color;
-		glm::vec4 textureRect;
+		void submit(C_Camera2d& cam);
+		~Renderer2dRectangles();
+	private:
+		static bool sort_comparator(RectangleInstance const& a, RectangleInstance const& b) {
+			return a.transform.position.z < b.transform.position.z;
+		}
 
-		Texture* tex;
+		struct RectangleInstance {
+			Transform2d transform;
+
+			glm::vec4 color;
+			float borderThickness;
+		};
+
+		RectangleInstance* drawQueue;
+		//last id in drawQueue
+		size_t draw_it;
+
+		air_sprite_id maxRectanglesCount;
+
+		GLuint vbo_id;
+		GLuint vao_id;
+
+		Shader* rectangleShader;
 	};
 
 
-	struct C_Camera2d {
+
+
+	struct C_Camera2d : public Component {
 		C_Camera2d() = default;
 		C_Camera2d(float _w, float _h) : width(_w), height(_h) {
 			width = _w;
@@ -116,11 +119,46 @@ namespace air {
 			transform.scale *= _factor;
 		}
 
-		float width, height;
+		float width = 100, height = 100;
 		Transform2d transform;
 
-		glm::mat4 projection;
-		glm::mat4 view;
+		glm::mat4 projection = glm::mat4(0);
+		glm::mat4 view = glm::mat4(0);
+	};
+
+
+	class _System_Render : public System {
+	public:
+		_System_Render(air_sprite_id sprite_count) {
+			render = new Renderer2d(sprite_count);
+		}
+		void init() override {
+		}
+		void update(float _deltaTime) override {
+
+			C_Camera2d* main_camera = nullptr;
+
+			reg->view<C_Camera2d>().each([&](auto& cam) {
+				main_camera = &cam;
+			});
+				
+			auto reg_render = reg->view<C_Sprite, C_Transform2d>();
+
+			reg_render.each([&](C_Sprite& sprite, C_Transform2d& transform) {
+
+				render->draw({ transform.transform, sprite.color, sprite.textureRect, sprite.tex });
+			});
+
+			render->submit(*main_camera);
+		}
+		void terminate() override {
+			delete render;
+		}
+		~_System_Render() {
+			delete render;
+		}
+	private:
+		Renderer2d* render;
 	};
 
 }

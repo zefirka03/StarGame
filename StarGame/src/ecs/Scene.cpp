@@ -1,14 +1,16 @@
 #include "Scene.h"
 #include "Entity.h"
 #include "../core/debug.h"
+#include "../components/Transform2d.h"
 
 namespace air {
 	Scene::Scene() {
-		this->addSystem<_System_Render>(300000);
+		this->addSystem<_System_Render>(300000+10);
 	}
 
 	Entity Scene::createEntity() {
 		Entity ent(reg.create(), this);
+		ent.addComponent<C_Transform2d>();
 		return ent;
 	}
 
@@ -24,7 +26,7 @@ namespace air {
 		}
 
 		for (auto it = systems.begin(); it != systems.end(); ++it) {
-			(*it)->init(reg);
+			(*it)->init();
 		}
 	}
 
@@ -32,7 +34,7 @@ namespace air {
 		//Update scripts
 		{
 			//Timer t1("Update scripts");
-			reg.view<Entity::_C_NativeScriptComponent>().each([=](auto entity, auto& nsc) {
+			reg.view<Entity::_C_NativeScriptComponent>().each([=](auto& nsc) {
 				for (auto script : nsc.Instances) {
 					script->OnUpdate(_deltaTime);
 				}
@@ -44,6 +46,11 @@ namespace air {
 		}
 	}
 
+	TextureManager& Scene::getTextureManager() {
+		return textureManager;
+	}
+
 	Scene::~Scene() {
+
 	}
 }

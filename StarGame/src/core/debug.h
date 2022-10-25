@@ -3,7 +3,7 @@
 #include <cassert>
 #include <chrono>
 #define WA(x) (std::cout<<"WA: "<<x<<'\n');
-#define AIR_STATIC_ASSERT(x, a) static_assert(x, a); 
+//#define AIR_STATIC_ASSERT(x, a) static_assert(x, "AIR: " + a); 
 
 namespace air {
 	class Timer {
