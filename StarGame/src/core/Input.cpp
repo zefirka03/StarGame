@@ -13,6 +13,17 @@ namespace air{
 		return glm::vec2(x, y);
 	}
 
+	 glm::vec2 Input::getCursorPos(Camera2d const& _camera) {
+		double x, y;
+		glfwGetCursorPos(Game::getInstance().getNativeWindow(), &x, &y);
+
+		glm::vec4 out = glm::inverse(_camera.getProjection()) * glm::inverse(_camera.getView()) * glm::vec4((glm::vec2(2*x, -2*y))/glm::vec2(_camera.width, _camera.height) , 0, 0);
+
+		return	glm::vec2(_camera.transform.position.x, _camera.transform.position.y) -
+				glm::vec2(_camera.transform.origin.x, _camera.transform.origin.y) / _camera.transform.scale +
+				glm::vec2{out.x, out.y};
+	}
+
 	bool Input::isMousePressed_Left() {
 		return (glfwGetMouseButton(Game::getInstance().getNativeWindow(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS);
 	}

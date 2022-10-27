@@ -52,10 +52,10 @@ namespace air {
 
 
 	//render all objects in draw queue and clear queue
-	void Renderer2dRectangles::submit(C_Camera2d& cam) {
+	void Renderer2dRectangles::submit(Camera2d& cam) {
 		std::sort(drawQueue, drawQueue + draw_it, sort_comparator);
 
-		rectangleShader->setMatrix4f(cam.getProjection(), "proj");
+		rectangleShader->setMatrix4f(cam.getMatrix(), "proj");
 
 		glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, draw_it * sizeof(RectangleInstance), drawQueue);

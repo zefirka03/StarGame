@@ -57,7 +57,8 @@ namespace air {
 	public:
 		void OnUpdate(float deltaTime) {
 			t += deltaTime * 5;
-			getComponent<C_Sprite>().color = glm::vec4(abs(sin(t)), abs(sin(t+0.2)), abs(sin(t + 0.42)),1);
+			auto& it = getComponent<C_Sprite>().color;
+			it = glm::vec4(1, 1, 1, (std::min(1.f, it.a + 0.25f * deltaTime)));
 		}
 
 		void OnCreate() {
@@ -87,25 +88,32 @@ namespace air {
 
 	class S_pos : public Script {
 	public:
-
-		void OnUpdate(float deltaTime) {
-			getComponent<C_Transform2d>().transform.position = glm::vec3(Input::getCursorPos(), 0);
+		S_pos(Camera2d& _cam) {
+			cam = &_cam;
+		}
+		void OnUpdate(float deltaTime) override {
+			getComponent<C_Transform2d>().transform.position = glm::vec3(Input::getCursorPos(*cam), 0);
 
 			C_BoundingBox& bbox = getComponent<C_BoundingBox>();
-			bbox.transform.position = glm::vec3(Input::getCursorPos(), 0);
-			//std::cout << bbox.colliders.size() << '\n';
-			for (int i = 0; i < bbox.colliders.size(); i++) {
-				bbox.colliders[i]->_gameObject->getComponent<C_Sprite>().color = glm::vec4(0.5);
+			bbox.getTransform().position = glm::vec3(Input::getCursorPos(*cam), 0);
+			//std::cout<< glm::vec3(Input::getCursorPos(*cam), 0).x<<'\n';
+
+			auto& colls = bbox.getColliders();
+			for (int i = 0; i < colls.size(); i++) {
+				colls[i]->_gameObject.getComponent<C_Sprite>().color = glm::vec4(0.0);
 				 //bbox.colliders[i]->_gameObject->getComponent<C_Transform2d>().transform.position = glm::vec3(0);
 			}
 		}
 
-		void OnCreate() {
-			getComponent<C_BoundingBox>().check_collisions = true;
+		void OnCreate() override {
+			getComponent<C_BoundingBox>().setCollisionsCollect(true);
 			this->getComponent<C_Sprite>().color = glm::vec4(1);
+			this->getComponent<C_Transform2d>().transform.origin = this->getComponent<C_Transform2d>().transform.size / glm::vec2{2.f,2.f};
+			this->getComponent<C_BoundingBox>().getTransform().origin = this->getComponent<C_BoundingBox>().getTransform().size / glm::vec2{2.f,2.f};
 		}
 	private:
 		bool collided = false;
+		Camera2d* cam;
 	};
 
 
@@ -117,7 +125,7 @@ namespace air {
 
 		Entity ent_camera = scn.createEntity();
 		auto& camera = ent_camera.addComponent<C_Camera2d>(1280.f, 720.f);
-		//ent_camera.addScript<S_Camera2dController>();
+		ent_camera.addScript<S_Camera2dController>();
 
 		TextureManager& TM = scn.getTextureManager();
 
@@ -128,23 +136,24 @@ namespace air {
 		TM.loadTexture("img/5.png", "5");
 
 		Entity ent1 = scn.createEntity();
-		ent1.addScript<S_pos>();
+		ent1.addScript<S_pos>(ent_camera.getComponent<C_Camera2d>().camera);
 		//
 		auto& sp1 = ent1.addComponent<C_Sprite>(); 
 		auto& tr1 = ent1.getComponent<C_Transform2d>(); 
 		auto& bbx1 = ent1.addComponent<C_BoundingBox>(); 
 		
 		//sp1 = C_Sprite(glm::vec4(1, 1, 1, 1), glm::vec4(0,0,1,1), TM.getTexture("3"));
-		tr1.entity()->getComponent<C_Sprite>() = C_Sprite(glm::vec4(1, 1, 1, 1), glm::vec4(0, 0, 1, 1), TM.getTexture("4"));
+		tr1._gameObject.getComponent<C_Sprite>() = C_Sprite(glm::vec4(1, 1, 1, 1), glm::vec4(0, 0, 1, 1), TM.getTexture("4"));
 		tr1.transform = Transform2d( glm::vec3(0,  0, 0), glm::vec2(100, 100) );
-		bbx1.transform = Transform2d( glm::vec3(0, 0, 0), glm::vec2(100, 100) );
+		bbx1.getTransform() = Transform2d( glm::vec3(0, 0, 0), glm::vec2(100, 100) );
 
-		for (int i = 0; i < 100; ++i) {
-			for (int j = 0; j < 50; ++j) {
+		for (int i = 0; i < 150; ++i) {
+			for (int j = 0; j < 150; ++j) {
 				Entity ent2 = scn.createEntity();
+				ent2.addScript<S_color>();
 				auto& sp2 = ent2.addComponent<C_Sprite>();
-				auto& tr2 = ent2.getComponent<C_Transform2d>().transform = Transform2d( glm::vec3(i*12, j * 12, 0), glm::vec2(10, 10) );
-				auto& bbx2 = ent2.addComponent<C_BoundingBox>().transform = Transform2d( glm::vec3(i * 12, j * 12, 0), glm::vec2(10, 10) );
+				auto& tr2 = ent2.getComponent<C_Transform2d>().transform = Transform2d( glm::vec3(i*14, j * 14, 0), glm::vec2(10, 10) );
+				auto& bbx2 = ent2.addComponent<C_BoundingBox>().getTransform() = Transform2d( glm::vec3(i * 14, j * 14, 0), glm::vec2(10, 10) );
 				sp2 = C_Sprite( glm::vec4(1, 1, 1, 1), glm::vec4(0,0,1,1), TM.getTexture("3") );
 			}
 		}
@@ -176,6 +185,9 @@ namespace air {
 			{
 				if (ImGui::Checkbox("swapInterval", &swpInt))
 					glfwSwapInterval(swpInt);
+				if (ImGui::Checkbox("quadTree", &physics->debug)) {
+
+				}
 			}
 			ImGui::End();
 

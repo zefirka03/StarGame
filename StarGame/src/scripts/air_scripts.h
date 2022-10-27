@@ -2,6 +2,7 @@
 
 #include "../glIncl.h"
 #include "../ecs/air_ecs.h"
+#include "../ecs/Script.h"
 
 namespace air {
 	class S_Camera2dController : public Script {

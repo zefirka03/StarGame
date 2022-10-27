@@ -1,4 +1,4 @@
-#include "Entity.h"
+#include "EntityComponent.h"
 
 namespace air {
 	Entity::Entity(entt::entity _id, Scene* _scene)

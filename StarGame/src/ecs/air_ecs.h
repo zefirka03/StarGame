@@ -1,4 +1,4 @@
 #pragma once
-#include "Entity.h"
+#include "EntityComponent.h"
 #include "Scene.h"
 #include "System.h"

@@ -1,7 +1,8 @@
 #include "Scene.h"
-#include "Entity.h"
+#include "Script.h"
 #include "../core/debug.h"
-#include "../components/C_Transform2d.h"
+#include "../components/Transform.h"
+#include "../systems/System_render.h"
 
 namespace air {
 	Scene::Scene() {
@@ -17,7 +18,7 @@ namespace air {
 	void Scene::onStart() {
 		//onStart for scripts
 		{
-			reg.view<Entity::_C_NativeScriptComponent>().each([=](auto entity, auto& nsc) {
+			reg.view<_C_NativeScriptComponent>().each([=](auto entity, auto& nsc) {
 				for(auto script : nsc.Instances){
 					script->m_entity = { entity, this };
 					script->OnCreate();
@@ -34,7 +35,7 @@ namespace air {
 		//Update scripts
 		{
 			//Timer t1("Update scripts");
-			reg.view<Entity::_C_NativeScriptComponent>().each([=](auto& nsc) {
+			reg.view<_C_NativeScriptComponent>().each([=](auto& nsc) {
 				for (auto script : nsc.Instances) {
 					script->OnUpdate(_deltaTime);
 				}

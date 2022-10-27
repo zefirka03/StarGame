@@ -1,21 +1,17 @@
 #pragma once
 #include "../glIncl.h"
 #include "../ecs/air_ecs.h"
-#include "../components/C_Transform2d.h"
+#include "../components/Transform.h"
 #include "../render/Renderer2d.h"
 #include "../core/Input.h"
 
-#include "../ecs/Component.h"
+#include "../components/Camera2d.h"
+
+#include "Colliders.h"
 
 #include <vector>
 
 namespace air {
-	struct C_BoundingBox : public Component {
-		Transform2d transform;
-
-		std::vector<C_BoundingBox*> colliders;
-		bool check_collisions = false;
-	};
 
 	class PhysicsQuadTree {
 	public:
@@ -25,20 +21,19 @@ namespace air {
 			depth = _depth;
 		}
 
-		PhysicsQuadTree* getContainingTree(C_BoundingBox* _bbox) {
-			glm::vec2 borders_x = glm::vec2(_bbox->transform.position.x - _bbox->transform.origin.x, _bbox->transform.position.x - _bbox->transform.origin.x + _bbox->transform.size.x);
-			glm::vec2 borders_y = glm::vec2(_bbox->transform.position.y - _bbox->transform.origin.y, _bbox->transform.position.y - _bbox->transform.origin.y + _bbox->transform.size.y);
+		PhysicsQuadTree* getContainingTree(Collider* _bbox) {
+			box object_bound = _bbox->getBoundingBox();
 
-			if (position.x + size.x / 2.f > borders_x.y && position.y + size.y / 2.f > borders_y.y) {
+			if (position.x + size.x / 2.f > object_bound.horizontal.y && position.y + size.y / 2.f > object_bound.vertical.y) {
 				return north_west;
 			}
-			else if (position.x + size.x / 2.f <= borders_x.x && position.y + size.y / 2.f > borders_y.y) {
+			else if (position.x + size.x / 2.f <= object_bound.horizontal.x && position.y + size.y / 2.f > object_bound.vertical.y) {
 				return north_east;
 			}
-			else if (position.x + size.x / 2.f > borders_x.y && position.y + size.y / 2.f <= borders_y.x) {
+			else if (position.x + size.x / 2.f > object_bound.horizontal.y && position.y + size.y / 2.f <= object_bound.vertical.x) {
 				return south_west;
 			}
-			else if (position.x + size.x / 2.f <= borders_x.x && position.y + size.y / 2.f <= borders_y.x) {
+			else if (position.x + size.x / 2.f <= object_bound.horizontal.x && position.y + size.y / 2.f <= object_bound.vertical.x) {
 				return south_east;
 			}
 			return this;
@@ -52,7 +47,7 @@ namespace air {
 			separated = true;
 		}
 
-		void insert(C_BoundingBox* _bbox) {
+		void insert(Collider* _bbox) {
 			auto it = getContainingTree(_bbox);
 			if (it != this && capacity > depth + 1) {
 				if (it == nullptr) separate();
@@ -62,18 +57,20 @@ namespace air {
 			boxes.push_back(_bbox);
 		}
 
-		bool contains(C_BoundingBox* _bbox) {
-			glm::vec2 borders0_x = glm::vec2(_bbox->transform.position.x - _bbox->transform.origin.x, _bbox->transform.position.x - _bbox->transform.origin.x + _bbox->transform.size.x);
-			glm::vec2 borders0_y = glm::vec2(_bbox->transform.position.y - _bbox->transform.origin.y, _bbox->transform.position.y - _bbox->transform.origin.y + _bbox->transform.size.y);
-			glm::vec2 borders1_x = glm::vec2(position.x, position.x + size.x);
-			glm::vec2 borders1_y = glm::vec2(position.y, position.y + size.y);
+		bool contains(Collider* _bbox) {
+			box object_bound = _bbox->getBoundingBox();
+			box quad_bound = box{ 
+				{position.x, position.x + size.x},
+				{position.y, position.y + size.y}
+			};
 
-			if (borders0_x.y > borders1_x.x && borders0_x.x < borders1_x.y &&
-				borders0_y.y > borders1_y.x && borders0_y.x < borders1_y.y) return true;
+			if (object_bound.horizontal.y > quad_bound.horizontal.x && object_bound.horizontal.x < quad_bound.horizontal.y &&
+				object_bound.vertical.y > quad_bound.vertical.x && object_bound.vertical.x < quad_bound.vertical.y) 
+				return true;
 			return false;
 		}
 
-		void retrieve(C_BoundingBox* _bbox, std::vector<C_BoundingBox*>& _out) {
+		void retrieve(Collider* _bbox, std::vector<Collider*>& _out) {
 			if (separated) {
 				if(north_east->contains(_bbox))
 					north_east->retrieve(_bbox, _out);
@@ -87,43 +84,7 @@ namespace air {
 			for (int i = 0; i < boxes.size(); i++) {
 				auto bx = boxes[i];
 				if (_bbox == bx) continue;
-				glm::vec2 borders0_x = glm::vec2(_bbox->transform.position.x - _bbox->transform.origin.x, _bbox->transform.position.x - _bbox->transform.origin.x + _bbox->transform.size.x);
-				glm::vec2 borders0_y = glm::vec2(_bbox->transform.position.y - _bbox->transform.origin.y, _bbox->transform.position.y - _bbox->transform.origin.y + _bbox->transform.size.y);
-				glm::vec2 borders1_x = glm::vec2(bx->transform.position.x - bx->transform.origin.x, bx->transform.position.x - bx->transform.origin.x + bx->transform.size.x);
-				glm::vec2 borders1_y = glm::vec2(bx->transform.position.y - bx->transform.origin.y, bx->transform.position.y - bx->transform.origin.y + bx->transform.size.y);
-
-				if (borders0_x.y > borders1_x.x && borders0_x.x < borders1_x.y &&
-					borders0_y.y > borders1_y.x && borders0_y.x < borders1_y.y) _out.push_back(boxes[i]);
-			}
-		}
-
-		std::vector<C_BoundingBox*> getAllBoxes() {
-			if (separated) {
-				std::vector<C_BoundingBox*> out;
-				if (north_east) {
-					std::vector<C_BoundingBox*> b = north_east->getAllBoxes();
-					for (int i = 0; i < b.size(); ++i)
-						out.push_back(b[i]);
-				}
-				if (north_west) {
-					std::vector<C_BoundingBox*> b = north_west->getAllBoxes();
-					for (int i = 0; i < b.size(); ++i)
-						out.push_back(b[i]);
-				}
-				if (south_east) {
-					std::vector<C_BoundingBox*> b = south_east->getAllBoxes();
-					for (int i = 0; i < b.size(); ++i)
-						out.push_back(b[i]);
-				}
-				if (south_west) {
-					std::vector<C_BoundingBox*> b = south_west->getAllBoxes();
-					for (int i = 0; i < b.size(); ++i)
-						out.push_back(b[i]);
-				}
-				return out;
-			}
-			else {
-				return boxes;
+				if(_bbox->isCollide(*bx)) _out.push_back(boxes[i]);
 			}
 		}
 
@@ -172,13 +133,13 @@ namespace air {
 		}
 	private:
 		int depth = 0;
-		int capacity = 6;
+		int capacity = 7;
 
 		bool separated = false;
 
 		glm::vec2 size;
 		glm::vec2 position;
-		std::vector<C_BoundingBox*> boxes;
+		std::vector<Collider*> boxes;
 
 		PhysicsQuadTree* north_west = nullptr;
 		PhysicsQuadTree* north_east = nullptr;
@@ -203,13 +164,14 @@ namespace air {
 			delete quadTree;
 			quadTree = new PhysicsQuadTree(glm::vec2(8000, 8000), glm::vec2(-4000, -4000));
 
-			std::vector<C_BoundingBox*> CheckCollisionQueue;
+			std::vector<Collider*> CheckCollisionQueue;
 			reg->view<C_BoundingBox, C_Transform2d>().each([&](C_BoundingBox& bbox, C_Transform2d& transform) {
-				rectRenderer->draw({ bbox.transform, glm::vec4(0,1,0,1),1});
+				if(debug) rectRenderer->draw({ bbox.getTransform(), glm::vec4(0,1,0,1),1});
+
 				quadTree->insert(&bbox);
 				bbox.colliders.clear();
-
-				if (bbox.check_collisions)
+				
+				if (bbox.collect_collisions)
 					CheckCollisionQueue.push_back(&bbox);
 
 			});
@@ -219,22 +181,25 @@ namespace air {
 			}
 
 
-			std::vector<PhysicsQuadTree*> bb = quadTree->getAllTrees();
+			if (debug) {
+				std::vector<PhysicsQuadTree*> bb = quadTree->getAllTrees();
 
-			for (int i = 0; i < bb.size(); i++) {
-				Transform2d tr;
-				tr.position = glm::vec3(bb[i]->getPosition(),0);
-				tr.size = bb[i]->getSize();
-				rectRenderer->draw({ tr, glm::vec4(1,0,0,1), 2});
+				for (int i = 0; i < bb.size(); i++) {
+					Transform2d tr;
+					tr.position = glm::vec3(bb[i]->getPosition(), 0);
+					tr.size = bb[i]->getSize();
+					rectRenderer->draw({ tr, glm::vec4(1,0,0,1), 2 });
+				}
+
+				rectRenderer->submit(main_camera->camera);
 			}
-
-			rectRenderer->submit(*main_camera);
 		}
 		void terminate() override {
 			delete rectRenderer;
 			delete quadTree;
 		}
 		PhysicsQuadTree* quadTree;
+		bool debug = false;
 	private:
 		Renderer2dRectangles* rectRenderer;
 	};

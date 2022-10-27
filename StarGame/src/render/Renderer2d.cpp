@@ -53,10 +53,10 @@ namespace air {
 
 
 	//render all objects in draw queue and clear queue
-	void Renderer2d::submit(C_Camera2d& cam) {
+	void Renderer2d::submit(Camera2d& cam) {
 		std::sort(drawQueue, drawQueue + draw_it, texture_sort_comparator);
 
-		spriteShader->setMatrix4f(cam.getProjection(), "proj");
+		spriteShader->setMatrix4f(cam.getMatrix(), "proj");
 		
 		glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, draw_it * sizeof(SpriteInstance), drawQueue);

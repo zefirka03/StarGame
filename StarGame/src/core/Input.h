@@ -1,11 +1,13 @@
 #pragma once
 #include "Game.h"
+#include "../components/Camera2d.h"
 
 namespace air {
 	class Input {
 	public:
 		static bool isKeyPressed(int _keycode);
 		static glm::vec2 getCursorPos();
+		static glm::vec2 getCursorPos(Camera2d const& _camera);
 
 		static bool isMousePressed_Left();
 
