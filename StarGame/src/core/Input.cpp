@@ -32,6 +32,14 @@ namespace air{
 		return (glfwGetMouseButton(Game::getInstance().getNativeWindow(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE);
 	}
 
+	bool Input::isMousePressed_Right() {
+		return (glfwGetMouseButton(Game::getInstance().getNativeWindow(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS);
+	}
+
+	bool Input::isMouseRelease_Right() {
+		return (glfwGetMouseButton(Game::getInstance().getNativeWindow(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE);
+	}
+
 	double Input::getMouseWheel() {
 		if (!mouseWheel_Callback_inited) {
 			glfwSetScrollCallback(Game::getInstance().getNativeWindow(), wheelCallback);

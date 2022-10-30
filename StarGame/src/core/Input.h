@@ -13,6 +13,10 @@ namespace air {
 
 		static bool isMouseRelease_Left();
 
+		static bool isMousePressed_Right();
+
+		static bool isMouseRelease_Right();
+
 		static double getMouseWheel();
 
 		static void pollEvents();

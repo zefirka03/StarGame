@@ -152,7 +152,7 @@ namespace air {
 	class PhysicsSystem : public System {
 	public:
 		void init() override {
-			rectRenderer = new Renderer2dRectangles(100000);
+			debugRenderer = new RendererDebug(200000);
 		}
 		void update(float _deltaTime) override {
 			C_Camera2d* main_camera = nullptr;
@@ -166,7 +166,7 @@ namespace air {
 
 			std::vector<Collider*> CheckCollisionQueue;
 			reg->view<C_BoundingBox, C_Transform2d>().each([&](C_BoundingBox& bbox, C_Transform2d& transform) {
-				if(debug) rectRenderer->draw({ bbox.getTransform(), glm::vec4(0,1,0,1),1});
+				if(debug) debugRenderer->drawQuad(bbox.getTransform(), glm::vec4(0,1,0,1));
 
 				quadTree->insert(&bbox);
 				bbox.colliders.clear();
@@ -188,19 +188,19 @@ namespace air {
 					Transform2d tr;
 					tr.position = glm::vec3(bb[i]->getPosition(), 0);
 					tr.size = bb[i]->getSize();
-					rectRenderer->draw({ tr, glm::vec4(1,0,0,1), 2 });
+					debugRenderer->drawQuad( tr, glm::vec4(1,0,0,1));
 				}
 
-				rectRenderer->submit(main_camera->camera);
+				debugRenderer->submit(main_camera->camera);
 			}
 		}
 		void terminate() override {
-			delete rectRenderer;
+			delete debugRenderer;
 			delete quadTree;
 		}
 		PhysicsQuadTree* quadTree;
 		bool debug = false;
 	private:
-		Renderer2dRectangles* rectRenderer;
+		RendererDebug* debugRenderer;
 	};
 }

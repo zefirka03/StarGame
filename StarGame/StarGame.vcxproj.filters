@@ -72,6 +72,9 @@
     <ClCompile Include="src\physics\Colliders.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\render\RendererDebug.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Game.h">
@@ -173,5 +176,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="src\render\shaders\SpriteShader.shader" />
+    <None Include="src\render\shaders\debugRendererShader.shader" />
   </ItemGroup>
 </Project>

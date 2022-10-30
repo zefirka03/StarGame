@@ -151,6 +151,7 @@
     <ClCompile Include="src\physics\PhysicsQuadTree.cpp" />
     <ClCompile Include="src\core\Input.cpp" />
     <ClCompile Include="src\render\Renderer2dRectangles.cpp" />
+    <ClCompile Include="src\render\RendererDebug.cpp" />
     <ClCompile Include="src\scripts\S_Camera2dController.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui_demo.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="src\render\TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\render\shaders\debugRendererShader.shader" />
     <None Include="src\render\shaders\SpriteShader.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

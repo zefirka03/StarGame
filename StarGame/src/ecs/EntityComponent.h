@@ -11,6 +11,7 @@ namespace air {
 	struct _C_NativeScriptComponent;
 	class Entity {
 		friend class Scene;
+		friend class Script;
 	public:
 		Entity() = default;
 		Entity(entt::entity _id, Scene* _scene);

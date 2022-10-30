@@ -9,6 +9,9 @@ namespace air {
 		T& getComponent() {
 			return m_entity.getComponent<T>();
 		}
+		Scene* getScene() {
+			return m_entity.scene;
+		}
 	protected:
 		virtual void OnCreate() {}
 		virtual void OnUpdate(float _deltaTime) {}
