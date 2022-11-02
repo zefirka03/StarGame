@@ -12,6 +12,9 @@ namespace air {
 		Scene* getScene() {
 			return m_entity.scene;
 		}
+		Entity getEntity() {
+			return m_entity;
+		}
 	protected:
 		virtual void OnCreate() {}
 		virtual void OnUpdate(float _deltaTime) {}

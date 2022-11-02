@@ -6,21 +6,26 @@
 
 
 namespace air {
-	class _C_New : public Component {};
-
 	Scene::Scene() {
 		this->addSystem<_System_Render>(300000+10);
 	}
 
 	Entity Scene::createEntity() {
-		Entity ent(reg.create(), this);
+		Entity ent(reg.create(), this);;
 		ent.addComponent<C_Transform2d>();
 		ent.addComponent<_C_New>();
 		return ent;
 	}
 
-	void Scene::onStart() {
-		
+	void Scene::destroyEntity(Entity ent) {
+		if (!ent.hasComponent<_C_Destroyed>()) {
+			
+			ent.addComponent<_C_Destroyed>();
+
+		}
+	}
+
+	void Scene::_init() {
 		//onStart for scripts
 		{
 			reg.view<_C_NativeScriptComponent>().each([=](auto entity, auto& nsc) {
@@ -36,7 +41,7 @@ namespace air {
 		}
 	}
 
-	void Scene::onUpdate(float _deltaTime) {
+	void Scene::_onUpdate(float _deltaTime) {
 		//process new scriptable objects
 		reg.view<_C_NativeScriptComponent, _C_New>().each([&](auto entity, auto& nsc, auto& n) {
 			for (auto script : nsc.Instances) {
@@ -45,6 +50,12 @@ namespace air {
 			}
 			reg.remove<_C_New>(entity);
 		});
+		//process just new objects
+		reg.view<_C_New>().each([&](auto entity, auto& n) {
+			reg.remove<_C_New>(entity);
+		});
+
+
 		//Update scripts
 		{
 			//Timer t1("Update scripts");
@@ -55,9 +66,22 @@ namespace air {
 			});
 		}
 
+
+		//Update destroyed after scripts
+		reg.view<_C_Destroyed>().each([&](const auto entity, auto& dst) {
+			reg.destroy(entity);
+		});
+
+		//update systems
 		for (auto it = systems.begin(); it != systems.end(); ++it) {
 			(*it)->update(_deltaTime);
 		}
+
+		//Update destroyed after systems
+		reg.view<_C_Destroyed>().each([&](const auto entity, auto& dst) {
+			reg.destroy(entity);
+		});
+
 	}
 
 	TextureManager& Scene::getTextureManager() {

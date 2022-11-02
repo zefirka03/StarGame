@@ -36,6 +36,10 @@ namespace air {
 		void operator=(entt::entity _entt) {
 			entity_handle = _entt;
 		}
+		void operator=(Entity _entt) {
+			entity_handle = _entt.entity_handle;
+			scene = _entt.scene;
+		}
 
 		~Entity();
 	private:
@@ -82,8 +86,8 @@ namespace air {
 	};
 
 
-
-	
+	class _C_New : public Component {};
+	class _C_Destroyed : public Component {};
 	
 
 	template<class T, class ...Args>

@@ -70,21 +70,24 @@ namespace air {
 			return false;
 		}
 
-		void retrieve(Collider* _bbox, std::vector<Collider*>& _out) {
+		void retrieve(Collider* _bbox, std::vector<Collider*>& _out, uint32_t& collision_checks) {
 			if (separated) {
 				if(north_east->contains(_bbox))
-					north_east->retrieve(_bbox, _out);
+					north_east->retrieve(_bbox, _out, collision_checks);
 				if (north_west->contains(_bbox))
-					north_west->retrieve(_bbox, _out);
+					north_west->retrieve(_bbox, _out, collision_checks);
 				if (south_east->contains(_bbox))
-					south_east->retrieve(_bbox, _out);
+					south_east->retrieve(_bbox, _out, collision_checks);
 				if (south_west->contains(_bbox))
-					south_west->retrieve(_bbox, _out);
+					south_west->retrieve(_bbox, _out, collision_checks);
 			}
 			for (int i = 0; i < boxes.size(); i++) {
 				auto bx = boxes[i];
 				if (_bbox == bx) continue;
-				if(_bbox->isCollide(*bx)) _out.push_back(boxes[i]);
+				++collision_checks;
+				if (_bbox->isCollide(*bx)) {
+					_out.push_back(boxes[i]);
+				}
 			}
 		}
 
@@ -145,12 +148,18 @@ namespace air {
 		PhysicsQuadTree* north_east = nullptr;
 		PhysicsQuadTree* south_west = nullptr;
 		PhysicsQuadTree* south_east = nullptr;
+
+		
 	};
 
 
 
 	class PhysicsSystem : public System {
 	public:
+		PhysicsSystem(glm::vec2 _pos=glm::vec2(0,0), glm::vec2 _size = glm::vec2(1000,1000)) {
+			pos = _pos;
+			size = _size;
+		}
 		void init() override {
 			debugRenderer = new RendererDebug(200000);
 		}
@@ -162,24 +171,46 @@ namespace air {
 			});
 
 			delete quadTree;
-			quadTree = new PhysicsQuadTree(glm::vec2(8000, 8000), glm::vec2(-4000, -4000));
+			quadTree = new PhysicsQuadTree(size, pos);
+
+			stats.colliders_count = 0;
 
 			std::vector<Collider*> CheckCollisionQueue;
-			reg->view<C_BoundingBox, C_Transform2d>().each([&](C_BoundingBox& bbox, C_Transform2d& transform) {
-				if(debug) debugRenderer->drawQuad(bbox.getTransform(), glm::vec4(0,1,0,1));
+			reg->view<C_AABoundingBox, C_Transform2d>(entt::exclude<_C_New>).each([&](C_AABoundingBox& bbox, C_Transform2d& transform) {
+				if (debug) debugRenderer->drawQuad(Transform2d(glm::vec3(bbox.getAABBox().pos,0), bbox.getAABBox().size), glm::vec4(1, 1, 0, 1));
+
+				quadTree->insert(&bbox);
+				bbox.colliders.clear();
+
+				if (bbox.collect_collisions)
+					CheckCollisionQueue.push_back(&bbox);
+
+				++stats.colliders_count;
+			});
+
+			reg->view<C_BoundingBox, C_Transform2d>(entt::exclude<_C_New>).each([&](C_BoundingBox& bbox, C_Transform2d& transform) {
+				if (debug) {
+					debugRenderer->drawQuad(Transform2d(glm::vec3(bbox.getAABBox().pos, 0), bbox.getAABBox().size), glm::vec4(1, 1, 0, 1));
+					debugRenderer->drawQuad(bbox.getTransform(), glm::vec4(0, 1, 0, 1));
+				}
 
 				quadTree->insert(&bbox);
 				bbox.colliders.clear();
 				
 				if (bbox.collect_collisions)
 					CheckCollisionQueue.push_back(&bbox);
-
+				
+				++stats.colliders_count;
 			});
-
+			
+			stats.coll_checks = 0;
+			stats.total_coll_checks = 0;
 			for (int i = 0; i < CheckCollisionQueue.size(); ++i) {
-				quadTree->retrieve(CheckCollisionQueue[i], CheckCollisionQueue[i]->colliders);
+				uint32_t cur_ch = 0;
+				quadTree->retrieve(CheckCollisionQueue[i], CheckCollisionQueue[i]->colliders, cur_ch);
+				stats.total_coll_checks += cur_ch;
+				stats.coll_checks = std::max(stats.coll_checks, cur_ch);
 			}
-
 
 			if (debug) {
 				std::vector<PhysicsQuadTree*> bb = quadTree->getAllTrees();
@@ -198,9 +229,17 @@ namespace air {
 			delete debugRenderer;
 			delete quadTree;
 		}
-		PhysicsQuadTree* quadTree;
 		bool debug = false;
+
+		struct PhysicsStats {
+			uint32_t coll_checks;
+			uint32_t total_coll_checks;
+			uint32_t colliders_count;
+		} stats;
+
 	private:
+		PhysicsQuadTree* quadTree;
 		RendererDebug* debugRenderer;
+		glm::vec2 pos, size;
 	};
 }
