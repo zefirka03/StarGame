@@ -3,10 +3,14 @@
 #include "../core/debug.h"
 #include "../components/Transform.h"
 #include "../systems/System_render.h"
+#include "../systems/System_Native_Scripting.h"
+#include "../physics/PhysicsQuadTree.h"
 
 
 namespace air {
 	Scene::Scene() {
+		this->addSystem<_System_Native_Scripting>();
+		this->addSystem<PhysicsSystem>();
 		this->addSystem<_System_Render>(300000+10);
 	}
 
@@ -26,50 +30,15 @@ namespace air {
 	}
 
 	void Scene::_init() {
-		//onStart for scripts
-		{
-			reg.view<_C_NativeScriptComponent>().each([=](auto entity, auto& nsc) {
-				for(auto script : nsc.Instances){
-					script->m_entity = { entity, this };
-					script->OnCreate();
-				}
-			});
-		}
-
 		for (auto it = systems.begin(); it != systems.end(); ++it) {
 			(*it)->init();
 		}
 	}
 
 	void Scene::_onUpdate(float _deltaTime) {
-		//process new scriptable objects
-		reg.view<_C_NativeScriptComponent, _C_New>().each([&](auto entity, auto& nsc, auto& n) {
-			for (auto script : nsc.Instances) {
-				script->m_entity = { entity, this };
-				script->OnCreate();
-			}
-			reg.remove<_C_New>(entity);
-		});
 		//process just new objects
 		reg.view<_C_New>().each([&](auto entity, auto& n) {
 			reg.remove<_C_New>(entity);
-		});
-
-
-		//Update scripts
-		{
-			//Timer t1("Update scripts");
-			reg.view<_C_NativeScriptComponent>(entt::exclude<_C_New>).each([&](auto& nsc) {
-				for (auto script : nsc.Instances) {
-					script->OnUpdate(_deltaTime);
-				}
-			});
-		}
-
-
-		//Update destroyed after scripts
-		reg.view<_C_Destroyed>().each([&](const auto entity, auto& dst) {
-			reg.destroy(entity);
 		});
 
 		//update systems
@@ -89,6 +58,8 @@ namespace air {
 	}
 
 	Scene::~Scene() {
-
+		for (auto it = systems.begin(); it != systems.end(); ++it) {
+			(*it)->terminate();
+		}
 	}
 }

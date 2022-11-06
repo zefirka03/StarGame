@@ -68,7 +68,8 @@ namespace air {
 		while (j < draw_it) {
 			auto it = (drawQueue + j);
 
-			glBindTexture(GL_TEXTURE_2D, it->tex->id);
+			if (it->tex != nullptr)
+				glBindTexture(GL_TEXTURE_2D, it->tex->id);
 
 			spriteShader->use();
 			glDrawArrays(GL_POINTS, j, it->tex->spritesCount);

@@ -31,9 +31,7 @@ namespace air {
 
 			render->submit(main_camera->camera);
 		}
-		void terminate() override {
-			delete render;
-		}
+		void terminate() override {}
 		~_System_Render() {
 			delete render;
 		}

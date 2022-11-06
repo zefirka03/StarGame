@@ -153,6 +153,7 @@
     <ClCompile Include="src\render\Renderer2dRectangles.cpp" />
     <ClCompile Include="src\render\RendererDebug.cpp" />
     <ClCompile Include="src\scripts\S_Camera2dController.cpp" />
+    <ClCompile Include="src\systems\System_Native_Scripting.h" />
     <ClCompile Include="src\third-party\imgui\imgui.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui_draw.cpp" />
@@ -173,7 +174,6 @@
     <ClInclude Include="src\components\air_components.h" />
     <ClInclude Include="src\components\Camera2d.h" />
     <ClInclude Include="src\components\Transform.h" />
-    <ClInclude Include="src\ecs\Component.h" />
     <ClInclude Include="src\ecs\EntityComponent.h" />
     <ClInclude Include="src\ecs\Script.h" />
     <ClInclude Include="src\physics\Colliders.h" />
