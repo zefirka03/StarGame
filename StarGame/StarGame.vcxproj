@@ -153,6 +153,7 @@
     <ClCompile Include="src\render\Renderer2dRectangles.cpp" />
     <ClCompile Include="src\render\RendererDebug.cpp" />
     <ClCompile Include="src\scripts\S_Camera2dController.cpp" />
+    <ClCompile Include="src\systems\System_Native_Scripting.h" />
     <ClCompile Include="src\third-party\imgui\imgui.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui_draw.cpp" />
@@ -169,10 +170,10 @@
     <ClCompile Include="src\render\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\scenes\Scene1.h" />
     <ClInclude Include="src\components\air_components.h" />
     <ClInclude Include="src\components\Camera2d.h" />
     <ClInclude Include="src\components\Transform.h" />
-    <ClInclude Include="src\ecs\Component.h" />
     <ClInclude Include="src\ecs\EntityComponent.h" />
     <ClInclude Include="src\ecs\Script.h" />
     <ClInclude Include="src\physics\Colliders.h" />
@@ -182,6 +183,9 @@
     <ClInclude Include="src\ecs\System.h" />
     <ClInclude Include="src\glIncl.h" />
     <ClInclude Include="src\render\shaders\RectangleShader.shader" />
+    <ClInclude Include="src\scenes\Scene2.h" />
+    <ClInclude Include="src\scenes\Scene3.h" />
+    <ClInclude Include="src\scenes\Scene_Coll_detect.h" />
     <ClInclude Include="src\systems\System_render.h" />
     <ClInclude Include="src\third-party\imgui\imconfig.h" />
     <ClInclude Include="src\third-party\imgui\imgui.h" />
@@ -196,7 +200,6 @@
     <ClInclude Include="src\render\air_render.h" />
     <ClInclude Include="src\render\Renderer2d.h" />
     <ClInclude Include="src\core\debug.h" />
-    <ClInclude Include="src\ecs\Entity.h" />
     <ClInclude Include="src\ecs\air_ecs.h" />
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\ecs\Scene.h" />

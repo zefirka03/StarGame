@@ -14,12 +14,17 @@ namespace air {
 
 		GLFWwindow* window;
 
+		Scene* current_scene = nullptr;
+		Scene* next_scene = nullptr;
+
 		const char* title;
 		int w, h;
 		TimeStep ts;
 	public:
 		Game(const char* _title, int _w, int _h);
-		void run();
+		void run(Scene* _scn);
+
+		void goToScene(Scene* _scn);
 
 		static Game& getInstance();
 		GLFWwindow* getNativeWindow();
@@ -27,5 +32,6 @@ namespace air {
 		~Game();
 	private:
 		void init_imgui();
+		void _updateCurrentScene();
 	};
 }

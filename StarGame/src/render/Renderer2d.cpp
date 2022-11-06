@@ -54,6 +54,8 @@ namespace air {
 
 	//render all objects in draw queue and clear queue
 	void Renderer2d::submit(Camera2d& cam) {
+		last_draw_count = draw_it;
+
 		std::sort(drawQueue, drawQueue + draw_it, texture_sort_comparator);
 
 		spriteShader->setMatrix4f(cam.getMatrix(), "proj");
@@ -66,7 +68,8 @@ namespace air {
 		while (j < draw_it) {
 			auto it = (drawQueue + j);
 
-			glBindTexture(GL_TEXTURE_2D, it->tex->id);
+			if (it->tex != nullptr)
+				glBindTexture(GL_TEXTURE_2D, it->tex->id);
 
 			spriteShader->use();
 			glDrawArrays(GL_POINTS, j, it->tex->spritesCount);
@@ -80,6 +83,10 @@ namespace air {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		
 		draw_it = 0;
+	}
+
+	size_t Renderer2d::getLastDrawCount() {
+		return last_draw_count;
 	}
 
 	Renderer2d::~Renderer2d() {

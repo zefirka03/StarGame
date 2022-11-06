@@ -26,6 +26,8 @@ namespace air {
 
 		void submit(Camera2d& cam);
 		~Renderer2d();
+
+		size_t getLastDrawCount();
 	private:
 		static bool texture_sort_comparator(SpriteInstance const& a, SpriteInstance const& b) {
 			if (a.transform.position.z == b.transform.position.z)
@@ -52,6 +54,8 @@ namespace air {
 		GLuint vao_id;
 
 		Shader* spriteShader;
+
+		size_t last_draw_count=0;
 	};
 
 	class Renderer2dRectangles {

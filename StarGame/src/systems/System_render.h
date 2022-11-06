@@ -22,7 +22,7 @@ namespace air {
 				main_camera = &cam;
 				});
 
-			auto reg_render = reg->view<C_Sprite, C_Transform2d>();
+			auto reg_render = reg->view<C_Sprite, C_Transform2d>(entt::exclude<_C_New>);
 
 			reg_render.each([&](C_Sprite& sprite, C_Transform2d& transform) {
 
@@ -31,9 +31,7 @@ namespace air {
 
 			render->submit(main_camera->camera);
 		}
-		void terminate() override {
-			delete render;
-		}
+		void terminate() override {}
 		~_System_Render() {
 			delete render;
 		}

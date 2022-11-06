@@ -41,7 +41,7 @@ namespace air {
 
 
 	void RendererDebug::drawQuad(Transform2d const& transform, glm::vec4 color) {
-		glm::mat4 view = glm::rotate(glm::mat4(1), transform.rotation, glm::vec3(0,0,1));
+		glm::mat4 view = glm::rotate(glm::mat4(1), -transform.rotation, glm::vec3(0,0,1));
 		
 		glm::vec4 pos1 = glm::vec4(transform.position, 1) + view * glm::vec4(0 - transform.origin.x, 0 - transform.origin.y, 0, 1);
 		glm::vec4 pos2 = glm::vec4(transform.position, 1) + view * glm::vec4(transform.size.x - transform.origin.x, 0 - transform.origin.y, 0, 1);

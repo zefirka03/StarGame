@@ -3,7 +3,6 @@
 #include "../glIncl.h"
 #include "Scene.h"
 
-
 #include "../components/Camera2d.h"
 #include "../components/Transform.h"
 
@@ -36,6 +35,10 @@ namespace air {
 		void operator=(entt::entity _entt) {
 			entity_handle = _entt;
 		}
+		void operator=(Entity _entt) {
+			entity_handle = _entt.entity_handle;
+			scene = _entt.scene;
+		}
 
 		~Entity();
 	private:
@@ -54,21 +57,15 @@ namespace air {
 		Entity _gameObject;
 	};
 
-	struct _C_NativeScriptComponent : public Component {
-		std::vector<std::shared_ptr<Script>> Instances;
-
-		template<class T, class ...Args>
-		void Bind(Args&&... args) {
-			Instances.emplace_back(std::make_shared<T>(std::forward<Args>(args)...));
-		}
-	};
+	
 	struct C_Sprite : public Component {
 		C_Sprite() = default;
+		C_Sprite(glm::vec4 _color) : color(_color) {};
 		C_Sprite(glm::vec4 _color, glm::vec4 _texRect, Texture* _tex) : color(_color), textureRect(_texRect), tex(_tex) {};
 		glm::vec4 color;
 		glm::vec4 textureRect;
 
-		Texture* tex;
+		Texture* tex = nullptr;
 	};
 
 	struct C_Camera2d : public Component {
@@ -82,8 +79,8 @@ namespace air {
 	};
 
 
-
-	
+	class _C_New : public Component {};
+	class _C_Destroyed : public Component {};
 	
 
 	template<class T, class ...Args>
@@ -104,12 +101,4 @@ namespace air {
 	T& Entity::getComponent() {
 		return scene->reg.get<T>(entity_handle);
 	}
-
-	template<class T, class ...Args>
-	void Entity::addScript(Args&&... args) {
-		if (nsc == nullptr)
-			nsc = &(this->addComponent<_C_NativeScriptComponent>());
-		nsc->Bind<T>(std::forward<Args>(args)...);
-	}
-
 }
