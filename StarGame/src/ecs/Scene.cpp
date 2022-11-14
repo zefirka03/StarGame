@@ -4,28 +4,27 @@
 #include "../components/Transform.h"
 #include "../systems/System_render.h"
 #include "../systems/System_Native_Scripting.h"
-#include "../physics/PhysicsQuadTree.h"
+#include "../systems/System_Physics.h"
 
 
 namespace air {
 	Scene::Scene() {
 		this->addSystem<_System_Native_Scripting>();
-		this->addSystem<PhysicsSystem>();
+		this->addSystem<_System_Physics>();
 		this->addSystem<_System_Render>(300000+10);
 	}
 
 	Entity Scene::createEntity() {
-		Entity ent(reg.create(), this);;
+		Entity ent(reg.create(), this);
 		ent.addComponent<C_Transform2d>();
 		ent.addComponent<_C_New>();
 		return ent;
 	}
 
+
 	void Scene::destroyEntity(Entity ent) {
 		if (!ent.hasComponent<_C_Destroyed>()) {
-			
 			ent.addComponent<_C_Destroyed>();
-
 		}
 	}
 
@@ -44,6 +43,11 @@ namespace air {
 		//update systems
 		for (auto it = systems.begin(); it != systems.end(); ++it) {
 			(*it)->update(_deltaTime);
+		}
+
+		//last update systems
+		for (auto it = systems.begin(); it != systems.end(); ++it) {
+			(*it)->updateLast(_deltaTime);
 		}
 
 		//Update destroyed after systems

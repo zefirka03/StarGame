@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include <unordered_map>
+#include <cassert>
 #include "../glIncl.h"
 #include "Scene.h"
 
@@ -8,6 +10,7 @@
 
 namespace air {
 	struct _C_NativeScriptComponent;
+
 	class Entity {
 		friend class Scene;
 		friend class Script;
@@ -30,7 +33,7 @@ namespace air {
 		}
 
 		template<class T, class ...Args>
-		void addScript(Args&&... args);
+		T* addScript(Args&&... args);
 
 		void operator=(entt::entity _entt) {
 			entity_handle = _entt;
@@ -46,7 +49,6 @@ namespace air {
 		Scene* scene = nullptr;
 		entt::entity entity_handle{ 0 };
 	};
-
 
 	class Component;
 	class Script;
@@ -81,6 +83,43 @@ namespace air {
 
 	class _C_New : public Component {};
 	class _C_Destroyed : public Component {};
+
+	//class Prefab {
+	//	friend class Scene;
+	//public:
+	//	Prefab() {
+	//		this->addComponent<C_Transform2d>();
+	//	};
+	//	~Prefab() {
+	//		for (auto it : m_component_handles)
+	//			delete it.second;
+	//	}
+	//
+	//	template<class T, class ...Args>
+	//	T& addComponent(Args&&... args) {
+	//		static_assert(std::is_base_of<Component, T>::value, "AIR: You are trying to add Class as Component to Prefab, but it is not inherited from Component!");
+	//
+	//		m_component_handles[typeid(T).hash_code()] = new T(args...);
+	//		return (T&)*m_component_handles[typeid(T).hash_code()];
+	//	}
+	//
+	//	template<class T>
+	//	bool hasComponent() {
+	//		return m_component_handles.find(typeid(T).hash_code()) != m_component_handles.end();
+	//	}
+	//
+	//	template<class T>
+	//	T& getComponent() {
+	//		auto it = m_component_handles.find(typeid(T).hash_code());
+	//		assert(it != m_component_handles.end() && "AIR: There is no such component!");
+	//
+	//		return (T&)*(it->second);
+	//	}
+	//
+	//
+	//private:
+	//	std::unordered_map<size_t, Component*> m_component_handles;
+	//};
 	
 
 	template<class T, class ...Args>

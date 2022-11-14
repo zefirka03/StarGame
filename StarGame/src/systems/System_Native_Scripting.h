@@ -17,7 +17,7 @@ namespace air {
 			reg->view<_C_NativeScriptComponent, _C_New_Script>().each([&](auto entity, auto& nsc, auto& _new) {
 				for (auto script : nsc.Instances) {
 					if (!script->inited) {
-						script->m_entity = { entity, scene };
+
 						script->OnCreate();
 						script->inited = true;
 					}
@@ -30,7 +30,7 @@ namespace air {
 			reg->view<_C_NativeScriptComponent, _C_New_Script>().each([&](auto entity, auto& nsc, auto& _new) {
 				for (auto script : nsc.Instances) {
 					if (!script->inited) {
-						script->m_entity = { entity, scene };
+
 						script->OnCreate();
 						script->inited = true;
 					}
