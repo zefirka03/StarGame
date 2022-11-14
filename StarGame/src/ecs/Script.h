@@ -10,14 +10,17 @@ namespace air {
 		std::vector<std::shared_ptr<Script>> Instances;
 
 		template<class T, class ...Args>
-		void Bind(Args&&... args) {
+		T* Bind(Args&&... args) {
 			Instances.emplace_back(std::make_shared<T>(std::forward<Args>(args)...));
+			Instances.back().get()->m_entity = _gameObject;
+			return (T*)Instances.back().get();
 		}
 	};
 
 	class Script {
 		friend class Scene;
 		friend class _System_Native_Scripting;
+		friend struct _C_NativeScriptComponent;
 	public:
 		template<class T>
 		T& getComponent() {
@@ -39,11 +42,11 @@ namespace air {
 	};
 	
 	template<class T, class ...Args>
-	void Entity::addScript(Args&&... args) {
+	T* Entity::addScript(Args&&... args) {
 		if (nsc == nullptr)
 			nsc = &(this->addComponent<_C_NativeScriptComponent>());
-		nsc->Bind<T>(std::forward<Args>(args)...);
 		if(!this->hasComponent<_C_New_Script>())
 			this->addComponent<_C_New_Script>();
+		return nsc->Bind<T>(std::forward<Args>(args)...);
 	}
 }

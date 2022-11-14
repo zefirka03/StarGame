@@ -5,7 +5,10 @@ namespace air{
 	double Input::mouseWheel = 0;
 
 	bool Input::isKeyPressed(int _keycode) {
-		return glfwGetKey(Game::getInstance().getNativeWindow(), _keycode);
+		return (glfwGetKey(Game::getInstance().getNativeWindow(), _keycode) == GLFW_PRESS);
+	}
+	bool Input::isKeyReleased(int _keycode) {
+		return (glfwGetKey(Game::getInstance().getNativeWindow(), _keycode) == GLFW_RELEASE);
 	}
 	glm::vec2 Input::getCursorPos() {
 		double x, y;

@@ -6,6 +6,7 @@ namespace air {
 	class Input {
 	public:
 		static bool isKeyPressed(int _keycode);
+		static bool isKeyReleased(int _keycode);
 		static glm::vec2 getCursorPos();
 		static glm::vec2 getCursorPos(Camera2d const& _camera);
 

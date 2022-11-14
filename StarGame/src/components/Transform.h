@@ -5,7 +5,7 @@ namespace air {
 
 	struct Transform2d {
 		Transform2d() = default;
-		Transform2d(glm::vec3 _position, glm::vec2 _size) : position(_position), size(_size) {};
+		Transform2d(glm::vec3 _position, glm::vec2 _size) : position(_position), size(_size), origin(_size / glm::vec2(2.f)) {};
 		Transform2d(glm::vec3 _position, glm::vec2 _size, float _rotation) : position(_position), size(_size), rotation(_rotation) {};
 		Transform2d(glm::vec3 _position, glm::vec2 _size, float _rotation, glm::vec2 _origin) : position(_position), size(_size), rotation(_rotation), origin(_origin) {};
 
