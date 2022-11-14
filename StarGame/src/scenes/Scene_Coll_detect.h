@@ -9,7 +9,7 @@ class s_coll;
 class s_bullet;
 
 void cont(C_RigidBody& rb) {
-	rb._gameObject.getComponent<C_Sprite>().color = glm::vec4(0, 0, 1, 1);
+	rb._gameObject.getComponent<C_Sprite>().color = glm::vec4(0.2, 0.2, 0.8, 1);
 }
 class Scene_Coll_detect : public Scene {
 	void onStart() override {

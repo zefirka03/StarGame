@@ -15,10 +15,8 @@ namespace air {
 	public:
 		void init() override;
 		void update(float _deltaTime) override;
-		void terminate() override;
 		void updateLast(float _deltaTime) override;
-
-		void instantiate_phisics_object(C_RigidBody& _rigid);
+		void terminate() override;
 
 		~_System_Physics() {
 			std::cout << "Physics Terminated!\n";
@@ -27,6 +25,8 @@ namespace air {
 		}
 		bool debug = true;
 	private:
+		void instantiate_phisics_object(C_RigidBody& _rigid);
+
 		Air_B2dContactListener* air_b2ContactListener_h;
 
 		b2World* h_world = nullptr;
