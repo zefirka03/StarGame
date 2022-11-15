@@ -27,7 +27,7 @@ class Scene_Coll_detect : public Scene {
 		TM.loadTexture("img/empty.png", "empty");
 
 		Entity ent1 = createEntity();
-		ent1.addScript<s_coll>();
+		ent1.addScript<s_coll>(camera.camera);
 
 		auto& sp1 = ent1.addComponent<C_Sprite>();
 		auto& tr1 = ent1.getComponent<C_Transform2d>();
@@ -97,14 +97,17 @@ public:
 
 class s_coll : public Script {
 public:
+	s_coll(Camera2d& _cam){
+		cam = &_cam;
+	}
 	void OnCreate() override {
 		
 	}
 	void OnUpdate(float _deltaTime) override {
-		if (Input::isKeyPressed(GLFW_KEY_SPACE)) {
+		if (Input::isMousePressed_Right()) {
 			auto ent = getScene()->createEntity();
 			auto bull = ent.addScript<s_bullet>();
-			bull->Init(getComponent<C_Transform2d>().transform.position);
+			bull->Init(glm::vec3(Input::getCursorPos(*cam),0));
 		}
 
 
@@ -129,5 +132,6 @@ public:
 	}
 	void OnDestroy()  override {}
 	float app = false;
+	Camera2d* cam;
 };
 

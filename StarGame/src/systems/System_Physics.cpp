@@ -69,7 +69,7 @@ namespace air {
 
 		render = new RendererDebug(50000);
 
-		h_world = new b2World(b2Vec2(0.f, 9.8f));
+		h_world = new b2World(b2Vec2(0.f, 9.8f*5));
 		h_world->SetContactListener(air_b2ContactListener_h);
 
 		auto view = reg->view<C_RigidBody>();

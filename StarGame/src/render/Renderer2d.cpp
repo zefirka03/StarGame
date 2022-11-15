@@ -66,6 +66,7 @@ namespace air {
 
 		int j = 0;
 		while (j < draw_it) {
+			//jump to another texture
 			auto it = (drawQueue + j);
 
 			if (it->tex != nullptr)
