@@ -41,7 +41,8 @@ namespace air {
 		float width = 100, height = 100;
 		Transform2d transform;
 
+		bool main = false;
 		glm::mat4 projection = glm::mat4(0);
-
+		uint32_t m_layersBitmask = 4294967295; //max
 	};
 }

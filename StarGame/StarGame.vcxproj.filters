@@ -81,6 +81,12 @@
     <ClCompile Include="src\systems\System_Physics.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\render\Framebuffer.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\System_render.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Game.h">
@@ -188,9 +194,21 @@
     <ClInclude Include="src\systems\System_Physics.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="src\render\Framebuffer.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\Texture.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\Scene_RenderTex.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\render\shaders\SpriteShader.shader" />
     <None Include="src\render\shaders\debugRendererShader.shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\render\AboutRenderingArchitecture.txt" />
   </ItemGroup>
 </Project>

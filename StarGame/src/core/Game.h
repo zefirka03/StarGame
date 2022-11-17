@@ -2,13 +2,9 @@
 #include "debug.h"
 #include "../glIncl.h"
 
-#include "../ecs/air_ecs.h"
-#include "Input.h"
-#include "../render/air_render.h"
-#include "../scripts/air_scripts.h"
-#include "../systems/System_Physics.h"
-
 namespace air {
+	class Scene;
+
 	class Game {
 	private:
 		static Game* instance;
@@ -22,13 +18,15 @@ namespace air {
 		int w, h;
 		TimeStep ts;
 	public:
-		Game(const char* _title, int _w, int _h);
+		Game(const char* _title, int _w, int _h, bool _fullscreen = false);
 		void run(Scene* _scn);
 
 		void goToScene(Scene* _scn);
 
 		static Game& getInstance();
 		GLFWwindow* getNativeWindow();
+		int getWidth();
+		int getHeight();
 
 		~Game();
 	private:

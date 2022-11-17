@@ -3,13 +3,14 @@
 #include <unordered_map>
 #include <cassert>
 #include "../glIncl.h"
-#include "Scene.h"
 
 #include "../components/Camera2d.h"
 #include "../components/Transform.h"
+#include "../render/Texture.h"
 
 namespace air {
 	struct _C_NativeScriptComponent;
+	class Scene;
 
 	class Entity {
 		friend class Scene;
@@ -28,9 +29,7 @@ namespace air {
 		T& getComponent();
 
 		template<class T>
-		void removeComponent() {
-			scene->reg.remove<T>(entity_handle);
-		}
+		void removeComponent();
 
 		template<class T, class ...Args>
 		T* addScript(Args&&... args);
@@ -50,7 +49,6 @@ namespace air {
 		entt::entity entity_handle{ 0 };
 	};
 
-	class Component;
 	class Script;
 
 	class Component {
@@ -64,10 +62,11 @@ namespace air {
 		C_Sprite() = default;
 		C_Sprite(glm::vec4 _color) : color(_color) {};
 		C_Sprite(glm::vec4 _color, glm::vec4 _texRect, Texture* _tex) : color(_color), textureRect(_texRect), tex(_tex) {};
-		glm::vec4 color;
-		glm::vec4 textureRect;
+		glm::vec4 color = glm::vec4(1,1,1,1);
+		glm::vec4 textureRect = glm::vec4(0,0,1,1);
 
 		Texture* tex = nullptr;
+		uint8_t layer = 0;
 	};
 
 	struct C_Camera2d : public Component {
@@ -76,6 +75,7 @@ namespace air {
 		Camera2d camera;
 	};
 
+
 	struct C_Transform2d : public Component {
 		Transform2d transform;
 	};
@@ -83,61 +83,4 @@ namespace air {
 
 	class _C_New : public Component {};
 	class _C_Destroyed : public Component {};
-
-	//class Prefab {
-	//	friend class Scene;
-	//public:
-	//	Prefab() {
-	//		this->addComponent<C_Transform2d>();
-	//	};
-	//	~Prefab() {
-	//		for (auto it : m_component_handles)
-	//			delete it.second;
-	//	}
-	//
-	//	template<class T, class ...Args>
-	//	T& addComponent(Args&&... args) {
-	//		static_assert(std::is_base_of<Component, T>::value, "AIR: You are trying to add Class as Component to Prefab, but it is not inherited from Component!");
-	//
-	//		m_component_handles[typeid(T).hash_code()] = new T(args...);
-	//		return (T&)*m_component_handles[typeid(T).hash_code()];
-	//	}
-	//
-	//	template<class T>
-	//	bool hasComponent() {
-	//		return m_component_handles.find(typeid(T).hash_code()) != m_component_handles.end();
-	//	}
-	//
-	//	template<class T>
-	//	T& getComponent() {
-	//		auto it = m_component_handles.find(typeid(T).hash_code());
-	//		assert(it != m_component_handles.end() && "AIR: There is no such component!");
-	//
-	//		return (T&)*(it->second);
-	//	}
-	//
-	//
-	//private:
-	//	std::unordered_map<size_t, Component*> m_component_handles;
-	//};
-	
-
-	template<class T, class ...Args>
-	T& Entity::addComponent(Args&&... args) {
-		static_assert(std::is_base_of<Component, T>::value, "AIR: You are trying to add Class as Component to an Entity, but it is not inherited from Component!");
-
-		auto& it = scene->reg.emplace<T>(entity_handle, std::forward<Args>(args)...);
-		it._gameObject = Entity(entity_handle, scene);
-		return it;
-	}
-
-	template<class ...T>
-	bool Entity::hasComponent(){
-		return scene->reg.all_of<T...>(entity_handle);
-	}
-
-	template<class T>
-	T& Entity::getComponent() {
-		return scene->reg.get<T>(entity_handle);
-	}
 }

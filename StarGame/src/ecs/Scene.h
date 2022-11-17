@@ -1,6 +1,6 @@
 #pragma once
-#include <entt.hpp>
 
+#include "EntityComponent.h"
 #include "../render/Renderer2d.h"
 
 #include "System.h"
@@ -45,5 +45,27 @@ namespace air {
 	};
 
 
+	template<class T, class ...Args>
+	T& Entity::addComponent(Args&&... args) {
+		static_assert(std::is_base_of<Component, T>::value, "AIR: You are trying to add Class as Component to an Entity, but it is not inherited from Component!");
 
+		auto& it = scene->reg.emplace<T>(entity_handle, std::forward<Args>(args)...);
+		it._gameObject = Entity(entity_handle, scene);
+		return it;
+	}
+
+	template<class ...T>
+	bool Entity::hasComponent() {
+		return scene->reg.all_of<T...>(entity_handle);
+	}
+
+	template<class T>
+	T& Entity::getComponent() {
+		return scene->reg.get<T>(entity_handle);
+	}
+
+	template<class T>
+	void Entity::removeComponent() {
+		scene->reg.remove<T>(entity_handle);
+	}
 }

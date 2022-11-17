@@ -2,6 +2,7 @@
 
 #include "../ecs/EntityComponent.h"
 #include "../ecs/System.h"
+#include "../render/Renderer2d.h"
 
 #include <box2d/box2d.h>
 

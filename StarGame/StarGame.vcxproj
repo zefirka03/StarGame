@@ -150,11 +150,13 @@
     <ClCompile Include="src\physics\Colliders.cpp" />
     <ClCompile Include="src\physics\PhysicsQuadTree.cpp" />
     <ClCompile Include="src\core\Input.cpp" />
+    <ClCompile Include="src\render\Framebuffer.cpp" />
     <ClCompile Include="src\render\Renderer2dRectangles.cpp" />
     <ClCompile Include="src\render\RendererDebug.cpp" />
     <ClCompile Include="src\scripts\S_Camera2dController.cpp" />
     <ClCompile Include="src\systems\System_Native_Scripting.h" />
     <ClCompile Include="src\systems\System_Physics.cpp" />
+    <ClCompile Include="src\systems\System_render.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui_draw.cpp" />
@@ -171,6 +173,8 @@
     <ClCompile Include="src\render\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\render\Framebuffer.h" />
+    <ClInclude Include="src\render\Texture.h" />
     <ClInclude Include="src\scenes\Scene1.h" />
     <ClInclude Include="src\components\air_components.h" />
     <ClInclude Include="src\components\Camera2d.h" />
@@ -187,6 +191,7 @@
     <ClInclude Include="src\scenes\Scene2.h" />
     <ClInclude Include="src\scenes\Scene3.h" />
     <ClInclude Include="src\scenes\Scene_Coll_detect.h" />
+    <ClInclude Include="src\scenes\Scene_RenderTex.h" />
     <ClInclude Include="src\systems\System_Physics.h" />
     <ClInclude Include="src\systems\System_render.h" />
     <ClInclude Include="src\third-party\imgui\imconfig.h" />
@@ -210,6 +215,9 @@
   <ItemGroup>
     <None Include="src\render\shaders\debugRendererShader.shader" />
     <None Include="src\render\shaders\SpriteShader.shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\render\AboutRenderingArchitecture.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

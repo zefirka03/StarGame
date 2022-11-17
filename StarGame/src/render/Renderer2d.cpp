@@ -44,8 +44,8 @@ namespace air {
 			WA("Renderer2d: You are trying to render more than maximum allowed sprites!");
 			return;
 		}
-
-		_vert.tex->spritesCount++;
+		
+		++_vert.tex->spritesCount[_vert.layer];
 
 		drawQueue[draw_it++] = _vert;
 	}
@@ -53,36 +53,62 @@ namespace air {
 
 
 	//render all objects in draw queue and clear queue
-	void Renderer2d::submit(Camera2d& cam) {
+	void Renderer2d::submit(Camera2d& cam, C_RenderTexture* rendTex) {
 		last_draw_count = draw_it;
 
 		std::sort(drawQueue, drawQueue + draw_it, texture_sort_comparator);
-
-		spriteShader->setMatrix4f(cam.getMatrix(), "proj");
 		
 		glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, draw_it * sizeof(SpriteInstance), drawQueue);
 		glBindVertexArray(vao_id);
 
+		Camera2d& tmp_cam = cam;
+		uint32_t tmp_layer_mask = cam.m_layersBitmask;
+
+		if (rendTex != nullptr) {
+			tmp_cam = *rendTex->getCamera();
+			glBindFramebuffer(GL_FRAMEBUFFER, rendTex->getFramebuffer().m_fbo_id);
+			glViewport(0, 0, rendTex->getFramebuffer().m_params.width, rendTex->getFramebuffer().m_params.height);
+			glClear(GL_COLOR_BUFFER_BIT);
+		}
+		else {
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glViewport(0, 0, Game::getInstance().getWidth(), Game::getInstance().getHeight());
+		}
+
+		spriteShader->setMatrix4f(tmp_cam.getMatrix(), "proj");
+
+		int j = 0;
+		while (j < draw_it) {
+			//jump to another texture
+			auto it = (drawQueue + j);
+			//ADD FRAMEBUFFER THERE!
+			if ((tmp_layer_mask >> it->layer) & 1u) {
+				if (it->tex != nullptr)
+					glBindTexture(GL_TEXTURE_2D, it->tex->id);
+
+				spriteShader->use();
+				glDrawArrays(GL_POINTS, j, it->tex->spritesCount[it->layer]);
+				spriteShader->unuse();
+			}
+
+			j += it->tex->spritesCount[it->layer];
+		}
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glBindVertexArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+
+	void Renderer2d::clear() {
 		int j = 0;
 		while (j < draw_it) {
 			//jump to another texture
 			auto it = (drawQueue + j);
 
-			if (it->tex != nullptr)
-				glBindTexture(GL_TEXTURE_2D, it->tex->id);
-
-			spriteShader->use();
-			glDrawArrays(GL_POINTS, j, it->tex->spritesCount);
-			spriteShader->unuse();
-
-			j += it->tex->spritesCount;
-			it->tex->spritesCount = 0;
+			j += it->tex->spritesCount[it->layer];
+			it->tex->spritesCount[it->layer] = 0;
 		}
-
-		glBindVertexArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		
 		draw_it = 0;
 	}
 

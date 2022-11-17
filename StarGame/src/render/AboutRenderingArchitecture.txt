@@ -1,0 +1,2 @@
+Each Texture store id on GPU, and array of 32 elements, where i-element(i = [0, 31]) show the number of sprites, that renders in i-th layer. 
+Inside Sprite object, Sprite instance contains 32-bit number, where i-th bit indicates whether to render this sprite at this layer.

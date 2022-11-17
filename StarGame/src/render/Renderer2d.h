@@ -6,12 +6,16 @@
 #include <map>
 #include <unordered_map>
 
+#include "../core/Game.h" 
+
 #include "Shader.h" 
 #include "TextureManager.h"
 #include "../ecs/System.h"
 
 #include "../components/Transform.h"
 #include "../components/Camera2d.h"
+#include "../ecs/air_ecs.h"
+#include "Framebuffer.h"
 	
 typedef uint32_t	air_sprite_id;
 
@@ -24,15 +28,20 @@ namespace air {
 		Renderer2d(air_sprite_id _sprite_count);
 		void draw(const SpriteInstance& _vert);
 
-		void submit(Camera2d& cam);
+		void submit(Camera2d& cam, C_RenderTexture* rendTex = nullptr);
+
+		void clear();
 		~Renderer2d();
 
 		size_t getLastDrawCount();
 	private:
 		static bool texture_sort_comparator(SpriteInstance const& a, SpriteInstance const& b) {
-			if (a.transform.position.z == b.transform.position.z)
-				return a.tex < b.tex;
-			else return a.transform.position.z < b.transform.position.z;
+			if (a.layer == b.layer) {
+				if (a.transform.position.z == b.transform.position.z)
+					return a.tex < b.tex;
+				else return a.transform.position.z < b.transform.position.z;
+			}
+			else return a.layer > b.layer;
 		}
 
 		struct SpriteInstance {
@@ -42,6 +51,7 @@ namespace air {
 			glm::vec4 textureRect;
 
 			Texture* tex;
+			uint8_t layer;
 		};
 		
 		SpriteInstance* drawQueue;

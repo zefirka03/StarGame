@@ -16,7 +16,8 @@ namespace air {
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-			Texture* tx = new Texture{ id, 0 };
+			Texture* tx = new Texture();
+			tx->id = id;
 
 			textures_path.insert(std::make_pair(path, tx));
 			textures_names.insert(std::make_pair(name, tx));

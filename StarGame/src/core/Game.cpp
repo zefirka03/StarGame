@@ -2,10 +2,12 @@
 #include "Input.h"
 #include "debug.h"
 
+#include "../ecs/Scene.h"
+
 namespace air {
 	Game* Game::instance = nullptr;
 
-	Game::Game(const char* _title, int _w, int _h) {
+	Game::Game(const char* _title, int _w, int _h, bool _fullscreen) {
 		instance = this;
 
 		window = nullptr;
@@ -13,7 +15,9 @@ namespace air {
 		w = _w, h = _h;
 
 		if (glfwInit()) {
-			window = glfwCreateWindow(w, h, _title, NULL, NULL);
+			if(_fullscreen)
+				window = glfwCreateWindow(w, h, _title, glfwGetPrimaryMonitor(), NULL);
+			else window = glfwCreateWindow(w, h, _title, NULL, NULL);
 			glfwMakeContextCurrent(window);
 		}
 		else WA("glfw not inited!");
@@ -42,6 +46,14 @@ namespace air {
 
 	void Game::goToScene(Scene* scn) {
 		next_scene = scn;
+	}
+
+	int Game::getHeight() {
+		return h;
+	}
+
+	int Game::getWidth() {
+		return w;
 	}
 
 	void Game::_updateCurrentScene() {

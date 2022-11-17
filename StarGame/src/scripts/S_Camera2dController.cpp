@@ -3,7 +3,7 @@
 
 namespace air {
 	void S_Camera2dController::OnUpdate(float deltaTime) {
-			glm::vec2 nPos = Input::getCursorPos();
+		glm::vec2 nPos = Input::getCursorPos();
 			//std::cout << nPos.x << " " << nPos.y << '\n';
 			//std::cout << cam_instance->transform.size.x << " " << cam_instance->transform.size.y << '\n';
 		if (Input::isMousePressed_Left()) {
@@ -11,7 +11,8 @@ namespace air {
 			delta_m = nPos - prev_m;
 			prev_m = nPos;
 			moved = glm::vec4(glm::vec2(-1.f) * delta_m / cam_instance->camera.transform.scale, 0, 0);
-			cam_instance->camera.move(glm::vec3(moved.x, moved.y, 0)) ;			
+			cam_instance->camera.move(glm::vec3(moved.x, moved.y, 0)) ;	
+			//std::cout << nPos.x << " " << nPos.y<<'\n';
 		}
 		else prev_m = Input::getCursorPos();
 
