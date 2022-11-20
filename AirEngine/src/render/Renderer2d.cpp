@@ -7,8 +7,16 @@ namespace air {
 
 		drawQueue = new SpriteInstance[_sprite_count];
 		draw_it = 0;
-
-		spriteShader = new Shader("src/render/shaders/SpriteShader.shader", AIR_SHADER_VGF);
+		std::cout << "SEFEGGEEGGEGE\n";
+		//spriteShader = new Shader("src/render/shaders/SpriteShader.shader", AIR_SHADER_VGF);
+		spriteShader = new Shader();
+		const char* shader =
+			#include "shaders/_SpriteShader.shader"
+		;
+		spriteShader->loadFromString( 
+			shader,
+			AIR_SHADER_VGF
+		);
 
 		glGenBuffers(1, &vbo_id);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo_id);

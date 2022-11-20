@@ -8,7 +8,14 @@ namespace air {
 		drawQueue = new LineInstance[_objects_count];
 		draw_it = 0;
 
-		debugShader = new Shader("src/render/shaders/debugRendererShader.shader", AIR_SHADER_VF);
+		debugShader = new Shader();
+		const char* shader =
+			#include "shaders/_debugRendererShader.shader"
+		;
+		debugShader->loadFromString(
+			shader, 
+			AIR_SHADER_VF
+		);
 
 		glGenBuffers(1, &vbo_id);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
