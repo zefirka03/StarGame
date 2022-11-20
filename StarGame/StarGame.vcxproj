@@ -17,11 +17,12 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{92b124e7-55db-46d6-9bfc-aec20ef47d2b}</ProjectGuid>
+    <ProjectGuid>{e4e58210-54cd-43b0-a6e0-a4c63c5947fa}</ProjectGuid>
     <RootNamespace>StarGame</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -52,23 +53,25 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Label="Shared">
+  <ImportGroup Label="Shared" >
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
+    <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    </ImportGroup>
+    <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    </ImportGroup>
+    <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    </ImportGroup>
+    <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    </ImportGroup>
+
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -82,6 +85,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
+
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -114,16 +118,12 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>GLEW_STATIC;FLECS_STATIC_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dep\box2d\include;$(SolutionDir)dep\glfw\include;$(SolutionDir)dep\entt;$(SolutionDir)dep\glm;$(SolutionDir)dep\glew\include;$(SolutionDir)dep\imgui;$(SolutionDir)dep\SOIL\include</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Users\www\Desktop\game\StarGame\dep\box2d\lib;$(SolutionDir)dep\glfw\lib-vc2019;$(SolutionDir)dep\glew\x64;$(SolutionDir)dep\SOIL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>box2d.lib;soil.lib;glew32s.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -132,85 +132,18 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>GLEW_STATIC;FLECS_STATICNDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dep\box2d\include;$(SolutionDir)dep\glfw\include;$(SolutionDir)dep\entt;$(SolutionDir)dep\glm;$(SolutionDir)dep\glew\include;$(SolutionDir)dep\imgui;$(SolutionDir)dep\SOIL\include</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Users\www\Desktop\game\StarGame\dep\box2d\lib;$(SolutionDir)dep\glfw\lib-vc2019;$(SolutionDir)dep\glew\x64;$(SolutionDir)dep\SOIL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>box2d.lib;soil.lib;glew32s.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="src\physics\Colliders.cpp" />
-    <ClCompile Include="src\physics\PhysicsQuadTree.cpp" />
-    <ClCompile Include="src\core\Input.cpp" />
-    <ClCompile Include="src\render\Renderer2dRectangles.cpp" />
-    <ClCompile Include="src\render\RendererDebug.cpp" />
-    <ClCompile Include="src\scripts\S_Camera2dController.cpp" />
-    <ClCompile Include="src\systems\System_Native_Scripting.h" />
-    <ClCompile Include="src\systems\System_Physics.cpp" />
-    <ClCompile Include="src\third-party\imgui\imgui.cpp" />
-    <ClCompile Include="src\third-party\imgui\imgui_demo.cpp" />
-    <ClCompile Include="src\third-party\imgui\imgui_draw.cpp" />
-    <ClCompile Include="src\third-party\imgui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="src\third-party\imgui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="src\third-party\imgui\imgui_tables.cpp" />
-    <ClCompile Include="src\third-party\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="src\render\Shader.cpp" />
-    <ClCompile Include="src\render\Renderer2d.cpp" />
-    <ClCompile Include="src\ecs\Scene.cpp" />
-    <ClCompile Include="src\ecs\Entity.cpp" />
-    <ClCompile Include="src\core\Game.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\render\TextureManager.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\scenes\Scene1.h" />
-    <ClInclude Include="src\components\air_components.h" />
-    <ClInclude Include="src\components\Camera2d.h" />
-    <ClInclude Include="src\components\Transform.h" />
-    <ClInclude Include="src\ecs\EntityComponent.h" />
-    <ClInclude Include="src\ecs\Script.h" />
-    <ClInclude Include="src\physics\Colliders.h" />
-    <ClInclude Include="src\physics\PhysicsQuadTree.h" />
-    <ClInclude Include="src\air.h" />
-    <ClInclude Include="src\core\Input.h" />
-    <ClInclude Include="src\ecs\System.h" />
-    <ClInclude Include="src\glIncl.h" />
-    <ClInclude Include="src\render\shaders\RectangleShader.shader" />
-    <ClInclude Include="src\scenes\Scene2.h" />
-    <ClInclude Include="src\scenes\Scene3.h" />
-    <ClInclude Include="src\scenes\Scene_Coll_detect.h" />
-    <ClInclude Include="src\systems\System_Physics.h" />
-    <ClInclude Include="src\systems\System_render.h" />
-    <ClInclude Include="src\third-party\imgui\imconfig.h" />
-    <ClInclude Include="src\third-party\imgui\imgui.h" />
-    <ClInclude Include="src\third-party\imgui\imgui_impl_glfw.h" />
-    <ClInclude Include="src\third-party\imgui\imgui_impl_opengl3.h" />
-    <ClInclude Include="src\third-party\imgui\imgui_internal.h" />
-    <ClInclude Include="src\third-party\imgui\imstb_rectpack.h" />
-    <ClInclude Include="src\third-party\imgui\imstb_textedit.h" />
-    <ClInclude Include="src\third-party\imgui\imstb_truetype.h" />
-    <ClInclude Include="src\scripts\air_scripts.h" />
-    <ClInclude Include="src\render\Shader.h" />
-    <ClInclude Include="src\render\air_render.h" />
-    <ClInclude Include="src\render\Renderer2d.h" />
-    <ClInclude Include="src\core\debug.h" />
-    <ClInclude Include="src\ecs\air_ecs.h" />
-    <ClInclude Include="src\core\Game.h" />
-    <ClInclude Include="src\ecs\Scene.h" />
-    <ClInclude Include="src\render\TextureManager.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\render\shaders\debugRendererShader.shader" />
-    <None Include="src\render\shaders\SpriteShader.shader" />
-  </ItemGroup>
+
+  <ItemGroup></ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
