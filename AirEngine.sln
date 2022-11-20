@@ -5,6 +5,11 @@ VisualStudioVersion = 16.0.32106.194
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AirEngine", "AirEngine\AirEngine.vcxproj", "{92B124E7-55DB-46D6-9BFC-AEC20EF47D2B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StarGame", "StarGame\StarGame.vcxproj", "{E4E58210-54CD-43B0-A6E0-A4C63C5947FA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{92B124E7-55DB-46D6-9BFC-AEC20EF47D2B} = {92B124E7-55DB-46D6-9BFC-AEC20EF47D2B}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +26,14 @@ Global
 		{92B124E7-55DB-46D6-9BFC-AEC20EF47D2B}.Release|x64.Build.0 = Release|x64
 		{92B124E7-55DB-46D6-9BFC-AEC20EF47D2B}.Release|x86.ActiveCfg = Release|Win32
 		{92B124E7-55DB-46D6-9BFC-AEC20EF47D2B}.Release|x86.Build.0 = Release|Win32
+		{E4E58210-54CD-43B0-A6E0-A4C63C5947FA}.Debug|x64.ActiveCfg = Debug|x64
+		{E4E58210-54CD-43B0-A6E0-A4C63C5947FA}.Debug|x64.Build.0 = Debug|x64
+		{E4E58210-54CD-43B0-A6E0-A4C63C5947FA}.Debug|x86.ActiveCfg = Debug|Win32
+		{E4E58210-54CD-43B0-A6E0-A4C63C5947FA}.Debug|x86.Build.0 = Debug|Win32
+		{E4E58210-54CD-43B0-A6E0-A4C63C5947FA}.Release|x64.ActiveCfg = Release|x64
+		{E4E58210-54CD-43B0-A6E0-A4C63C5947FA}.Release|x64.Build.0 = Release|x64
+		{E4E58210-54CD-43B0-A6E0-A4C63C5947FA}.Release|x86.ActiveCfg = Release|Win32
+		{E4E58210-54CD-43B0-A6E0-A4C63C5947FA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
