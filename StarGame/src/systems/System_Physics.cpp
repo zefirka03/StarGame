@@ -5,7 +5,7 @@ namespace air {
 		switch (_type)
 		{
 		case C_RigidBody::type::Dynamic: return b2BodyType::b2_dynamicBody;
-		case C_RigidBody::type::Kinematic: return b2BodyType::b2_dynamicBody;
+		case C_RigidBody::type::Kinematic: return b2BodyType::b2_kinematicBody;
 		case C_RigidBody::type::Static: return b2BodyType::b2_staticBody;
 		}
 		return b2BodyType::b2_staticBody;
@@ -69,7 +69,7 @@ namespace air {
 
 		render = new RendererDebug(50000);
 
-		h_world = new b2World(b2Vec2(0.f, 9.8f*5));
+		h_world = new b2World(b2Vec2(0.f, -9.8f*5));
 		h_world->SetContactListener(air_b2ContactListener_h);
 
 		auto view = reg->view<C_RigidBody>();
@@ -87,14 +87,14 @@ namespace air {
 			if (!rigid.h_body)
 				this->instantiate_phisics_object(rigid);
 
-			Entity& gameObject = rigid._gameObject;
+				Entity& gameObject = rigid._gameObject;
 
-			auto& tr = gameObject.getComponent<C_Transform2d>();
-			
-			const auto& n_pos = rigid.h_body->GetPosition();
+				auto& tr = gameObject.getComponent<C_Transform2d>();
 
-			tr.transform.position = { n_pos.x, n_pos.y, 0 };
-			tr.transform.rotation = -rigid.h_body->GetAngle();
+				const auto& n_pos = rigid.h_body->GetPosition();
+
+				tr.transform.position = { n_pos.x, n_pos.y, 0 };
+				tr.transform.rotation = -rigid.h_body->GetAngle();
 		});
 	}
 

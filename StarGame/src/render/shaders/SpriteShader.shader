@@ -51,25 +51,25 @@ void main() {
         sin(_rotation[0]), cos(_rotation[0]));
 
     ps = gl_in[0].gl_Position.xy - _origin[0] + vec2(0.0, 0.0);
-    f_texture_coord = vec2(_texRect[0][0], _texRect[0][1]);
-    f_color = _color[0];
-    gl_Position = proj * vec4(_position[0].xy + rot_mat * (_scale[0] * ps), 0, 1);
-    EmitVertex();
-
-    ps = gl_in[0].gl_Position.xy - _origin[0] + vec2(_size[0].x, 0.0);
-    f_texture_coord = vec2(_texRect[0][0] + _texRect[0][2], _texRect[0][1]);
-    f_color = _color[0];
-    gl_Position = proj * vec4(_position[0].xy + rot_mat * (_scale[0] * ps), 0, 1);
-    EmitVertex();
-
-    ps = gl_in[0].gl_Position.xy - _origin[0] + vec2(0.0, _size[0].y);
     f_texture_coord = vec2(_texRect[0][0], _texRect[0][1] + _texRect[0][3]);
     f_color = _color[0];
     gl_Position = proj * vec4(_position[0].xy + rot_mat * (_scale[0] * ps), 0, 1);
     EmitVertex();
 
-    ps = gl_in[0].gl_Position.xy - _origin[0] + vec2(_size[0].x, _size[0].y);
+    ps = gl_in[0].gl_Position.xy - _origin[0] + vec2(_size[0].x, 0.0);
     f_texture_coord = vec2(_texRect[0][0] + _texRect[0][2], _texRect[0][1] + _texRect[0][3]);
+    f_color = _color[0];
+    gl_Position = proj * vec4(_position[0].xy + rot_mat * (_scale[0] * ps), 0, 1);
+    EmitVertex();
+
+    ps = gl_in[0].gl_Position.xy - _origin[0] + vec2(0.0, _size[0].y);
+    f_texture_coord = vec2(_texRect[0][0], _texRect[0][1]);
+    f_color = _color[0];
+    gl_Position = proj * vec4(_position[0].xy + rot_mat * (_scale[0] * ps), 0, 1);
+    EmitVertex();
+
+    ps = gl_in[0].gl_Position.xy - _origin[0] + vec2(_size[0].x, _size[0].y);
+    f_texture_coord = vec2(_texRect[0][0] + _texRect[0][2], _texRect[0][1]);
     f_color = _color[0];
     gl_Position = proj * vec4(_position[0].xy + rot_mat * (_scale[0] * ps), 0, 1);
     EmitVertex();

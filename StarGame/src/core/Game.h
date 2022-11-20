@@ -32,5 +32,6 @@ namespace air {
 	private:
 		void init_imgui();
 		void _updateCurrentScene();
+		void _terminate();
 	};
 }

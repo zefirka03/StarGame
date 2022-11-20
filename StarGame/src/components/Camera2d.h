@@ -11,7 +11,7 @@ namespace air {
 
 			transform.size = glm::vec2(_w, _h);
 
-			projection = glm::ortho(0.f, _w, _h, 0.f);
+			projection = glm::ortho(0.f, _w, 0.f, _h);
 			
 
 			this->transform.position = glm::vec3(0);

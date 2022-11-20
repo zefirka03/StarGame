@@ -51,7 +51,13 @@ namespace air {
 				});
 			
 		}
-		void terminate() override {}
+		void terminate() override {
+			reg->view<_C_NativeScriptComponent>().each([&](auto& nsc) {
+				for (auto script : nsc.Instances) {
+					script->OnDestroy();
+				}
+			});
+		}
 		~_System_Native_Scripting() {}
 	private:
 	};

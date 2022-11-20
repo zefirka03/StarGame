@@ -10,7 +10,7 @@
 namespace air {
 	Scene::Scene() {
 		this->addSystem<_System_Native_Scripting>();
-		this->addSystem<_System_Physics>();
+		systems_handles.Air_Physics =  this->addSystem<_System_Physics>();
 		this->addSystem<_System_Render>(300000+10);
 	}
 
@@ -61,9 +61,14 @@ namespace air {
 		return textureManager;
 	}
 
-	Scene::~Scene() {
+	void Scene::_terminate() {
 		for (auto it = systems.begin(); it != systems.end(); ++it) {
 			(*it)->terminate();
 		}
+		reg.clear();
+	}
+
+	Scene::~Scene() {
+		this->_terminate();
 	}
 }

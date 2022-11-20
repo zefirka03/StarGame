@@ -203,6 +203,9 @@
     <ClInclude Include="src\scenes\Scene_RenderTex.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="src\scenes\Scene_try1.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\render\shaders\SpriteShader.shader" />

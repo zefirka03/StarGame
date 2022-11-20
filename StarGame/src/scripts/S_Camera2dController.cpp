@@ -10,7 +10,7 @@ namespace air {
 
 			delta_m = nPos - prev_m;
 			prev_m = nPos;
-			moved = glm::vec4(glm::vec2(-1.f) * delta_m / cam_instance->camera.transform.scale, 0, 0);
+			moved = glm::vec4(glm::vec2(-1.f, 1.f) * delta_m / cam_instance->camera.transform.scale, 0, 0);
 			cam_instance->camera.move(glm::vec3(moved.x, moved.y, 0)) ;	
 			//std::cout << nPos.x << " " << nPos.y<<'\n';
 		}

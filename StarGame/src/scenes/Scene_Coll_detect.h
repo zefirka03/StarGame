@@ -35,7 +35,7 @@ class Scene_Coll_detect : public Scene {
 		auto& c_box1 = ent1.addComponent<C_Collider_Box2d>();
 
 		tr1._gameObject.getComponent<C_Sprite>() = C_Sprite(glm::vec4(0.8, 0.2, 0.2, 1), glm::vec4(0, 0, 1, 1), TM.getTexture("empty"));
-		tr1.transform = Transform2d(glm::vec3(0, -50, 0), glm::vec2(100, 2), 0, glm::vec2(50, 1));
+		tr1.transform = Transform2d(glm::vec3(0, 50, 0), glm::vec2(100, 2), 0, glm::vec2(50, 1));
 		c_box1.size = tr1.transform.size;
 		rg1.Type = C_RigidBody::type::Dynamic;
 		rg1.mass = 5;
@@ -48,7 +48,7 @@ class Scene_Coll_detect : public Scene {
 		auto& c_box2 = ent2.addComponent<C_Collider_Box2d>();
 		
 		tr2._gameObject.getComponent<C_Sprite>() = C_Sprite(glm::vec4(0.8, 0.8, 0.8, 1), glm::vec4(0, 0, 1, 1), TM.getTexture("empty"));
-		tr2.transform = Transform2d(glm::vec3(0, 50, 0), glm::vec2(1000, 2), 0, glm::vec2(500, 1));
+		tr2.transform = Transform2d(glm::vec3(0, -50, 0), glm::vec2(1000, 2), 0, glm::vec2(500, 1));
 		c_box2.size = tr2.transform.size;
 		rg2.Type = C_RigidBody::type::Static;
 
@@ -113,14 +113,14 @@ public:
 
 		if (Input::isKeyPressed(GLFW_KEY_W) && !app) {
 			//std::cout << getComponent<C_RigidBody>().mass << '\n';
-			getComponent<C_RigidBody>().h_body->ApplyLinearImpulseToCenter({ 0, -1500 * _deltaTime }  , 1);
+			getComponent<C_RigidBody>().h_body->ApplyLinearImpulseToCenter({ 0, 1500 * _deltaTime }  , 1);
 			//app = true;
 		}
 		else if (Input::isKeyReleased(GLFW_KEY_W)) {
 			//app = false;
 		}
 		if (Input::isKeyPressed(GLFW_KEY_S)) {
-			getComponent<C_RigidBody>().h_body->ApplyLinearImpulseToCenter({ 0, 1500 * _deltaTime }, 1);
+			getComponent<C_RigidBody>().h_body->ApplyLinearImpulseToCenter({ 0, -1500 * _deltaTime }, 1);
 		}
 		if (Input::isKeyPressed(GLFW_KEY_A)) {
 			getComponent<C_RigidBody>().h_body->ApplyLinearImpulseToCenter({ -1500 * _deltaTime,  0}, 1);

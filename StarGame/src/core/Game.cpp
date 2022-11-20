@@ -105,7 +105,9 @@ namespace air {
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 			glfwSwapBuffers(window);
 		}
+
 		glfwTerminate();
+		this->_terminate();
 	}
 
 	void Game::init_imgui() {
@@ -118,6 +120,10 @@ namespace air {
 
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init(glsl_version);
+	}
+
+	void Game::_terminate() {
+		delete current_scene;
 	}
 
 	Game::~Game() {

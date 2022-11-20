@@ -11,6 +11,7 @@ class Scene_RenderTex : public Scene {
 		auto& camera_rendTex = ent_camera_rendTex.addComponent<C_Camera2d>(Game::getInstance().getWidth(), Game::getInstance().getHeight());
 		auto& camera = ent_camera.addComponent<C_Camera2d>(Game::getInstance().getWidth(), Game::getInstance().getHeight());
 		ent_camera.addScript<S_Camera2dController>();
+		
 
 		camera_rendTex.camera.main = true;
 
@@ -25,6 +26,8 @@ class Scene_RenderTex : public Scene {
 
 		air::Entity ent_renderTex = createEntity();
 		auto& rTex = ent_renderTex.addComponent<C_RenderTexture>(FramebufferParameters(1920/4,1080/4,AIR_TEXTURE_NEAREST));
+
+		
 		rTex.setCamera(camera.camera);
 		camera_rendTex.camera.m_layersBitmask = 1;
 		camera.camera.m_layersBitmask = 2;
@@ -45,10 +48,10 @@ class Scene_RenderTex : public Scene {
 		auto& sp1 = ent_t.addComponent<C_Sprite>();
 		sp1.tex = rTex.getTexture();
 		sp1.color = glm::vec4(1, 1, 1, 1);
-		
+
 		ent_t.getComponent<C_Transform2d>().transform.size = glm::vec2(Game::getInstance().getWidth(), Game::getInstance().getHeight());
-		ent_t.getComponent<C_Transform2d>().transform.scale = glm::vec2(1.0, -1.0);
-		ent_t.getComponent<C_Transform2d>().transform.position = glm::vec3(0, Game::getInstance().getHeight(), 1);
+		ent_t.getComponent<C_Sprite>().textureRect = glm::vec4(0, 1, 1, -1);
+		ent_t.getComponent<C_Transform2d>().transform.position = glm::vec3(0, 0, 1);
 	}
 	void imGui() override {};
 	void onEnd() override {};

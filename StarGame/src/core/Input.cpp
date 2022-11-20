@@ -20,7 +20,12 @@ namespace air{
 		double x, y;
 		glfwGetCursorPos(Game::getInstance().getNativeWindow(), &x, &y);
 
-		glm::vec4 out = glm::inverse(_camera.getProjection()) * glm::inverse(_camera.getView()) * glm::vec4((glm::vec2(2*x, -2*y))/glm::vec2(_camera.width, _camera.height) , 0, 0);
+		int w_x, w_y;
+		glfwGetWindowSize(Game::getInstance().getNativeWindow(), &w_x, &w_y);
+		
+		y = w_y - y;
+
+		glm::vec4 out = glm::inverse(_camera.getProjection()) * glm::inverse(_camera.getView()) * glm::vec4((glm::vec2(2*x, 2*y))/glm::vec2(_camera.width, _camera.height) , 0, 0);
 
 		return	glm::vec2(_camera.transform.position.x, _camera.transform.position.y) -
 				glm::vec2(_camera.transform.origin.x, _camera.transform.origin.y) / _camera.transform.scale +

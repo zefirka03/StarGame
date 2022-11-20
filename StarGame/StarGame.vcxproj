@@ -192,6 +192,7 @@
     <ClInclude Include="src\scenes\Scene3.h" />
     <ClInclude Include="src\scenes\Scene_Coll_detect.h" />
     <ClInclude Include="src\scenes\Scene_RenderTex.h" />
+    <ClInclude Include="src\scenes\Scene_try1.h" />
     <ClInclude Include="src\systems\System_Physics.h" />
     <ClInclude Include="src\systems\System_render.h" />
     <ClInclude Include="src\third-party\imgui\imconfig.h" />

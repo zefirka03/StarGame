@@ -2,16 +2,23 @@
 
 #include "EntityComponent.h"
 #include "../render/Renderer2d.h"
-
+#include <unordered_map>
 #include "System.h"
 
 namespace air {
+	class _System_Physics;
+
 	class Entity;
 	class Game;
 
 	class Scene {
 		friend class Entity;
 		friend class Game;
+	private:
+		struct systems_handler {
+			_System_Physics* Air_Physics;
+		} systems_handles;
+
 	public:
 		Scene();
 		Entity createEntity();
@@ -27,6 +34,10 @@ namespace air {
 			return it;
 		}
 
+		systems_handler& getSystems() {
+			return systems_handles;
+		}
+
 		TextureManager& getTextureManager();
 
 		virtual void onStart() = 0;
@@ -38,6 +49,7 @@ namespace air {
 	private:
 		void _init();
 		void _onUpdate(float _deltaTime);
+		void _terminate();
 
 		TextureManager textureManager;
 		std::vector<std::shared_ptr<System>> systems;
