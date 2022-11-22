@@ -7,7 +7,7 @@ namespace air {
 
 		drawQueue = new SpriteInstance[_sprite_count];
 		draw_it = 0;
-		std::cout << "SEFEGGEEGGEGE\n";
+
 		//spriteShader = new Shader("src/render/shaders/SpriteShader.shader", AIR_SHADER_VGF);
 		spriteShader = new Shader();
 		const char* shader =

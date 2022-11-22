@@ -2,6 +2,7 @@
 
 #include "../ecs/EntityComponent.h"
 #include "../ecs/System.h"
+#include "../ecs/Script.h"
 #include "../render/Renderer2d.h"
 
 #include <box2d/box2d.h>
@@ -35,17 +36,32 @@ namespace air {
 	};
 
 	struct C_RigidBody : public Component {
+		friend class Air_B2dContactListener;
+		friend class _System_Physics;
+	public:
 		enum class type {
 			Static = 0,
 			Dynamic,
 			Kinematic
 		} Type = type::Static;
+		
+		void setCollisionCallback(void (*rg)(C_RigidBody&));
+		void setFixedRotation(bool _fix);
+		void setMass(float _mass);
+		void setLinearVelocity(glm::vec2 vel);
+		glm::vec2 getLinearVelocity();
+		void applyLenearImpulceToCenter(glm::vec2 vel);
+		void setGravityScale(float _gravityScale);
+		void setTransform(glm::vec2 _pos, float _angle);
 
+		bool isSensor = false;
+	private:
 		b2Body* h_body = nullptr;
-
 		std::function<void(C_RigidBody&)> collisionEnter = nullptr;
-
-		float mass = 1;
+		
+		bool m_FixedRotation = false;
+		float m_gravityScale = 1;
+		float m_mass = 1;
 	};
 
 	struct C_Collider_Box2d : public Component {
@@ -53,7 +69,7 @@ namespace air {
 		glm::vec2 size = { 1.f, 1.f };
 
 		float density = 1.0f;
-		float friction = 0.5f;
+		float friction = 0.0f;
 		float restitution = 0.5f;
 		float restitutionThreshold = 0.0f;
 	};

@@ -12,19 +12,41 @@ namespace air {
 	}
 
 	class Air_B2dContactListener : public b2ContactListener {
-		void BeginContact(b2Contact* contact) {
+		void BeginContact(b2Contact* contact) override  {
 			auto rb1 = ((C_RigidBody*)(contact->GetFixtureB()->GetBody()->GetUserData().pointer));
-			if (rb1->collisionEnter != nullptr) {
-				rb1->collisionEnter(*(C_RigidBody*)(contact->GetFixtureA()->GetBody()->GetUserData().pointer));
+			auto rb2 = ((C_RigidBody*)(contact->GetFixtureA()->GetBody()->GetUserData().pointer));
+
+			if (rb1->_gameObject.hasComponent<_C_NativeScriptComponent>()) {
+				_C_NativeScriptComponent& nsc = rb1->_gameObject.getComponent<_C_NativeScriptComponent>();
+				for (auto it = nsc.Instances.begin(); it != nsc.Instances.end(); ++it) {
+					(*it)->OnCollisionEnter(*rb2);
+				}
 			}
 
-			auto rb2 = ((C_RigidBody*)(contact->GetFixtureA()->GetBody()->GetUserData().pointer));
-			if (rb2->collisionEnter != nullptr) {
-				rb2->collisionEnter(*(C_RigidBody*)(contact->GetFixtureB()->GetBody()->GetUserData().pointer));
+			if (rb2->_gameObject.hasComponent<_C_NativeScriptComponent>()) {
+				_C_NativeScriptComponent& nsc = rb2->_gameObject.getComponent<_C_NativeScriptComponent>();
+				for (auto it = nsc.Instances.begin(); it != nsc.Instances.end(); ++it) {
+					(*it)->OnCollisionEnter(*rb1);
+				}
 			}
 		}
-		void EndContact(b2Contact* contact) {
+		void EndContact(b2Contact* contact) override {
+			auto rb1 = ((C_RigidBody*)(contact->GetFixtureB()->GetBody()->GetUserData().pointer));
+			auto rb2 = ((C_RigidBody*)(contact->GetFixtureA()->GetBody()->GetUserData().pointer));
 
+			if (rb1->_gameObject.hasComponent<_C_NativeScriptComponent>()) {
+				_C_NativeScriptComponent& nsc = rb1->_gameObject.getComponent<_C_NativeScriptComponent>();
+				for (auto it = nsc.Instances.begin(); it != nsc.Instances.end(); ++it) {
+					(*it)->OnCollisionEnd(*rb2);
+				}
+			}
+
+			if (rb2->_gameObject.hasComponent<_C_NativeScriptComponent>()) {
+				_C_NativeScriptComponent& nsc = rb2->_gameObject.getComponent<_C_NativeScriptComponent>();
+				for (auto it = nsc.Instances.begin(); it != nsc.Instances.end(); ++it) {
+					(*it)->OnCollisionEnd(*rb1);
+				}
+			}
 		}
 	};
 
@@ -40,21 +62,25 @@ namespace air {
 
 		b2Body* body = h_world->CreateBody(&bodyDef);
 		body->GetUserData().pointer = (uintptr_t)&_rigid;
+		body->SetFixedRotation(_rigid.m_FixedRotation);
+		body->SetGravityScale(_rigid.m_gravityScale);
+		
+		
 		_rigid.h_body = body;
-
+		
 		if (gameObject.hasComponent<C_Collider_Box2d>()) {
 			auto& c_box2d = gameObject.getComponent<C_Collider_Box2d>();
-
 			b2PolygonShape shape;
-			//shape.SetAsBox(c_box2d.size.x, c_box2d.size.y);
-			shape.SetAsBox(c_box2d.size.x / 2.f, c_box2d.size.y / 2.f);
+
+			shape.SetAsBox(c_box2d.size.x / 2.f, c_box2d.size.y / 2.f, { c_box2d.size.x/2 - tr.transform.origin.x , c_box2d.size.y/2 - tr.transform.origin.y  }, 0);
 
 			float area = c_box2d.size.x * c_box2d.size.y;
 
 			b2FixtureDef fixture;
-
+			
 			fixture.shape = &shape;
-			fixture.density = _rigid.mass / area;
+			fixture.isSensor = _rigid.isSensor;
+			fixture.density = _rigid.m_mass / area;
 			fixture.friction = c_box2d.friction;
 			fixture.restitution = c_box2d.restitution;
 			fixture.restitutionThreshold = c_box2d.restitutionThreshold;
@@ -69,7 +95,7 @@ namespace air {
 
 		render = new RendererDebug(50000);
 
-		h_world = new b2World(b2Vec2(0.f, -9.8f*5));
+		h_world = new b2World(b2Vec2(0.f, -9.8f*25));
 		h_world->SetContactListener(air_b2ContactListener_h);
 
 		auto view = reg->view<C_RigidBody>();
@@ -84,6 +110,10 @@ namespace air {
 		h_world->Step(_deltaTime, 4, 4);
 
 		reg->view<C_RigidBody>().each([&](C_RigidBody& rigid) {
+			if (rigid._gameObject.hasComponent<_C_Destroyed>()) {
+				h_world->DestroyBody(rigid.h_body);
+				return;
+			}
 			if (!rigid.h_body)
 				this->instantiate_phisics_object(rigid);
 
@@ -95,6 +125,18 @@ namespace air {
 
 				tr.transform.position = { n_pos.x, n_pos.y, 0 };
 				tr.transform.rotation = -rigid.h_body->GetAngle();
+
+				//if (rigid.isSensor) {
+				//	auto contactss = rigid.h_body->GetContactList();
+				//	if (contactss) {
+				//		auto contacts = contactss->contact;
+				//		while (contacts) {
+				//			auto rg = (C_RigidBody*)contacts->GetFixtureA()->GetBody()->GetUserData().pointer;
+				//			std::cout << rg->_gameObject.getComponent<C_Tag>().tag << '\n';
+				//			contacts = contacts->GetNext();
+				//		}
+				//	}
+				//}
 		});
 	}
 
@@ -107,9 +149,14 @@ namespace air {
 			});
 			reg->view<C_Collider_Box2d>().each([&](C_Collider_Box2d& coll) {
 				auto rb = coll._gameObject.getComponent<C_RigidBody>().h_body;
-				
+
+				glm::vec4 _color(1);
+				if (!coll._gameObject.getComponent<C_RigidBody>().isSensor)
+					_color = glm::vec4(0, 1, 0, 1);
+				else _color = glm::vec4(0, 0, 1, 1);
+
 				render->drawQuad(Transform2d(glm::vec3(rb->GetPosition().x, rb->GetPosition().y, 0), coll.size, -rb->GetAngle(),
-					coll.size / glm::vec2(2)), glm::vec4(0, 1, 0, 1));
+					coll._gameObject.getComponent<C_Transform2d>().transform.origin), _color);
 				render->submit(main_camera->camera);
 			});
 		}

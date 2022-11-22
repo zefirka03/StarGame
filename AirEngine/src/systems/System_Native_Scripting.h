@@ -45,11 +45,6 @@ namespace air {
 					script->OnUpdate(_deltaTime);
 				}
 			});
-
-			reg->view<_C_Destroyed>().each([&](const auto entity, auto& dst) {
-				reg->destroy(entity);
-				});
-			
 		}
 		void terminate() override {
 			reg->view<_C_NativeScriptComponent>().each([&](auto& nsc) {

@@ -17,6 +17,7 @@ namespace air {
 	Entity Scene::createEntity() {
 		Entity ent(reg.create(), this);
 		ent.addComponent<C_Transform2d>();
+		ent.addComponent<C_Tag>();
 		ent.addComponent<_C_New>();
 		return ent;
 	}
@@ -54,6 +55,7 @@ namespace air {
 		reg.view<_C_Destroyed>().each([&](const auto entity, auto& dst) {
 			reg.destroy(entity);
 		});
+
 
 	}
 

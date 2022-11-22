@@ -75,6 +75,8 @@ namespace air {
 
 		bool swpInt = 1;
 
+		glClearColor(0.1, 0.1, 0.1, 1);
+
 		while (!glfwWindowShouldClose(window)) {
 			this->_updateCurrentScene();
 

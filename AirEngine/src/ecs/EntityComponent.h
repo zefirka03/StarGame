@@ -43,10 +43,10 @@ namespace air {
 		}
 
 		~Entity();
+		entt::entity entity_handle{ 0 };
 	private:
 		_C_NativeScriptComponent* nsc = nullptr;
 		Scene* scene = nullptr;
-		entt::entity entity_handle{ 0 };
 	};
 
 	class Script;
@@ -73,6 +73,10 @@ namespace air {
 		C_Camera2d() = default;
 		C_Camera2d(float _w, float _h) : camera(_w, _h) {};
 		Camera2d camera;
+	};
+
+	struct C_Tag : public Component {
+		std::string tag = "Default";
 	};
 
 

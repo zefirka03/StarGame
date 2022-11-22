@@ -155,6 +155,7 @@
     <ClCompile Include="src\render\Renderer2dRectangles.cpp" />
     <ClCompile Include="src\render\RendererDebug.cpp" />
     <ClCompile Include="src\scripts\S_Camera2dController.cpp" />
+    <ClCompile Include="src\systems\C_RigidBody.cpp" />
     <ClCompile Include="src\systems\System_Native_Scripting.h" />
     <ClCompile Include="src\systems\System_Physics.cpp" />
     <ClCompile Include="src\systems\System_render.cpp" />

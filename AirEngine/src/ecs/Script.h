@@ -4,6 +4,8 @@
 namespace air {
 	class _System_Native_Scripting;
 
+	class C_RigidBody;
+
 	class _C_New_Script : public Component {};
 
 	struct _C_NativeScriptComponent : public Component {
@@ -20,6 +22,7 @@ namespace air {
 	class Script {
 		friend class Scene;
 		friend class _System_Native_Scripting;
+		friend class Air_B2dContactListener;
 		friend struct _C_NativeScriptComponent;
 	public:
 		template<class T>
@@ -36,6 +39,9 @@ namespace air {
 		virtual void OnCreate() {}
 		virtual void OnUpdate(float _deltaTime) {}
 		virtual void OnDestroy() {}
+
+		virtual void OnCollisionEnter(C_RigidBody& _other) {}
+		virtual void OnCollisionEnd(C_RigidBody& _other) {}
 	private:
 		Entity m_entity;
 		bool inited = false;

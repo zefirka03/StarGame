@@ -109,16 +109,16 @@ class S_PlayerController : public Script {
 	}
 	virtual void OnUpdate(float _deltaTime) override {
 		if (Input::isKeyPressed(GLFW_KEY_W)) {
-			rg->h_body->SetLinearVelocity({ 0, 10});
+			rg->setLinearVelocity({ 0, 10});
 		}
 		if (Input::isKeyPressed(GLFW_KEY_S)) {
-			rg->h_body->SetLinearVelocity({ 0, -10 });
+			rg->setLinearVelocity({ 0, -10 });
 		}
 		if (Input::isKeyPressed(GLFW_KEY_A)) {
-			rg->h_body->SetLinearVelocity({ -10 ,  0 });
+			rg->setLinearVelocity({ -10 ,  0 });
 		}
 		if (Input::isKeyPressed(GLFW_KEY_D)) {
-			rg->h_body->SetLinearVelocity({ 10, 0 });
+			rg->setLinearVelocity({ 10, 0 });
 		}
 	}
 	virtual void OnDestroy() override {}
