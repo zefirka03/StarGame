@@ -48,6 +48,7 @@ namespace air {
 		void setCollisionCallback(void (*rg)(C_RigidBody&));
 		void setFixedRotation(bool _fix);
 		void setMass(float _mass);
+		float getMass();
 		void setLinearVelocity(glm::vec2 vel);
 		glm::vec2 getLinearVelocity();
 		void applyLenearImpulceToCenter(glm::vec2 vel);
@@ -55,8 +56,8 @@ namespace air {
 		void setTransform(glm::vec2 _pos, float _angle);
 
 		bool isSensor = false;
-	private:
 		b2Body* h_body = nullptr;
+	private:
 		std::function<void(C_RigidBody&)> collisionEnter = nullptr;
 		
 		bool m_FixedRotation = false;

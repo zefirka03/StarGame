@@ -48,6 +48,11 @@ namespace air {
 			h_body->SetTransform({ _pos.x, _pos.y }, _angle);
 	}
 
+	float C_RigidBody::getMass() {
+		if (h_body)
+			return h_body->GetMass();
+	}
+
 	void C_RigidBody::setGravityScale(float _gravityScale) {
 		m_gravityScale = _gravityScale;
 		if (h_body) 

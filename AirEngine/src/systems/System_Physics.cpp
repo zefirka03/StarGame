@@ -73,7 +73,7 @@ namespace air {
 			b2PolygonShape shape;
 
 			shape.SetAsBox(c_box2d.size.x / 2.f, c_box2d.size.y / 2.f, { c_box2d.size.x/2 - tr.transform.origin.x , c_box2d.size.y/2 - tr.transform.origin.y  }, 0);
-
+			
 			float area = c_box2d.size.x * c_box2d.size.y;
 
 			b2FixtureDef fixture;

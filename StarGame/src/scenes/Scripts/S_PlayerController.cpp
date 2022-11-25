@@ -46,6 +46,15 @@ void S_PlayerController::OnUpdate(float _deltaTime)  {
 		rg->setLinearVelocity({ 0,  rg->getLinearVelocity().y });
 		t = 0;
 	}
+	auto it = rg->h_body->GetContactList();
+	while (it) {
+		std::cout << it->contact->GetManifold()->points->localPoint.x << " "  << it->contact->GetManifold()->points->localPoint.y<<'\n';
+		//std::cout << ((C_RigidBody*)it->contact->GetFixtureA()->GetBody()->GetUserData().pointer)->_gameObject.getComponent<C_Tag>().tag << '\n';
+		it = it->next;
+	}
+	std::cout << std::endl;
+		//std::cout << rg->getLinearVelocity().y << '\n';
+		//std::cout << rg->getLinearVelocity().x << '\n';
 
 	if (Input::isMousePressed_Right()) {
 		World->DestroyBlock(Input::getCursorPos(Camera->camera).x / 16, Input::getCursorPos(Camera->camera).y / 16);
