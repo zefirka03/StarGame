@@ -24,12 +24,18 @@
     <ClCompile Include="src\scenes\Scripts\S_World.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\scenes\Scripts\Chunk.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\scenes\Scripts\S_PlayerController.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\scenes\Scripts\S_World.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\Scripts\Chunk.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

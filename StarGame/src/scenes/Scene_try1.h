@@ -3,11 +3,14 @@
 #include "air.h"
 #include "Scripts/S_PlayerController.h"
 #include "Scripts/S_World.h"
+#include <ctime>
 
 using namespace air;
 
 class Scene_try1 : public Scene {
 	void onStart() override {
+		srand(time(nullptr));
+
 		physics = getSystems().Air_Physics;
 
 		Entity ent_camera = createEntity();
@@ -26,7 +29,7 @@ class Scene_try1 : public Scene {
 		TM.loadTexture("img/empty.png", "empty");
 
 		Entity world_generation = createEntity();
-		S_WorldGeneration* WG = world_generation.addScript<S_WorldGeneration>(120, 100);
+		S_World* WG = world_generation.addScript<S_World>(500, 100);
 		
 		Entity player = createEntity();
 		S_PlayerController* playerController = player.addScript<S_PlayerController>();

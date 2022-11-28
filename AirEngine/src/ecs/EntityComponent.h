@@ -43,7 +43,7 @@ namespace air {
 		}
 
 		~Entity();
-		entt::entity entity_handle{ 0 };
+		entt::entity entity_handle;
 	private:
 		_C_NativeScriptComponent* nsc = nullptr;
 		Scene* scene = nullptr;

@@ -158,6 +158,7 @@
     <ClCompile Include="src\systems\C_RigidBody.cpp" />
     <ClCompile Include="src\systems\System_Native_Scripting.h" />
     <ClCompile Include="src\systems\System_Physics.cpp" />
+    <ClCompile Include="src\systems\System_Physics_debug.cpp" />
     <ClCompile Include="src\systems\System_render.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui.cpp" />
     <ClCompile Include="src\third-party\imgui\imgui_demo.cpp" />

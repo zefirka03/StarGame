@@ -21,7 +21,7 @@ namespace air {
 		glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(LineInstance) * maxCount, nullptr, GL_DYNAMIC_DRAW);
 
-		std::cout << sizeof(LineInstance) * maxCount << " video bites allocated\n";
+		//std::cout << sizeof(LineInstance) * maxCount << " video bites allocated\n";
 
 		glGenVertexArrays(1, &vao_id);
 		glBindVertexArray(vao_id);
@@ -66,7 +66,7 @@ namespace air {
 
 	//render all objects in draw queue and clear queue
 	void RendererDebug::submit(Camera2d& cam) {
-		std::sort(drawQueue, drawQueue + draw_it, sort_comparator);
+		//std::sort(drawQueue, drawQueue + draw_it, sort_comparator);
 
 		debugShader->setMatrix4f(cam.getMatrix(), "proj");
 
@@ -87,7 +87,7 @@ namespace air {
 	RendererDebug::~RendererDebug() {
 		glDeleteBuffers(1, &vbo_id);
 		glDeleteVertexArrays(1, &vao_id);
-
+		std::cout << "RendererDebug Destroyed!\n";
 		delete debugShader;
 		delete[] drawQueue;
 	}

@@ -1,11 +1,13 @@
 #include "S_PlayerController.h"
 
-void S_PlayerController::setWorld(S_WorldGeneration* _world) {
+void S_PlayerController::setWorld(S_World* _world) {
 	World = _world;
 }
+
 void S_PlayerController::setCamera(C_Camera2d* _camera) {
 	Camera = _camera;
 }
+
 void S_PlayerController::OnCreate() {
 	auto& TM = getScene()->getTextureManager();
 	sp = &getEntity().addComponent<C_Sprite>();
@@ -26,6 +28,7 @@ void S_PlayerController::OnCreate() {
 	ent_feet = getScene()->createEntity();
 	ent_feet.addScript<S_PlayerFeet>(this);
 }
+
 void S_PlayerController::OnUpdate(float _deltaTime)  {
 	if (Input::isKeyPressed(GLFW_KEY_W)) {
 		if (onGround) {
@@ -46,22 +49,11 @@ void S_PlayerController::OnUpdate(float _deltaTime)  {
 		rg->setLinearVelocity({ 0,  rg->getLinearVelocity().y });
 		t = 0;
 	}
-	auto it = rg->h_body->GetContactList();
-	while (it) {
-		std::cout << it->contact->GetManifold()->points->localPoint.x << " "  << it->contact->GetManifold()->points->localPoint.y<<'\n';
-		//std::cout << ((C_RigidBody*)it->contact->GetFixtureA()->GetBody()->GetUserData().pointer)->_gameObject.getComponent<C_Tag>().tag << '\n';
-		it = it->next;
-	}
-	std::cout << std::endl;
-		//std::cout << rg->getLinearVelocity().y << '\n';
-		//std::cout << rg->getLinearVelocity().x << '\n';
 
 	if (Input::isMousePressed_Right()) {
-		World->DestroyBlock(Input::getCursorPos(Camera->camera).x / 16, Input::getCursorPos(Camera->camera).y / 16);
+		World->DestroyBlock(int(Input::getCursorPos(Camera->camera).x / 16), int(Input::getCursorPos(Camera->camera).y / 16));
+		//std::cout << int(Input::getCursorPos(Camera->camera).x / 16) << " " << int(Input::getCursorPos(Camera->camera).y / 16) << '\n';
 	}
-
-	//getComponent<C_Transform2d>().transform.rotation = sin(t) / 2.f;
-
 }
 void S_PlayerController::OnDestroy()  {}
 
@@ -84,16 +76,19 @@ void S_PlayerFeet::OnCreate()  {
 }
 
 void S_PlayerFeet::OnUpdate(float _deltaTime)  {
-	rg_feet->setTransform(glm::vec2(h_control->tr->transform.position.x, h_control->tr->transform.position.y - h_control->tr->transform.origin.y), 0);
 	rg_feet->setLinearVelocity(h_control->rg->getLinearVelocity());
+	rg_feet->setTransform(glm::vec2(h_control->tr->transform.position.x, h_control->tr->transform.position.y - h_control->tr->transform.origin.y), 0);
 }
 
 void S_PlayerFeet::OnCollisionEnter(C_RigidBody& _other)  {
 	if (_other._gameObject.getComponent<C_Tag>().tag == "Ground")
 		h_control->onGround++;
+	//std::cout << "cood";
 }
 
 void S_PlayerFeet::OnCollisionEnd(C_RigidBody& _other)  {
 	if (_other._gameObject.getComponent<C_Tag>().tag == "Ground")
 		h_control->onGround--;
+	//std::cout << "end";
+
 }

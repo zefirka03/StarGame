@@ -8,14 +8,14 @@ using namespace air;
 class S_PlayerController : public Script {
 	friend class S_PlayerFeet;
 public:
-	void setWorld(S_WorldGeneration* _world);
+	void setWorld(S_World* _world);
 	void setCamera(C_Camera2d* _camera);
 	void OnCreate() override;
 	void OnUpdate(float _deltaTime) override;
 	void OnDestroy() override;
 
 private:
-	S_WorldGeneration* World = nullptr;
+	S_World* World = nullptr;
 	C_Camera2d* Camera = nullptr;
 
 	int onGround = 0;
@@ -45,6 +45,7 @@ public:
 
 
 private:
+
 	C_Collider_Box2d* cl_feet;
 	C_RigidBody* rg_feet;
 

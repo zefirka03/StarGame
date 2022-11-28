@@ -143,11 +143,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\scenes\Scripts\Chunk.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\scenes\Scripts\S_PlayerController.cpp" />
     <ClCompile Include="src\scenes\Scripts\S_World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\scenes\Scripts\Chunk.h" />
     <ClInclude Include="src\scenes\Scripts\S_PlayerController.h" />
     <ClInclude Include="src\scenes\Scripts\S_World.h" />
   </ItemGroup>

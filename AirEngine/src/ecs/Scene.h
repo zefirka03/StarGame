@@ -25,6 +25,8 @@ namespace air {
 
 		void destroyEntity(Entity ent);
 
+		bool isValidEntity(Entity ent);
+
 		template<class T, class ...Args>
 		T* addSystem(Args&&... args) {
 			T* it = new T(std::forward<Args>(args)...);
@@ -80,4 +82,5 @@ namespace air {
 	void Entity::removeComponent() {
 		scene->reg.remove<T>(entity_handle);
 	}
+	
 }

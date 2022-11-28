@@ -58,6 +58,9 @@ namespace air {
 
 
 	}
+	bool Scene::isValidEntity(Entity ent) {
+		return reg.valid(ent.entity_handle);
+	}
 
 	TextureManager& Scene::getTextureManager() {
 		return textureManager;

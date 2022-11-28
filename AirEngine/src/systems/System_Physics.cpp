@@ -74,11 +74,23 @@ namespace air {
 
 			shape.SetAsBox(c_box2d.size.x / 2.f, c_box2d.size.y / 2.f, { c_box2d.size.x/2 - tr.transform.origin.x , c_box2d.size.y/2 - tr.transform.origin.y  }, 0);
 			
+			b2Vec2 vs[4];
+			vs[3].Set(-tr.transform.origin.x, -tr.transform.origin.y);
+			vs[2].Set(-tr.transform.origin.x, -tr.transform.origin.y + c_box2d.size.y);
+			vs[1].Set(-tr.transform.origin.x + c_box2d.size.x, -tr.transform.origin.y + c_box2d.size.y);
+			vs[0].Set(-tr.transform.origin.x + c_box2d.size.x, -tr.transform.origin.y);
+
+
+			b2ChainShape chain;
+			chain.CreateLoop(vs, 4);
+
 			float area = c_box2d.size.x * c_box2d.size.y;
 
 			b2FixtureDef fixture;
 			
-			fixture.shape = &shape;
+			if(bodyDef.type == b2BodyType::b2_staticBody)
+				fixture.shape = &chain;
+			else  fixture.shape = &shape;
 			fixture.isSensor = _rigid.isSensor;
 			fixture.density = _rigid.m_mass / area;
 			fixture.friction = c_box2d.friction;
@@ -93,10 +105,14 @@ namespace air {
 	void _System_Physics::init()  {
 		air_b2ContactListener_h = new Air_B2dContactListener();
 
-		render = new RendererDebug(50000);
+		//render = new RendererDebug(50000);
 
 		h_world = new b2World(b2Vec2(0.f, -9.8f*25));
 		h_world->SetContactListener(air_b2ContactListener_h);
+
+		debugDraw = new Physics_debugDraw();
+		h_world->SetDebugDraw(debugDraw);
+		debugDraw->SetFlags(b2Draw::e_shapeBit | b2Draw::e_aabbBit);
 
 		auto view = reg->view<C_RigidBody>();
 		view.each([&](C_RigidBody& rigid) {
@@ -142,23 +158,31 @@ namespace air {
 
 	void _System_Physics::updateLast(float _deltaTime) {
 		if (debug) {
+			
 			C_Camera2d* main_camera = nullptr;
 
 			reg->view<C_Camera2d>().each([&](auto& cam) {
 				main_camera = &cam;
 			});
-			reg->view<C_Collider_Box2d>().each([&](C_Collider_Box2d& coll) {
-				auto rb = coll._gameObject.getComponent<C_RigidBody>().h_body;
+			
+			h_world->DebugDraw();
+			debugDraw->Flush(main_camera);
+			
+			//reg->view<C_Collider_Box2d>().each([&](C_Collider_Box2d& coll) {
+			//	auto rb = coll._gameObject.getComponent<C_RigidBody>().h_body;
+			//
+			//	glm::vec4 _color(1);
+			//	if (!coll._gameObject.getComponent<C_RigidBody>().isSensor)
+			//		_color = glm::vec4(0, 1, 0, 1);
+			//	else _color = glm::vec4(0, 0, 1, 1);
+			//
+			//	debugDraw->render->drawQuad(Transform2d(glm::vec3(rb->GetPosition().x, rb->GetPosition().y, 0), coll.size, -rb->GetAngle(),
+			//		coll._gameObject.getComponent<C_Transform2d>().transform.origin), _color);
+			//
+			//	debugDraw->Flush(main_camera);
+			//});
+			
 
-				glm::vec4 _color(1);
-				if (!coll._gameObject.getComponent<C_RigidBody>().isSensor)
-					_color = glm::vec4(0, 1, 0, 1);
-				else _color = glm::vec4(0, 0, 1, 1);
-
-				render->drawQuad(Transform2d(glm::vec3(rb->GetPosition().x, rb->GetPosition().y, 0), coll.size, -rb->GetAngle(),
-					coll._gameObject.getComponent<C_Transform2d>().transform.origin), _color);
-				render->submit(main_camera->camera);
-			});
 		}
 	}
 
