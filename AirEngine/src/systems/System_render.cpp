@@ -8,27 +8,34 @@ namespace air {
 
 	void _System_Render::init()  {}
 
-	void _System_Render::update(float _deltaTime)  {
+	void _System_Render::update(float _deltaTime) {
 
 		C_Camera2d* main_camera = nullptr;
 
 		reg->view<C_Camera2d>().each([&](auto& cam) {
-			if(cam.camera.main)
+			if (cam.camera.main)
 				main_camera = &cam;
-		});
+			});
 
 		auto reg_render = reg->view<C_Sprite, C_Transform2d>(entt::exclude<_C_New>);
 
 		reg_render.each([&](C_Sprite& sprite, C_Transform2d& transform) {
 			render->draw({ transform.transform, sprite.color, sprite.textureRect, sprite.tex , sprite.layer });
-		});
-		
-		reg->view<C_RenderTexture>().each([&] (C_RenderTexture& _renderTexture) {
+			});
+
+		reg->view<C_RenderTexture>().each([&](C_RenderTexture& _renderTexture) {
 			render->submit(*_renderTexture.getCamera(), &_renderTexture);
-		});
+			});
 		render->submit(main_camera->camera);
 
+		//update states
+		states.sprites = render->getLastDrawCount();
+
 		render->clear();
+	}
+
+	SystemRender_States _System_Render::getStates(){
+		return states;
 	}
 
 	void _System_Render::terminate() {}

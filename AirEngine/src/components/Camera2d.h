@@ -3,6 +3,11 @@
 #include "Transform.h"
 
 namespace air {
+	struct cameraBorder {
+		float x1, x2;
+		float y1, y2;
+	};
+
 	struct Camera2d {
 		Camera2d() = default;
 		Camera2d(float _w, float _h) : width(_w), height(_h) {
@@ -32,6 +37,12 @@ namespace air {
 			view = glm::translate(view, -transform.position);
 			return view;
 		}
+
+		cameraBorder getBorders() {
+			return { transform.position.x - transform.origin.x / transform.scale.x, transform.position.x - (transform.origin.x - width) / transform.scale.x,
+					transform.position.y - transform.origin.y / transform.scale.y, transform.position.y - (transform.origin.x - height) / transform.scale.y };
+		}
+
 		void move(glm::vec3 _factor) {
 			transform.position += _factor;
 		}

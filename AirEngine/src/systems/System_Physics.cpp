@@ -12,9 +12,11 @@ namespace air {
 	}
 
 	class Air_B2dContactListener : public b2ContactListener {
-		void BeginContact(b2Contact* contact) override  {
-			auto rb1 = ((C_RigidBody*)(contact->GetFixtureB()->GetBody()->GetUserData().pointer));
-			auto rb2 = ((C_RigidBody*)(contact->GetFixtureA()->GetBody()->GetUserData().pointer));
+	public:
+		Scene* scene;
+		void BeginContact(b2Contact* contact) override {
+			auto rb1 = (&Entity((entt::entity)contact->GetFixtureA()->GetBody()->GetUserData().pointer, scene).getComponent<C_RigidBody>());
+			auto rb2 = (&Entity((entt::entity)contact->GetFixtureB()->GetBody()->GetUserData().pointer, scene).getComponent<C_RigidBody>());
 
 			if (rb1->_gameObject.hasComponent<_C_NativeScriptComponent>()) {
 				_C_NativeScriptComponent& nsc = rb1->_gameObject.getComponent<_C_NativeScriptComponent>();
@@ -31,8 +33,8 @@ namespace air {
 			}
 		}
 		void EndContact(b2Contact* contact) override {
-			auto rb1 = ((C_RigidBody*)(contact->GetFixtureB()->GetBody()->GetUserData().pointer));
-			auto rb2 = ((C_RigidBody*)(contact->GetFixtureA()->GetBody()->GetUserData().pointer));
+			auto rb1 = (&Entity((entt::entity)contact->GetFixtureA()->GetBody()->GetUserData().pointer, scene).getComponent<C_RigidBody>());
+			auto rb2 = (&Entity((entt::entity)contact->GetFixtureB()->GetBody()->GetUserData().pointer, scene).getComponent<C_RigidBody>());
 
 			if (rb1->_gameObject.hasComponent<_C_NativeScriptComponent>()) {
 				_C_NativeScriptComponent& nsc = rb1->_gameObject.getComponent<_C_NativeScriptComponent>();
@@ -48,6 +50,7 @@ namespace air {
 				}
 			}
 		}
+		
 	};
 
 	void _System_Physics::instantiate_phisics_object(C_RigidBody& _rigid) {
@@ -61,10 +64,9 @@ namespace air {
 		bodyDef.angle = -tr.transform.rotation;
 
 		b2Body* body = h_world->CreateBody(&bodyDef);
-		body->GetUserData().pointer = (uintptr_t)&_rigid;
+		body->GetUserData().pointer = (uintptr_t)_rigid._gameObject.entity_handle;
 		body->SetFixedRotation(_rigid.m_FixedRotation);
 		body->SetGravityScale(_rigid.m_gravityScale);
-		
 		
 		_rigid.h_body = body;
 		
@@ -91,6 +93,7 @@ namespace air {
 			if(bodyDef.type == b2BodyType::b2_staticBody)
 				fixture.shape = &chain;
 			else  fixture.shape = &shape;
+
 			fixture.isSensor = _rigid.isSensor;
 			fixture.density = _rigid.m_mass / area;
 			fixture.friction = c_box2d.friction;
@@ -109,6 +112,7 @@ namespace air {
 
 		h_world = new b2World(b2Vec2(0.f, -9.8f*25));
 		h_world->SetContactListener(air_b2ContactListener_h);
+		air_b2ContactListener_h->scene = scene;
 
 		debugDraw = new Physics_debugDraw();
 		h_world->SetDebugDraw(debugDraw);
@@ -123,10 +127,11 @@ namespace air {
 
 
 	void _System_Physics::update(float _deltaTime)  {
+
 		h_world->Step(_deltaTime, 4, 4);
 
 		reg->view<C_RigidBody>().each([&](C_RigidBody& rigid) {
-			if (rigid._gameObject.hasComponent<_C_Destroyed>()) {
+			if (rigid._gameObject.hasComponent<_C_Destroyed>() && rigid.h_body != nullptr) {
 				h_world->DestroyBody(rigid.h_body);
 				return;
 			}

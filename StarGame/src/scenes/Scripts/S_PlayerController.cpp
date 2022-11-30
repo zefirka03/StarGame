@@ -1,13 +1,5 @@
 #include "S_PlayerController.h"
 
-void S_PlayerController::setWorld(S_World* _world) {
-	World = _world;
-}
-
-void S_PlayerController::setCamera(C_Camera2d* _camera) {
-	Camera = _camera;
-}
-
 void S_PlayerController::OnCreate() {
 	auto& TM = getScene()->getTextureManager();
 	sp = &getEntity().addComponent<C_Sprite>();
@@ -18,7 +10,7 @@ void S_PlayerController::OnCreate() {
 	getEntity().getComponent<C_Tag>().tag = "Player";
 
 	*sp = C_Sprite(glm::vec4(1, 1, 1, 1), glm::vec4(0, 0, 5.f / 17.f, 1), TM.getTexture("2"));;
-	tr->transform = Transform2d(glm::vec3(250, 1700, 1), glm::vec2(14, 30), 0, glm::vec2(7.f, 15.f));
+	tr->transform = Transform2d(glm::vec3(250, 1500*16, 1), glm::vec2(14, 30), 0, glm::vec2(7.f, 15.f));
 	rg->Type = C_RigidBody::type::Dynamic;
 	rg->setFixedRotation(true);
 	cl->size = tr->transform.size;
@@ -28,6 +20,8 @@ void S_PlayerController::OnCreate() {
 	ent_feet = getScene()->createEntity();
 	ent_feet.addScript<S_PlayerFeet>(this);
 }
+
+
 
 void S_PlayerController::OnUpdate(float _deltaTime)  {
 	if (Input::isKeyPressed(GLFW_KEY_W)) {
@@ -48,11 +42,6 @@ void S_PlayerController::OnUpdate(float _deltaTime)  {
 	else {
 		rg->setLinearVelocity({ 0,  rg->getLinearVelocity().y });
 		t = 0;
-	}
-
-	if (Input::isMousePressed_Right()) {
-		World->DestroyBlock(int(Input::getCursorPos(Camera->camera).x / 16), int(Input::getCursorPos(Camera->camera).y / 16));
-		//std::cout << int(Input::getCursorPos(Camera->camera).x / 16) << " " << int(Input::getCursorPos(Camera->camera).y / 16) << '\n';
 	}
 }
 void S_PlayerController::OnDestroy()  {}
@@ -81,14 +70,14 @@ void S_PlayerFeet::OnUpdate(float _deltaTime)  {
 }
 
 void S_PlayerFeet::OnCollisionEnter(C_RigidBody& _other)  {
-	if (_other._gameObject.getComponent<C_Tag>().tag == "Ground")
-		h_control->onGround++;
-	//std::cout << "cood";
+	if (_other.h_body) {
+		_other._gameObject.getComponent<C_Sprite>().color = glm::vec4(1, 0, 0, 1); 
+		if (_other._gameObject.getComponent<C_Tag>().tag == "Ground")
+			h_control->onGround++;
+	}
 }
 
 void S_PlayerFeet::OnCollisionEnd(C_RigidBody& _other)  {
 	if (_other._gameObject.getComponent<C_Tag>().tag == "Ground")
 		h_control->onGround--;
-	//std::cout << "end";
-
 }

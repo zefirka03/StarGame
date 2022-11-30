@@ -27,6 +27,9 @@
     <ClCompile Include="src\scenes\Scripts\Chunk.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\scenes\Scripts\S_Camera_Player.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\scenes\Scripts\S_PlayerController.h">
@@ -36,6 +39,12 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\scenes\Scripts\Chunk.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\Scripts\S_Camera_Player.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\Scripts\S_WorldDestruction.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

@@ -13,11 +13,19 @@ struct Tile {
 };
 
 
+
 class Chunk{
+public:
 	uint32_t seed;
 	Tile** chunk_data = nullptr;
+	bool active = false;
 
-	Chunk() = default;
+	Chunk();
+
+	void setBlock(int _x, int _y, uint16_t id);
+	Tile& getBlock(int _x, int _y);
+	void setActive(bool);
+	bool isActive();
 	
 	~Chunk();
 };

@@ -116,10 +116,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)dep\SOIL\include;$(SolutionDir)dep\box2d\include;$(SolutionDir)dep\glfw\include;$(SolutionDir)dep\entt;$(SolutionDir)dep\glm;$(SolutionDir)dep\glew\include;$(SolutionDir)dep\imgui;$(SolutionDir)AirEngine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>box2d.lib;soil.lib;glew32s.lib;glfw3.lib;opengl32.lib;AirEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)dep\box2d\lib\$(Configuration);$(SolutionDir)dep\glfw\lib-vc2019;$(SolutionDir)dep\glew\x64;$(SolutionDir)dep\SOIL\lib;$(SolutionDir)AirEngineBuild\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -139,19 +144,22 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>box2d.lib;soil.lib;glew32s.lib;glfw3.lib;opengl32.lib; AirEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)dep\box2d\lib;$(SolutionDir)dep\glfw\lib-vc2019;$(SolutionDir)dep\glew\x64;$(SolutionDir)dep\SOIL\lib;$(SolutionDir)AirEngineBuild\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)dep\box2d\lib\$(Configuration);$(SolutionDir)dep\glfw\lib-vc2019;$(SolutionDir)dep\glew\x64;$(SolutionDir)dep\SOIL\lib;$(SolutionDir)AirEngineBuild\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\scenes\Scripts\S_Camera_Player.cpp" />
     <ClCompile Include="src\scenes\Scripts\Chunk.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\scenes\Scripts\S_PlayerController.cpp" />
     <ClCompile Include="src\scenes\Scripts\S_World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\scenes\Scripts\S_Camera_Player.h" />
     <ClInclude Include="src\scenes\Scripts\Chunk.h" />
     <ClInclude Include="src\scenes\Scripts\S_PlayerController.h" />
     <ClInclude Include="src\scenes\Scripts\S_World.h" />
+    <ClInclude Include="src\scenes\Scripts\S_WorldDestruction.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

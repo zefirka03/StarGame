@@ -7,6 +7,7 @@
 
 namespace air {
 	class _System_Physics;
+	class _System_Render;
 
 	class Entity;
 	class Game;
@@ -17,6 +18,7 @@ namespace air {
 	private:
 		struct systems_handler {
 			_System_Physics* Air_Physics;
+			_System_Render* Air_Render;
 		} systems_handles;
 
 	public:

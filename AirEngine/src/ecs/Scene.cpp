@@ -11,7 +11,7 @@ namespace air {
 	Scene::Scene() {
 		this->addSystem<_System_Native_Scripting>();
 		systems_handles.Air_Physics =  this->addSystem<_System_Physics>();
-		this->addSystem<_System_Render>(300000+10);
+		systems_handles.Air_Render = this->addSystem<_System_Render>(300000+10);
 	}
 
 	Entity Scene::createEntity() {
