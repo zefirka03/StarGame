@@ -29,7 +29,7 @@ class Scene_try1 : public Scene {
 		S_PlayerController* playerController = player.addScript<S_PlayerController>();
 
 		Entity world = createEntity();
-		S_World* WG = world.addScript<S_World>(2048, 2048);
+		WG = world.addScript<S_World>(2048, 2048);
 		WG->setPlayer(player);
 		
 		Entity player_camera_ent = createEntity();
@@ -42,10 +42,13 @@ class Scene_try1 : public Scene {
 		editor_camera_ent.addScript<S_Camera2dController>();
 
 		world.addScript<S_WorldDestruction>(&player_camera->camera, WG);
+		WG->cam = editor_camera_ent;
 	}
 	void imGui() override {
 		ImGui::Text(("Rendered sprites count: " + std::to_string(render->getStates().sprites)).c_str());
 		ImGui::Checkbox("Physics debug", &physics->debug);
+
+		ImGui::Checkbox("World debug", &WG->debug);
 
 		if (ImGui::Checkbox("Editor", &editor)) {
 			if (editor) {
@@ -63,6 +66,8 @@ class Scene_try1 : public Scene {
 private:
 	C_Camera2d* player_camera;
 	C_Camera2d* editor_camera;
+
+	S_World* WG;
 
 	bool editor = false;
 

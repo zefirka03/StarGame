@@ -7,7 +7,11 @@
 using namespace air;
 
 class S_World : public Script {
+private:
+	void _renderChunks();
 public:
+	bool debug = false;
+
 	S_World(int _w, int _h);
 
 	Tile MakeBlock(int _x, int _y);
@@ -26,8 +30,10 @@ public:
 
 	void OnCreate() override;
 	void OnUpdate(float _deltaTime) override;
-	void OnDestroy()override;
+	void OnDestroy() override;
 	~S_World();
+
+	Entity cam;
 private:
 	Entity player;
 

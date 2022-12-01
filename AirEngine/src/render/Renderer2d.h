@@ -103,6 +103,11 @@ namespace air {
 	class RendererDebug {
 		struct LineInstance;
 	public:
+		struct LineInstance {
+			glm::vec3 pos;
+			glm::vec4 color;
+		};
+
 		RendererDebug(air_sprite_id _objects_count);
 		void drawLine(glm::vec3 pos1, glm::vec3 pos2, glm::vec4 color = glm::vec4(1));
 		void drawQuad(Transform2d const& transform, glm::vec4 color = glm::vec4(1));
@@ -114,10 +119,6 @@ namespace air {
 			return a.pos.z < b.pos.z;
 		}
 
-		struct LineInstance {
-			glm::vec3 pos;
-			glm::vec4 color;
-		};
 
 		LineInstance* drawQueue;
 		//last id in drawQueue

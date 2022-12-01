@@ -5,6 +5,7 @@
 #include "../systems/System_render.h"
 #include "../systems/System_Native_Scripting.h"
 #include "../systems/System_Physics.h"
+#include "../systems/System_Debug.h"
 
 
 namespace air {
@@ -12,6 +13,7 @@ namespace air {
 		this->addSystem<_System_Native_Scripting>();
 		systems_handles.Air_Physics =  this->addSystem<_System_Physics>();
 		systems_handles.Air_Render = this->addSystem<_System_Render>(300000+10);
+		systems_handles.Air_Debug = this->addSystem<_System_Debug>(300000+10);
 	}
 
 	Entity Scene::createEntity() {
@@ -71,6 +73,11 @@ namespace air {
 			(*it)->terminate();
 		}
 		reg.clear();
+	}
+
+
+	_System_Debug& Scene::Debug() {
+		return *systems_handles.Air_Debug;
 	}
 
 	Scene::~Scene() {

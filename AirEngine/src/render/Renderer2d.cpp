@@ -128,6 +128,8 @@ namespace air {
 		glDeleteBuffers(1, &vbo_id);
 		glDeleteVertexArrays(1, &vao_id);
 
+		std::cout << "Renderer2d Destroyed!\n";
+
 		delete spriteShader;
 		delete[] drawQueue;
 	}

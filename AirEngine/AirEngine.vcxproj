@@ -176,6 +176,7 @@
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\render\TextureManager.cpp" />
+    <ClCompile Include="src\systems\System_Debug.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\render\Framebuffer.h" />
@@ -217,6 +218,7 @@
     <ClInclude Include="src\core\Game.h" />
     <ClInclude Include="src\ecs\Scene.h" />
     <ClInclude Include="src\render\TextureManager.h" />
+    <ClInclude Include="src\systems\System_Debug.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\render\shaders\debugRendererShader.shader" />

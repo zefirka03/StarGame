@@ -5,5 +5,7 @@
 #include "ecs/air_ecs.h"
 #include "render/air_render.h"
 #include "scripts/air_scripts.h"
+#include "systems/System_Native_Scripting.h"
 #include "systems/System_Physics.h"
 #include "systems/System_render.h"
+#include "systems/System_Debug.h"

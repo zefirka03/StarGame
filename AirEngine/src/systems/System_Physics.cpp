@@ -167,7 +167,8 @@ namespace air {
 			C_Camera2d* main_camera = nullptr;
 
 			reg->view<C_Camera2d>().each([&](auto& cam) {
-				main_camera = &cam;
+				if(cam.camera.main)
+					main_camera = &cam;
 			});
 			
 			h_world->DebugDraw();

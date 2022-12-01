@@ -8,6 +8,7 @@
 namespace air {
 	class _System_Physics;
 	class _System_Render;
+	class _System_Debug;
 
 	class Entity;
 	class Game;
@@ -19,6 +20,7 @@ namespace air {
 		struct systems_handler {
 			_System_Physics* Air_Physics;
 			_System_Render* Air_Render;
+			_System_Debug* Air_Debug;
 		} systems_handles;
 
 	public:
@@ -48,6 +50,8 @@ namespace air {
 		virtual void onEnd() = 0;
 		virtual void imGui() {};
 
+		_System_Debug& Debug();
+
 		~Scene();
 
 	private:
@@ -57,6 +61,7 @@ namespace air {
 
 		TextureManager textureManager;
 		std::vector<std::shared_ptr<System>> systems;
+
 		entt::registry reg;
 	};
 

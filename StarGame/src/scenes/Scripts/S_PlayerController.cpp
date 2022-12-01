@@ -70,11 +70,8 @@ void S_PlayerFeet::OnUpdate(float _deltaTime)  {
 }
 
 void S_PlayerFeet::OnCollisionEnter(C_RigidBody& _other)  {
-	if (_other.h_body) {
-		_other._gameObject.getComponent<C_Sprite>().color = glm::vec4(1, 0, 0, 1); 
-		if (_other._gameObject.getComponent<C_Tag>().tag == "Ground")
-			h_control->onGround++;
-	}
+	if (_other._gameObject.getComponent<C_Tag>().tag == "Ground")
+		h_control->onGround++;
 }
 
 void S_PlayerFeet::OnCollisionEnd(C_RigidBody& _other)  {

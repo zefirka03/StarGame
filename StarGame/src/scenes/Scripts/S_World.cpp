@@ -150,10 +150,6 @@ void S_World::Generate() {
 			chunks[ch_x][ch_y].setBlock(ch_x_p, ch_y_p, 1);
 		}
 	}
-
-	//for (int x = 0; x < ch_w; ++x) 
-	//	for (int y = 0; y < ch_h; ++y) 
-	//		ActivateChunk(x, y);
 }
 
 void S_World::setPlayer(Entity _player) {
@@ -161,7 +157,14 @@ void S_World::setPlayer(Entity _player) {
 }
 
 void S_World::OnUpdate(float _deltaTime) {
+	if (Input::isKeyPressed(GLFW_KEY_SPACE)) {
+		player.getComponent<C_Transform2d>().transform.position = glm::vec3(Input::getCursorPos(cam.getComponent<C_Camera2d>().camera), 1);
+		player.getComponent<C_RigidBody>().setTransform(Input::getCursorPos(cam.getComponent<C_Camera2d>().camera), 0);
+	}
+
 	updateChunksAboutPlayer(player);
+
+	if (debug) _renderChunks();
 }
 
 void S_World::updateChunksAboutPlayer(Entity _player) {
@@ -179,6 +182,16 @@ void S_World::updateChunksAboutPlayer(Entity _player) {
 				y > ch_y - border_size_y && y < ch_y + border_size_y)
 				fl |= ActivateChunk(x, y);
 			else fl |= DeactivateChunk(x, y);
+		}
+	}
+}
+
+void S_World::_renderChunks() {
+	for (int x = 0; x < getChunkSize().x; ++x) {
+		for (int y = 0; y < getChunkSize().y; ++y) {
+			if(chunks[x][y].isActive())
+				getScene()->Debug().drawQuad({ x * CHUNK_SIZE * 16,y * CHUNK_SIZE * 16 }, glm::vec2(CHUNK_SIZE * 16), glm::vec4(0,1,0,1));
+			else getScene()->Debug().drawQuad({ x * CHUNK_SIZE * 16,y * CHUNK_SIZE * 16 }, glm::vec2(CHUNK_SIZE * 16), glm::vec4(1, 0, 0, 1));
 		}
 	}
 }

@@ -22,6 +22,7 @@ namespace air {
 		glBufferData(GL_ARRAY_BUFFER, sizeof(LineInstance) * maxCount, nullptr, GL_DYNAMIC_DRAW);
 
 		//std::cout << sizeof(LineInstance) * maxCount << " video bites allocated\n";
+		std::cout << sizeof(LineInstance) * _objects_count << " video bites allocated\n";
 
 		glGenVertexArrays(1, &vao_id);
 		glBindVertexArray(vao_id);
