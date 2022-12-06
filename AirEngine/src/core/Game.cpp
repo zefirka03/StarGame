@@ -30,7 +30,7 @@ namespace air {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
 
-		glfwWindowHint(GLFW_SAMPLES, 4);
+		glfwWindowHint(GLFW_SAMPLES, 8);
 		glEnable(GL_MULTISAMPLE);
 
 		glfwSwapInterval(1);

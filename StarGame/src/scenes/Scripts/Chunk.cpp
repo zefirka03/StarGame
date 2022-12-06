@@ -1,6 +1,7 @@
 #include "Chunk.h"
 
 
+
 Chunk::Chunk() {
 	if (!chunk_data) {
 		chunk_data = new Tile*[CHUNK_SIZE];
@@ -21,11 +22,15 @@ Tile& Chunk::getBlock(int _x, int _y) {
 	return chunk_data[_x][_y];
 }
 
-void Chunk::setActive(bool _act) {
-	active = _act;
+void Chunk::setActive(int _act_depth) {
+	activation_depth = _act_depth;
 }
 bool Chunk::isActive() {
-	return active;
+	return (bool)activation_depth;
+}
+
+int Chunk::activationDepth() {
+	return activation_depth;
 }
 
 Chunk::~Chunk() {

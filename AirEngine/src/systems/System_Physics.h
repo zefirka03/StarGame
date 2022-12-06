@@ -75,6 +75,7 @@ namespace air {
 		void applyLenearImpulceToCenter(glm::vec2 vel);
 		void setGravityScale(float _gravityScale);
 		void setTransform(glm::vec2 _pos, float _angle);
+		const b2Transform& getTransform();
 
 		bool isSensor = false;
 		b2Body* h_body = nullptr;

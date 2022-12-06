@@ -13,7 +13,10 @@ public:
 	}
 	void OnUpdate(float _deltaTime) override {
 		if (Input::isMousePressed_Right()) {
-			world->DestroyBlock(int(Input::getCursorPos(*camera).x / 16), int(Input::getCursorPos(*camera).y / 16));
+			tile_pos pos = world->getTilePos(Input::getCursorPos(*camera));
+			pos = world->normalizedTilePos(pos);
+
+			world->DestroyTile(pos);
 		}
 	}
 

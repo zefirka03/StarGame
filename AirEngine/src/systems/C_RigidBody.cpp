@@ -44,8 +44,13 @@ namespace air {
 	}
 
 	void C_RigidBody::setTransform(glm::vec2 _pos, float _angle) {
-		if(h_body)
+		if (h_body) 
 			h_body->SetTransform({ _pos.x, _pos.y }, _angle);
+		
+	}
+
+	const b2Transform& C_RigidBody::getTransform() {
+		return h_body->GetTransform();
 	}
 
 	float C_RigidBody::getMass() {

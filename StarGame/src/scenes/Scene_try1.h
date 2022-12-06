@@ -12,7 +12,6 @@ using namespace air;
 class Scene_try1 : public Scene {
 	void onStart() override {
 		srand(time(nullptr));
-
 		physics = getSystems().Air_Physics;
 		render = getSystems().Air_Render;
 
@@ -43,6 +42,8 @@ class Scene_try1 : public Scene {
 
 		world.addScript<S_WorldDestruction>(&player_camera->camera, WG);
 		WG->cam = editor_camera_ent;
+
+
 	}
 	void imGui() override {
 		ImGui::Text(("Rendered sprites count: " + std::to_string(render->getStates().sprites)).c_str());
@@ -61,6 +62,9 @@ class Scene_try1 : public Scene {
 			}
 		}
 
+		ImGui::Begin("Map");
+			ImGui::Image( (GLuint*)getTextureManager().getTexture("map")->id , { ImGui::GetWindowSize().x-20, ImGui::GetWindowSize().y - 20 });
+		ImGui::End();
 	};
 	void onEnd() override {};
 private:

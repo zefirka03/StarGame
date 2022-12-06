@@ -15,6 +15,13 @@ public:
 
 	~S_Camera_Player() {};
 private:
+	glm::vec2 lastPlayerPos;
+
+	glm::vec2 speed = glm::vec2(0);
+
+	bool updating = false;
+	float t = 0;
+
 	C_Camera2d* camera;
 	S_PlayerController* pl_controller;
 };

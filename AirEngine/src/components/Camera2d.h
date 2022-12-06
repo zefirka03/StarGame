@@ -34,6 +34,7 @@ namespace air {
 			glm::mat4 view;
 			view = glm::translate(glm::mat4(1), glm::vec3(transform.origin, 1));
 			view = glm::scale(view, glm::vec3(transform.scale, 1));
+			view = glm::rotate(view, transform.rotation, glm::vec3(0, 0, 1));
 			view = glm::translate(view, -transform.position);
 			return view;
 		}

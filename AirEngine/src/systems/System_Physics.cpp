@@ -101,6 +101,8 @@ namespace air {
 			fixture.restitutionThreshold = c_box2d.restitutionThreshold;
 
 			body->CreateFixture(&fixture);
+			chain.Clear();
+
 			body->ResetMassData();
 		}
 	}
