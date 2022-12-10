@@ -56,5 +56,6 @@ namespace air {
 		bool main = false;
 		glm::mat4 projection = glm::mat4(0);
 		uint32_t m_layersBitmask = 4294967295; //max
+		glm::vec3 backgroundColor = glm::vec3(0.2);
 	};
 }

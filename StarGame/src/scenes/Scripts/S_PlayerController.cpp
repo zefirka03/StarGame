@@ -13,7 +13,7 @@ void S_PlayerController::OnCreate() {
 	tr->transform = Transform2d(glm::vec3(250, 1500*16, 1), glm::vec2(14, 30), 0, glm::vec2(7.f, 15.f));
 	rg->Type = C_RigidBody::type::Dynamic;
 	rg->setFixedRotation(true);
-	//rg->setGravityScale(0);
+	rg->setGravityScale(40);
 	cl->size = tr->transform.size;
 	cl->restitutionThreshold = 0;
 	cl->restitution = 0;
@@ -27,7 +27,7 @@ void S_PlayerController::OnCreate() {
 void S_PlayerController::OnUpdate(float _deltaTime)  {
 	if (Input::isKeyPressed(GLFW_KEY_W)) {
 		if (onGround) {
-			rg->setLinearVelocity({ rg->getLinearVelocity().x, 160 });
+			rg->setLinearVelocity({ rg->getLinearVelocity().x, 200 });
 		}
 	}
 	if (Input::isKeyPressed(GLFW_KEY_A)) {

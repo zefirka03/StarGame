@@ -45,13 +45,18 @@ namespace air {
 	public:
 		C_RenderTexture();
 		C_RenderTexture(FramebufferParameters _params);
+		C_RenderTexture(const C_RenderTexture& rt);
+		C_RenderTexture& operator=(const C_RenderTexture& rt);
+		C_RenderTexture(C_RenderTexture&& rt);
+		C_RenderTexture& operator=(C_RenderTexture&& rt);
+
 		Texture* getTexture();
 		void setCamera(Camera2d& _camera);
 		Camera2d* getCamera();
 		Framebuffer& getFramebuffer();
 		~C_RenderTexture();
 	private:
-		Framebuffer m_framebuffer;
+		Framebuffer* m_framebuffer = nullptr;
 		Camera2d* m_camera = nullptr;
 	};
 

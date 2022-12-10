@@ -41,7 +41,7 @@ namespace air {
 
 	TextureManager::~TextureManager() {
 		for (auto it = textures_path.begin(); it != textures_path.end(); ++it) {
-			glDeleteTextures(1, &it->second->id);
+
 			delete it->second;
 		}
 	}

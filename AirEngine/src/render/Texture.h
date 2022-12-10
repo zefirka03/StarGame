@@ -25,7 +25,11 @@ namespace air {
 		}
 
 		~Texture() {
-			delete[] spritesCount;
+			if (spritesCount) {
+				delete[] spritesCount;
+				spritesCount = nullptr;
+			}
+			glDeleteTextures(1, &id);
 		}
 
 		air_texture_id id = 0;

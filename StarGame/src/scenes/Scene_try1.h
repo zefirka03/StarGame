@@ -43,7 +43,9 @@ class Scene_try1 : public Scene {
 		world.addScript<S_WorldDestruction>(&player_camera->camera, WG);
 		WG->cam = editor_camera_ent;
 
-
+		Entity render_tex = createEntity();
+		rTex = &render_tex.addComponent<C_RenderTexture>(FramebufferParameters(256, 144, AIR_TEXTURE_NEAREST));
+		rTex->setCamera(player_camera->camera);
 	}
 	void imGui() override {
 		ImGui::Text(("Rendered sprites count: " + std::to_string(render->getStates().sprites)).c_str());
@@ -65,11 +67,19 @@ class Scene_try1 : public Scene {
 		ImGui::Begin("Map");
 			ImGui::Image( (GLuint*)getTextureManager().getTexture("map")->id , { ImGui::GetWindowSize().x-20, ImGui::GetWindowSize().y - 20 });
 		ImGui::End();
+
+		if (rTex) {
+			ImGui::Begin("Texture");
+				ImGui::Image((GLuint*)rTex->getTexture()->id, { ImGui::GetWindowSize().x - 20, ImGui::GetWindowSize().y - 20 }, { 0,1 }, {1,0});
+			ImGui::End();
+		}
 	};
 	void onEnd() override {};
 private:
 	C_Camera2d* player_camera;
 	C_Camera2d* editor_camera;
+
+	C_RenderTexture* rTex = nullptr;
 
 	S_World* WG;
 

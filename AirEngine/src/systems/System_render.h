@@ -18,6 +18,7 @@ namespace air {
 		void update(float _deltaTime) override;
 		void terminate() override;
 		SystemRender_States getStates();
+
 		~_System_Render();
 	private:
 		Renderer2d* render;

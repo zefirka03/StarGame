@@ -19,8 +19,9 @@ float speed_func(float t) {
 }
 
 void S_Camera_Player::OnUpdate(float _deltaTime) {
-	glm::vec2 curPlayerPos = {	pl_controller->getComponent<C_Transform2d>().transform.position.x,
-								pl_controller->getComponent<C_Transform2d>().transform.position.y };
+	glm::vec2 curPlayerPos = glm::vec2(	pl_controller->getComponent<C_Transform2d>().transform.position.x,
+										pl_controller->getComponent<C_Transform2d>().transform.position.y ) +
+							 glm::vec2( 0, 100);
 	
 	glm::vec2 curCameraPos = { camera->camera.transform.position.x,
 							   camera->camera.transform.position.y };

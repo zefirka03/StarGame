@@ -112,7 +112,7 @@ namespace air {
 
 		//render = new RendererDebug(50000);
 
-		h_world = new b2World(b2Vec2(0.f, -9.8f*25));
+		h_world = new b2World(b2Vec2(0.f, -9.8f));
 		h_world->SetContactListener(air_b2ContactListener_h);
 		air_b2ContactListener_h->scene = scene;
 

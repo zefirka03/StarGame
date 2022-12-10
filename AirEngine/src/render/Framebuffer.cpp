@@ -36,22 +36,60 @@ namespace air {
 	}
 
 	Framebuffer::~Framebuffer() {
-		std::cout << "Framebuffer destructed\n" ;
+		std::cout << "Framebuffer destructed, texture id: " << m_texture.id<< " \n";
 		glDeleteTextures(1, &m_texture.id);
+		glDeleteFramebuffers(1, &m_fbo_id);
 	}
 
 
 	C_RenderTexture::C_RenderTexture() {
-		m_framebuffer.init();
+		m_framebuffer = new Framebuffer();
+		m_framebuffer->init();
 	}
 
 	C_RenderTexture::C_RenderTexture(FramebufferParameters _params) {
-		m_framebuffer.getParameters() = _params;
-		m_framebuffer.init();
+		m_framebuffer = new Framebuffer();
+		m_framebuffer->getParameters() = _params;
+		m_framebuffer->init();
 	}
 
+	C_RenderTexture::C_RenderTexture(const C_RenderTexture& rt) {
+		//std::cout << "copied! mutherfucker!";
+		m_framebuffer = rt.m_framebuffer;
+		m_camera = rt.m_camera;
+	}
+
+	C_RenderTexture& C_RenderTexture::operator=(const C_RenderTexture& rt) {
+		//std::cout << "copied assignment! mutherfucker!";
+		m_framebuffer = rt.m_framebuffer;
+		m_camera = rt.m_camera;
+
+		return *this;
+	}
+
+	C_RenderTexture::C_RenderTexture(C_RenderTexture&& rt) {
+		//std::cout << "move ! mutherfucker!";
+		m_framebuffer = rt.m_framebuffer;
+		m_camera = rt.m_camera;
+
+		rt.m_camera = nullptr;
+		rt.m_framebuffer = nullptr;
+	}
+
+	C_RenderTexture& C_RenderTexture::operator=(C_RenderTexture&& rt) {
+		//std::cout << "move assignment! mutherfucker!";
+		m_framebuffer = rt.m_framebuffer;
+		m_camera = rt.m_camera;
+
+		rt.m_camera = nullptr;
+		rt.m_framebuffer = nullptr;
+
+		return *this;
+	}
+
+
 	Texture* C_RenderTexture::getTexture() {
-		return m_framebuffer.getTexture();
+		return m_framebuffer->getTexture();
 	}
 
 
@@ -60,7 +98,7 @@ namespace air {
 	}
 
 	Framebuffer& C_RenderTexture::getFramebuffer() {
-		return m_framebuffer;
+		return *m_framebuffer;
 	}
 
 	void C_RenderTexture::setCamera(Camera2d& _camera) {
@@ -68,6 +106,7 @@ namespace air {
 	}
 
 	C_RenderTexture::~C_RenderTexture() {
-		m_framebuffer.~Framebuffer();
+		delete m_framebuffer;
+		std::cout << "C_RenderTexture destructed, texture id: "  << " \n";
 	}
 }

@@ -86,6 +86,8 @@ namespace air {
 
 		spriteShader->setMatrix4f(tmp_cam.getMatrix(), "proj");
 
+		glClearColor(cam.backgroundColor.x, cam.backgroundColor.y, cam.backgroundColor.z, 1);
+
 		int j = 0;
 		while (j < draw_it) {
 			//jump to another texture
@@ -133,8 +135,6 @@ namespace air {
 		delete spriteShader;
 		delete[] drawQueue;
 	}
-
-
 
 	
 }

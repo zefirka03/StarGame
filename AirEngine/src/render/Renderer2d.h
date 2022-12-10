@@ -22,6 +22,7 @@ typedef uint32_t	air_sprite_id;
 constexpr air_sprite_id MAX_AVALIABLE_SPRITE_COUNT = 1500000;
 
 namespace air {
+
 	class Renderer2d {
 		struct SpriteInstance;
 	public:
@@ -34,6 +35,7 @@ namespace air {
 		~Renderer2d();
 
 		size_t getLastDrawCount();
+
 	private:
 		static bool texture_sort_comparator(SpriteInstance const& a, SpriteInstance const& b) {
 			if (a.layer == b.layer) {

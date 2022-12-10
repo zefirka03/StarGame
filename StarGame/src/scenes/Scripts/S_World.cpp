@@ -164,8 +164,8 @@ void S_World::updateChunksAboutPlayer(Entity _player) {
 	int ch_x = (int)floor(_player.getComponent<C_Transform2d>().transform.position.x / (CHUNK_SIZE * 16));
 	int ch_y = (int)floor(_player.getComponent<C_Transform2d>().transform.position.y / (CHUNK_SIZE * 16));
 
-	const int depth_1_border_size_x = 3;
-	const int depth_1_border_size_y = 3;
+	const int depth_1_border_size_x = 2;
+	const int depth_1_border_size_y = 2;
 	
 	const int depth_2_border_size_x = 1;
 	const int depth_2_border_size_y = 1;
