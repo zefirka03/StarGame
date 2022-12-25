@@ -8,17 +8,6 @@ namespace air {
 
 	class _C_New_Script : public Component {};
 
-	struct _C_NativeScriptComponent : public Component {
-		std::vector<std::shared_ptr<Script>> Instances;
-
-		template<class T, class ...Args>
-		T* Bind(Args&&... args) {
-			Instances.emplace_back(std::make_shared<T>(std::forward<Args>(args)...));
-			Instances.back().get()->m_entity = _gameObject;
-			return (T*)Instances.back().get();
-		}
-	};
-
 	class Script {
 		friend class Scene;
 		friend class _System_Native_Scripting;
@@ -46,6 +35,19 @@ namespace air {
 		Entity m_entity;
 		bool inited = false;
 	};
+
+	struct _C_NativeScriptComponent : public Component {
+		std::vector<std::shared_ptr<Script>> Instances;
+
+		template<class T, class ...Args>
+		T* Bind(Args&&... args) {
+			Instances.emplace_back(std::make_shared<T>(std::forward<Args>(args)...));
+			Instances.back().get()->m_entity = _gameObject;
+			return (T*)Instances.back().get();
+		}
+	};
+
+	
 	
 	template<class T, class ...Args>
 	T* Entity::addScript(Args&&... args) {

@@ -103,6 +103,7 @@ namespace air {
 	};
 
 	class RendererDebug {
+	public:
 		struct LineInstance;
 	public:
 		struct LineInstance {
