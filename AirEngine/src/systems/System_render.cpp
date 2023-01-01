@@ -3,7 +3,11 @@
 namespace air {
 
 	_System_Render::_System_Render(air_sprite_id sprite_count) {
+#ifdef AIR_WEB
+		render = new Renderer2d_Web(sprite_count);
+#else
 		render = new Renderer2d(sprite_count);
+#endif
 	}
 
 	void _System_Render::init()  {}
@@ -29,7 +33,7 @@ namespace air {
 		render->submit(main_camera->camera);
 
 		//update states
-		states.sprites = render->getLastDrawCount();
+		states.sprites = render->getStats().last_draw_count;
 
 		render->clear();
 	}

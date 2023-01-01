@@ -12,6 +12,7 @@ namespace air {
 	private:
 		C_Camera2d* cam_instance = nullptr;
 
+		bool start_move = false;
 
 		glm::vec2 moved = glm::vec2(0);
 		glm::vec2 prev_m = glm::vec2(0);

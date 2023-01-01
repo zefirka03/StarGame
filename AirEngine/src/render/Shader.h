@@ -10,8 +10,6 @@
 #include <unordered_map>
 #include <string>
 
-#define AIR_DEBUG 
-
 #define AIR_SHADER_VF 0
 #define AIR_SHADER_VGF 1
 

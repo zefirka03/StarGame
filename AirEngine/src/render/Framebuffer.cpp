@@ -22,7 +22,7 @@ namespace air {
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-		std::cout << "Framebuffer init : tex id : " << m_texture.id << '\n';
+		printf( "Framebuffer init : tex id : %d \n", m_texture.id );
 	}
 
 	Texture* Framebuffer::getTexture() {
@@ -36,9 +36,14 @@ namespace air {
 	}
 
 	Framebuffer::~Framebuffer() {
-		std::cout << "Framebuffer destructed, texture id: " << m_texture.id<< " \n";
+		printf("Framebuffer destructed, texture id : %d \n", m_texture.id);
+
 		glDeleteTextures(1, &m_texture.id);
 		glDeleteFramebuffers(1, &m_fbo_id);
+	}
+
+	GLuint Framebuffer::getId() {
+		return m_fbo_id;
 	}
 
 
@@ -107,6 +112,6 @@ namespace air {
 
 	C_RenderTexture::~C_RenderTexture() {
 		delete m_framebuffer;
-		std::cout << "C_RenderTexture destructed, texture id: "  << " \n";
+		printf( "C_RenderTexture destructed \n");
 	}
 }

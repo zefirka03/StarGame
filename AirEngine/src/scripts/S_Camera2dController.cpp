@@ -3,10 +3,15 @@
 
 namespace air {
 	void S_Camera2dController::OnUpdate(float deltaTime) {
-		glm::vec2 nPos = Input::getCursorPos();
+
 			//std::cout << nPos.x << " " << nPos.y << '\n';
 			//std::cout << cam_instance->transform.size.x << " " << cam_instance->transform.size.y << '\n';
-		if (Input::isMousePressed_Left()) {
+		if (Input::isTouched()) {
+			glm::vec2 nPos = Input::getTouchPos();
+			if (!start_move) {
+				prev_m = nPos;
+				start_move = true;
+			}
 
 			delta_m = nPos - prev_m;
 			prev_m = nPos;
@@ -14,12 +19,14 @@ namespace air {
 			cam_instance->camera.move(glm::vec3(moved.x, moved.y, 0)) ;	
 			//std::cout << nPos.x << " " << nPos.y<<'\n';
 		}
-		else prev_m = Input::getCursorPos();
+		else prev_m = glm::vec2(0), start_move = false;
 
 		double w = Input::getMouseWheel();
 		if (w > 0)
 			cam_instance->camera.scale(float(pow(11.f/10.f, w)));
 		else if(w<0) cam_instance->camera.scale(float(pow(10.f / 11.f, -w)));
+
+		//printf("cam: %f %f %f\n", cam_instance->camera.transform.position.x, cam_instance->camera.transform.position.y, cam_instance->camera.transform.position.z);
 	}
 
 	void S_Camera2dController::OnCreate() {

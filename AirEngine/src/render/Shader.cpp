@@ -56,37 +56,50 @@ namespace air {
 			* geometry_source_c = geometry_source.c_str();
 
 		GLuint	vertex_id = glCreateShader(GL_VERTEX_SHADER),
+#ifndef AIR_WEB
 			geometry_id = glCreateShader(GL_GEOMETRY_SHADER),
+#endif
 			fragment_id = glCreateShader(GL_FRAGMENT_SHADER);
 		glShaderSource(vertex_id, 1, &vertex_source_c, 0);
+#ifndef AIR_WEB
 		glShaderSource(geometry_id, 1, &geometry_source_c, 0);
+#endif
 		glShaderSource(fragment_id, 1, &fragment_source_c, 0);
 
 		glCompileShader(vertex_id);
 		glCompileShader(fragment_id);
+#ifndef AIR_WEB
 		if (usings == AIR_SHADER_VGF)
 			glCompileShader(geometry_id);
+#endif
 
 #ifdef AIR_DEBUG
-		std::cout << "Shader::Debugging\n";
+		printf("Shader::Debugging\n");
 		GLchar info[2048];
 		glGetShaderInfoLog(vertex_id, 2048, 0, info);
-		std::cout << info;
+#ifndef AIR_WEB
+		printf("%s \n", info);
 		glGetShaderInfoLog(geometry_id, 2048, 0, info);
-		std::cout << info;
+#endif
+		printf("%s \n", info);
 		glGetShaderInfoLog(fragment_id, 2048, 0, info);
-		std::cout << info;
+		printf("%s \n", info);
+
 #endif
 
 		glAttachShader(this->prog_id, vertex_id);
+#ifndef AIR_WEB
 		if (usings == AIR_SHADER_VGF)
 			glAttachShader(this->prog_id, geometry_id);
+#endif
 		glAttachShader(this->prog_id, fragment_id);
 
 		glLinkProgram(this->prog_id);
 
 		glDeleteShader(vertex_id);
+#ifndef AIR_WEB
 		glDeleteShader(geometry_id);
+#endif
 		glDeleteShader(fragment_id);
 
 		this->_inited = true;
@@ -94,6 +107,7 @@ namespace air {
 
 	void Shader::loadFromString(const char* string, uint8_t usings) {
 		this->prog_id = glCreateProgram();
+
 		std::string curr;
 		int type = 0;
 		std::string vertex_source = "",
@@ -116,36 +130,49 @@ namespace air {
 			* geometry_source_c = geometry_source.c_str();
 
 		GLuint	vertex_id = glCreateShader(GL_VERTEX_SHADER),
+#ifndef AIR_WEB
 			geometry_id = glCreateShader(GL_GEOMETRY_SHADER),
+#endif
 			fragment_id = glCreateShader(GL_FRAGMENT_SHADER);
 		glShaderSource(vertex_id, 1, &vertex_source_c, 0);
+#ifndef AIR_WEB
 		glShaderSource(geometry_id, 1, &geometry_source_c, 0);
+#endif
 		glShaderSource(fragment_id, 1, &fragment_source_c, 0);
 
 		glCompileShader(vertex_id);
 		glCompileShader(fragment_id);
+#ifndef AIR_WEB
 		if (usings == AIR_SHADER_VGF)
 			glCompileShader(geometry_id);
+#endif
 
 #ifdef AIR_DEBUG
+		printf("Shader debug: %s\n", string);
 		GLchar info[2048];
 		glGetShaderInfoLog(vertex_id, 2048, 0, info);
-		std::cout << info;
+		printf("%s \n", info);
+#ifndef AIR_WEB
 		glGetShaderInfoLog(geometry_id, 2048, 0, info);
-		std::cout << info;
+#endif
+		printf("%s \n", info);
 		glGetShaderInfoLog(fragment_id, 2048, 0, info);
 		std::cout << info;
 #endif
 
 		glAttachShader(this->prog_id, vertex_id);
+#ifndef AIR_WEB
 		if (usings == AIR_SHADER_VGF)
 			glAttachShader(this->prog_id, geometry_id);
+#endif
 		glAttachShader(this->prog_id, fragment_id);
 
 		glLinkProgram(this->prog_id);
 
 		glDeleteShader(vertex_id);
+#ifndef AIR_WEB
 		glDeleteShader(geometry_id);
+#endif
 		glDeleteShader(fragment_id);
 
 		this->_inited = true;

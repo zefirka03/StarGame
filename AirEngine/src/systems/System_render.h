@@ -2,7 +2,9 @@
 
 #include "../ecs/air_ecs.h"
 
+#include "../render/IRenderer.h"
 #include "../render/Renderer2d.h"
+#include "../render/Renderer2d_Web.h"
 #include "../components/Transform.h"
 
 namespace air {
@@ -21,7 +23,7 @@ namespace air {
 
 		~_System_Render();
 	private:
-		Renderer2d* render;
+		IRenderer* render;
 		SystemRender_States states;
 	};
 }

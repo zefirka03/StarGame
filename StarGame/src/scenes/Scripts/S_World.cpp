@@ -386,10 +386,10 @@ void S_World::OnDestroy() {
 	for (int x = 0; x < ch_w; ++x) 
 		delete[] chunks[x];
 	delete[] chunks;
-	std::cout << "World Destructed\n";
+	printf("World Destructed\n");
 }
 
 S_World::~S_World() {
 	delete map_image;
-	std::cout << "World\n";
+	printf("World\n");
 }

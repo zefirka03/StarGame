@@ -38,8 +38,7 @@ class Scene_Coll_detect : public Scene {
 		tr1.transform = Transform2d(glm::vec3(0, 50, 0), glm::vec2(100, 2), 0, glm::vec2(50, 1));
 		c_box1.size = tr1.transform.size;
 		rg1.Type = C_RigidBody::type::Dynamic;
-		rg1.mass = 5;
-		rg1.collisionEnter = cont;
+		rg1.setMass(5);
 
 		Entity ent2 = createEntity();
 		auto& sp2 = ent2.addComponent<C_Sprite>();

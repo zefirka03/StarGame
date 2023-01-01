@@ -6,7 +6,7 @@ namespace air {
 	};
 	Physics_debugDraw::~Physics_debugDraw() {
 		delete render;
-		std::cout << "debug destroyed\n";
+		printf("debug destroyed\n");
 	};
 	void Physics_debugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) {
 		b2Vec2 p1 = vertices[vertexCount - 1];

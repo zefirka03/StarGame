@@ -16,25 +16,20 @@
 #include "../components/Camera2d.h"
 #include "../ecs/air_ecs.h"
 #include "Framebuffer.h"
+#include "IRenderer.h"
 	
-typedef uint32_t	air_sprite_id;
-
-constexpr air_sprite_id MAX_AVALIABLE_SPRITE_COUNT = 1500000;
 
 namespace air {
 
-	class Renderer2d {
-		struct SpriteInstance;
+	class Renderer2d : public IRenderer {
 	public:
 		Renderer2d(air_sprite_id _sprite_count);
-		void draw(const SpriteInstance& _vert);
+		void draw(const SpriteInstance& _vert) override;
 
-		void submit(Camera2d& cam, C_RenderTexture* rendTex = nullptr);
+		void submit(Camera2d& cam, C_RenderTexture* rendTex = nullptr) override;
 
-		void clear();
+		void clear() override;
 		~Renderer2d();
-
-		size_t getLastDrawCount();
 
 	private:
 		static bool texture_sort_comparator(SpriteInstance const& a, SpriteInstance const& b) {
@@ -46,28 +41,10 @@ namespace air {
 			else return a.layer > b.layer;
 		}
 
-		struct SpriteInstance {
-			Transform2d transform;
-
-			glm::vec4 color;
-			glm::vec4 textureRect;
-
-			Texture* tex;
-			uint8_t layer;
-		};
 		
 		SpriteInstance* drawQueue;
 		//last id in drawQueue
 		size_t draw_it;
-
-		air_sprite_id maxSpriteCount;
-
-		GLuint vbo_id;
-		GLuint vao_id;
-
-		Shader* spriteShader;
-
-		size_t last_draw_count=0;
 	};
 
 	class Renderer2dRectangles {

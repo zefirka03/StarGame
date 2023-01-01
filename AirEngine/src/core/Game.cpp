@@ -5,6 +5,11 @@
 #include "../ecs/Scene.h"
 
 namespace air {
+	static void dispatch_main(void* fp) {
+		std::function<void()>* func = (std::function<void()>*) fp;
+		(*func)();
+	}
+
 	Game* Game::instance = nullptr;
 
 	Game::Game(const char* _title, int _w, int _h, bool _fullscreen) {
@@ -13,7 +18,7 @@ namespace air {
 		window = nullptr;
 		title = _title;
 		w = _w, h = _h;
-
+		
 		if (glfwInit()) {
 			if(_fullscreen)
 				window = glfwCreateWindow(w, h, _title, glfwGetPrimaryMonitor(), NULL);
@@ -22,16 +27,20 @@ namespace air {
 		}
 		else WA("glfw not inited!");
 
+#ifndef AIR_WEB
 		if (glewInit())
 			WA("glew not inited!");
+#endif
 
 		init_imgui();
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
 
-		glfwWindowHint(GLFW_SAMPLES, 8);
-		glEnable(GL_MULTISAMPLE);
+		//glfwWindowHint(GLFW_SAMPLES, 8);
+		//glEnable(GL_MULTISAMPLE);
+
+		Input::Init();
 
 		glfwSwapInterval(1);
 	}
@@ -69,6 +78,9 @@ namespace air {
 		}
 	}
 	
+	void Game::_loop() {
+		main_loop();
+	}
 
 	void Game::run(Scene* scn) {
 		goToScene(scn);
@@ -77,43 +89,59 @@ namespace air {
 
 		glClearColor(0.1, 0.1, 0.1, 1);
 
-		while (!glfwWindowShouldClose(window)) {
-			this->_updateCurrentScene();
+		if (!main_loop) {
+			printf("set main loop!\n");
+			main_loop = [&]() {
+				this->_updateCurrentScene();
 
-			double deltaTime = ts.elapsed_ms() * 0.001f;
-			ts.restart();
+				double deltaTime = ts.elapsed_ms() * 0.001f;
+				ts.restart();
 
-			glClear(GL_COLOR_BUFFER_BIT);
-			Input::pollEvents();
-			
-			ImGui_ImplOpenGL3_NewFrame();
-			ImGui_ImplGlfw_NewFrame();
-			ImGui::NewFrame();
+				glClear(GL_COLOR_BUFFER_BIT);
+				Input::pollEvents();
 
-			//update current scene
-			current_scene->_onUpdate(float(deltaTime));
+				ImGui_ImplOpenGL3_NewFrame();
+				ImGui_ImplGlfw_NewFrame();
+				ImGui::NewFrame();
 
-			ImGui::Begin("debug");
-			{
-				current_scene->imGui();
+				//update current scene
+				current_scene->_onUpdate(float(deltaTime));
 
-				if (ImGui::Checkbox("swapInterval", &swpInt))
-					glfwSwapInterval(swpInt);
+				ImGui::Begin("debug");
+				{
+					current_scene->imGui();
 
-			}
-			ImGui::End();
+					if (ImGui::Checkbox("swapInterval", &swpInt))
+						glfwSwapInterval(swpInt);
 
-			ImGui::Render();
-			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-			glfwSwapBuffers(window);
+				}
+				ImGui::End();
+
+				ImGui::Render();
+				ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+				glfwSwapBuffers(window);
+				glfwPollEvents();
+			};
 		}
+
+#ifdef AIR_WEB
+		emscripten_set_main_loop_arg(dispatch_main, &main_loop, 0, 1);
+#else
+		while (!glfwWindowShouldClose(window)) {
+			main_loop();
+		}
+#endif
 
 		glfwTerminate();
 		this->_terminate();
 	}
 
 	void Game::init_imgui() {
+#ifdef AIR_WEB
+		const char* glsl_version = "#version 100";
+#else
 		const char* glsl_version = "#version 430";
+#endif
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -126,6 +154,10 @@ namespace air {
 
 	void Game::_terminate() {
 		delete current_scene;
+	}
+
+	static void lp() {
+		
 	}
 
 	Game::~Game() {

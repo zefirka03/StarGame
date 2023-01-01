@@ -1,4 +1,4 @@
-#include <iostream>
+#include <stdio.h>
 #include "air.h"
 
 //#include "scenes/Scene1.h"
@@ -13,7 +13,9 @@ using namespace air;
 
 int main() {
 	air::Game game("game", 1280, 720,false);
+
 	game.run(new Scene_try1());
+
 	
 	return 0;
 }

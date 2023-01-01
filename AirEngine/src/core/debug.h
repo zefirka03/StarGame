@@ -1,8 +1,9 @@
 #pragma once
-#include <iostream>
+#include <stdio.h>
 #include <cassert>
 #include <chrono>
-#define WA(x) (std::cout<<"WA: "<<x<<'\n');
+#include <string>
+#define WA(x) (printf("WA : %s \n",x));
 //#define AIR_STATIC_ASSERT(x, a) static_assert(x, "AIR: " + a); 
 
 namespace air {
@@ -24,7 +25,7 @@ namespace air {
 			auto duration = e - s;
 			double ms = duration * 0.001;
 			
-			std::cout << "duration of " << func <<": " << ms << " ms" << "\n";
+			printf( "duration of %s: %f ms\n",func.c_str(), ms);
 		}
 	private:
 		std::string func;

@@ -1,4 +1,5 @@
 #pragma once
+#include <stdio.h>
 
 #include "../ecs/EntityComponent.h"
 #include "../ecs/System.h"
@@ -43,7 +44,7 @@ namespace air {
 		void terminate() override;
 
 		~_System_Physics() {
-			std::cout << "Physics Terminated!\n";
+			printf( "Physics Terminated!\n");
 			delete h_world;
 		}
 		bool debug = false;

@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\render\Renderer2d_Web.cpp" />
     <ClCompile Include="src\physics\Colliders.cpp" />
     <ClCompile Include="src\physics\PhysicsQuadTree.cpp" />
     <ClCompile Include="src\core\Input.cpp" />
@@ -179,7 +180,9 @@
     <ClCompile Include="src\systems\System_Debug.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\render\Renderer2d_Web.h" />
     <ClInclude Include="src\render\Framebuffer.h" />
+    <ClInclude Include="src\render\IRenderer.h" />
     <ClInclude Include="src\render\Texture.h" />
     <ClInclude Include="src\scenes\Scene1.h" />
     <ClInclude Include="src\components\air_components.h" />

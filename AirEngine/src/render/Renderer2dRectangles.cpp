@@ -9,13 +9,15 @@ namespace air {
 		drawQueue = new RectangleInstance[_rectangles_count];
 		draw_it = 0;
 
+#ifndef AIR_WEB
 		rectangleShader = new Shader("src/render/shaders/RectangleShader.shader", AIR_SHADER_VGF);
+#endif
 
 		glGenBuffers(1, &vbo_id);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(RectangleInstance) * maxRectanglesCount, nullptr, GL_DYNAMIC_DRAW);
 
-		std::cout << sizeof(RectangleInstance) * maxRectanglesCount << " video bites allocated\n";
+		printf("%d video bites allocated\n", sizeof(RectangleInstance) * maxRectanglesCount);
 
 		glGenVertexArrays(1, &vao_id);
 		glBindVertexArray(vao_id);

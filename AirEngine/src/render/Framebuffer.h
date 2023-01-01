@@ -28,11 +28,13 @@ namespace air {
 
 	class Framebuffer {
 		friend class Renderer2d;
+		friend class Renderer2d_Web;
 	public:
 		Framebuffer();
 		FramebufferParameters& getParameters();
 		Texture* getTexture();
 		void init();
+		GLuint getId();
 		~Framebuffer();
 	private:
 		GLuint m_fbo_id;

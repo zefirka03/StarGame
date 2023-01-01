@@ -8,21 +8,21 @@ namespace air {
 		drawQueue = new SpriteInstance[_sprite_count];
 		draw_it = 0;
 
-		//spriteShader = new Shader("src/render/shaders/SpriteShader.shader", AIR_SHADER_VGF);
 		spriteShader = new Shader();
 		const char* shader =
-			#include "shaders/_SpriteShader.shader"
-		;
-		spriteShader->loadFromString( 
+				#include "shaders/_SpriteShader.shader"
+			;
+		spriteShader->loadFromString(
 			shader,
 			AIR_SHADER_VGF
 		);
+
 
 		glGenBuffers(1, &vbo_id);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(SpriteInstance) * maxSpriteCount, nullptr, GL_DYNAMIC_DRAW);
 
-		std::cout << sizeof(SpriteInstance) * maxSpriteCount << " video bites allocated\n";
+		printf("Renderer2d: %d video bites allocated\n", sizeof(SpriteInstance) * maxSpriteCount);
 
 		glGenVertexArrays(1, &vao_id);
 		glBindVertexArray(vao_id);
@@ -47,7 +47,7 @@ namespace air {
 	}
 
 	//add an instance to draw queue
-	void Renderer2d::draw(const SpriteInstance& _vert) {
+	void Renderer2d::draw(const SpriteInstance& _vert)   {
 		if (draw_it >= maxSpriteCount) {
 			WA("Renderer2d: You are trying to render more than maximum allowed sprites!");
 			return;
@@ -62,7 +62,7 @@ namespace air {
 
 	//render all objects in draw queue and clear queue
 	void Renderer2d::submit(Camera2d& cam, C_RenderTexture* rendTex) {
-		last_draw_count = draw_it;
+		stats.last_draw_count = draw_it;
 
 		std::sort(drawQueue, drawQueue + draw_it, texture_sort_comparator);
 		
@@ -122,15 +122,11 @@ namespace air {
 		draw_it = 0;
 	}
 
-	size_t Renderer2d::getLastDrawCount() {
-		return last_draw_count;
-	}
-
 	Renderer2d::~Renderer2d() {
 		glDeleteBuffers(1, &vbo_id);
 		glDeleteVertexArrays(1, &vao_id);
 
-		std::cout << "Renderer2d Destroyed!\n";
+		printf("Renderer2d Destroyed!\n");
 
 		delete spriteShader;
 		delete[] drawQueue;

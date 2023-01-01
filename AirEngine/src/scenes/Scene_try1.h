@@ -27,7 +27,7 @@ class Scene_try1 : public Scene {
 		TM.loadTexture("img/empty.png", "empty");
 
 		Entity world_generation = createEntity();
-		S_WorldGeneration* WG = world_generation.addScript<S_WorldGeneration>(50, 50);
+		S_WorldGeneration* WG = world_generation.addScript<S_WorldGeneration>(100, 100);
 		
 		Entity player = createEntity();
 		player.addScript<S_PlayerController>();
@@ -81,13 +81,13 @@ public:
 		for (int x = 0; x < w; ++x)
 			delete[] world[x];
 		delete[] world;
-		std::cout << "World Destructed\n";
+		printf("World Destructed\n");
 	}
 	bool** getWorld() {
 		return world;
 	}
 	~S_WorldGeneration() {
-		std::cout << "World\n";
+		printf( "World\n");
 	}
 private:
 	int w = 10, h = 10;

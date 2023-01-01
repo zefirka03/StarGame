@@ -2,6 +2,7 @@
 #include "debug.h"
 #include "../glIncl.h"
 
+
 namespace air {
 	class Scene;
 
@@ -17,6 +18,9 @@ namespace air {
 		const char* title;
 		int w, h;
 		TimeStep ts;
+
+		std::function<void()> main_loop = nullptr;
+		void _loop();
 	public:
 		Game(const char* _title, int _w, int _h, bool _fullscreen = false);
 		void run(Scene* _scn);

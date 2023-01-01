@@ -9,20 +9,31 @@ namespace air {
 		draw_it = 0;
 
 		debugShader = new Shader();
+
+#ifdef AIR_WEB
 		const char* shader =
-			#include "shaders/_debugRendererShader.shader"
-		;
+#include "shaders/_SpriteShaderWeb.shader"
+			;
 		debugShader->loadFromString(
-			shader, 
+			shader,
 			AIR_SHADER_VF
 		);
+#else	
+		const char* shader =
+#include "shaders/_debugRendererShader.shader"
+			;
+		debugShader->loadFromString(
+			shader,
+			AIR_SHADER_VF
+		);
+#endif
 
 		glGenBuffers(1, &vbo_id);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(LineInstance) * maxCount, nullptr, GL_DYNAMIC_DRAW);
 
 		//std::cout << sizeof(LineInstance) * maxCount << " video bites allocated\n";
-		std::cout << sizeof(LineInstance) * _objects_count << " video bites allocated\n";
+		printf("%d video bites allocated\n", sizeof(LineInstance) * _objects_count);
 
 		glGenVertexArrays(1, &vao_id);
 		glBindVertexArray(vao_id);
@@ -88,7 +99,7 @@ namespace air {
 	RendererDebug::~RendererDebug() {
 		glDeleteBuffers(1, &vbo_id);
 		glDeleteVertexArrays(1, &vao_id);
-		std::cout << "RendererDebug Destroyed!\n";
+		printf("RendererDebug Destroyed!\n");
 		delete debugShader;
 		delete[] drawQueue;
 	}
