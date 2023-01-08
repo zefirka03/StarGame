@@ -26,3 +26,7 @@
 #include <SOIL.h>
 
 #include <entt.hpp>
+
+#define AIR_LAYER_UI 31
+#define AIR_LAYER_UI_BITMASK 2147483648
+

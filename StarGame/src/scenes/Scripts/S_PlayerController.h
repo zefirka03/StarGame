@@ -26,7 +26,6 @@ private:
 };
 
 
-
 class S_PlayerFeet : public Script {
 public:
 	S_PlayerFeet(S_PlayerController* _control);

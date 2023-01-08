@@ -8,6 +8,8 @@ namespace air {
 			//std::cout << cam_instance->transform.size.x << " " << cam_instance->transform.size.y << '\n';
 		if (Input::isTouched()) {
 			glm::vec2 nPos = Input::getTouchPos();
+
+			//printf("%f %f \n", nPos.x, nPos.y);
 			if (!start_move) {
 				prev_m = nPos;
 				start_move = true;

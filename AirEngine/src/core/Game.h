@@ -26,16 +26,21 @@ namespace air {
 		void run(Scene* _scn);
 
 		void goToScene(Scene* _scn);
+		void setViewport(int x, int y);
 
 		static Game& getInstance();
 		GLFWwindow* getNativeWindow();
 		int getWidth();
 		int getHeight();
 
+		double getDeltaTime();
+
 		~Game();
 	private:
 		void init_imgui();
 		void _updateCurrentScene();
 		void _terminate();
+
+		double deltaTime = 1.f;
 	};
 }

@@ -16,7 +16,7 @@ namespace air {
 
 			transform.size = glm::vec2(_w, _h);
 
-			projection = glm::ortho(0.f, _w, 0.f, _h);
+			projection = glm::ortho(0.f, _w, 0.f, _h, -100.f, 100.f);
 			
 
 			this->transform.position = glm::vec3(0);
@@ -55,7 +55,7 @@ namespace air {
 
 		bool main = false;
 		glm::mat4 projection = glm::mat4(0);
-		uint32_t m_layersBitmask = 4294967295; //max
+		uint32_t m_layersBitmask = 4294967295 & (~AIR_LAYER_UI_BITMASK); //max
 		glm::vec3 backgroundColor = glm::vec3(0.2);
 	};
 }

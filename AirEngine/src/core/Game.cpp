@@ -18,9 +18,9 @@ namespace air {
 		window = nullptr;
 		title = _title;
 		w = _w, h = _h;
-		
+
 		if (glfwInit()) {
-			if(_fullscreen)
+			if (_fullscreen)
 				window = glfwCreateWindow(w, h, _title, glfwGetPrimaryMonitor(), NULL);
 			else window = glfwCreateWindow(w, h, _title, NULL, NULL);
 			glfwMakeContextCurrent(window);
@@ -36,6 +36,8 @@ namespace air {
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
+
+		glEnable(GL_DEPTH_TEST);
 
 		//glfwWindowHint(GLFW_SAMPLES, 8);
 		//glEnable(GL_MULTISAMPLE);
@@ -77,9 +79,18 @@ namespace air {
 			next_scene = nullptr;
 		}
 	}
-	
+
 	void Game::_loop() {
 		main_loop();
+	}
+
+	void Game::setViewport(int x, int y) {
+		w = x;
+		h = y;
+	}
+
+	double Game::getDeltaTime() {
+		return deltaTime;
 	}
 
 	void Game::run(Scene* scn) {
@@ -92,21 +103,25 @@ namespace air {
 		if (!main_loop) {
 			printf("set main loop!\n");
 			main_loop = [&]() {
-				this->_updateCurrentScene();
-
-				double deltaTime = ts.elapsed_ms() * 0.001f;
+				deltaTime = ts.elapsed_ms() * 0.001f;
 				ts.restart();
 
-				glClear(GL_COLOR_BUFFER_BIT);
+				glViewport(0, 0, w, h);
+				this->_updateCurrentScene();
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 				Input::pollEvents();
 
+#ifdef AIR_DEBUG
 				ImGui_ImplOpenGL3_NewFrame();
 				ImGui_ImplGlfw_NewFrame();
 				ImGui::NewFrame();
+#endif
 
 				//update current scene
 				current_scene->_onUpdate(float(deltaTime));
 
+#ifdef AIR_DEBUG
 				ImGui::Begin("debug");
 				{
 					current_scene->imGui();
@@ -119,6 +134,7 @@ namespace air {
 
 				ImGui::Render();
 				ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+#endif
 				glfwSwapBuffers(window);
 				glfwPollEvents();
 			};

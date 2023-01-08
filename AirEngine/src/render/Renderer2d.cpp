@@ -58,16 +58,17 @@ namespace air {
 		drawQueue[draw_it++] = _vert;
 	}
 
-
+	void Renderer2d::prepare() {
+		std::sort(drawQueue, drawQueue + draw_it, texture_sort_comparator);
+		
+		glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, draw_it * sizeof(SpriteInstance), drawQueue);
+	}
 
 	//render all objects in draw queue and clear queue
 	void Renderer2d::submit(Camera2d& cam, C_RenderTexture* rendTex) {
 		stats.last_draw_count = draw_it;
 
-		std::sort(drawQueue, drawQueue + draw_it, texture_sort_comparator);
-		
-		glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, draw_it * sizeof(SpriteInstance), drawQueue);
 		glBindVertexArray(vao_id);
 
 		Camera2d& tmp_cam = cam;

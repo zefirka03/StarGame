@@ -24,6 +24,7 @@ class Scene_try1 : public Scene {
 		TM.loadTexture("img/5.png", "5");
 		TM.loadTexture("img/empty.png", "empty");
 
+
 		Entity player = createEntity();
 		S_PlayerController* playerController = player.addScript<S_PlayerController>();
 
@@ -35,6 +36,7 @@ class Scene_try1 : public Scene {
 		player_camera = &player_camera_ent.addComponent<C_Camera2d>(Game::getInstance().getWidth(), Game::getInstance().getHeight());
 		player_camera_ent.addScript<S_Camera_Player>(playerController);
 		player_camera->camera.main = true;
+		std::cout<<"MA CUM: " << player_camera->camera.m_layersBitmask << '\n';
 
 		Entity editor_camera_ent = createEntity();
 		editor_camera = &editor_camera_ent.addComponent<C_Camera2d>(Game::getInstance().getWidth(), Game::getInstance().getHeight());

@@ -25,10 +25,10 @@ namespace air {
 	public:
 		Renderer2d(air_sprite_id _sprite_count);
 		void draw(const SpriteInstance& _vert) override;
-
 		void submit(Camera2d& cam, C_RenderTexture* rendTex = nullptr) override;
-
 		void clear() override;
+
+		void prepare() override;
 		~Renderer2d();
 
 	private:

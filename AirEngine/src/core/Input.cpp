@@ -104,10 +104,21 @@ namespace air{
 	{
 		const EmscriptenTouchPoint* t = &e->touches[0];
 
+		int left = EM_ASM_INT({
+			const rect = canvas.getBoundingClientRect();
+			return rect.left;
+		});
+
+		int top = EM_ASM_INT({
+			const rect = canvas.getBoundingClientRect();
+			return rect.top;
+		});
+
+
 		if (eventType == EMSCRIPTEN_EVENT_TOUCHSTART) {
 			//printf("Touch_down\n");
-			Input::touchPoint.x = t->screenX;
-			Input::touchPoint.y = t->screenY;
+			Input::touchPoint.x = t->clientX;
+			Input::touchPoint.y = t->clientY;
 
 			touched = true;
 		}
@@ -116,27 +127,42 @@ namespace air{
 		}
 		if (eventType == EMSCRIPTEN_EVENT_TOUCHMOVE) {
 			//printf("Touch_moved\n");
-			Input::touchPoint.x = t->screenX;
-			Input::touchPoint.y = t->screenY;
+			Input::touchPoint.x = t->clientX;
+			Input::touchPoint.y = t->clientY;
 		}
+
+		Input::touchPoint.x -= left;
+		Input::touchPoint.y -= top;
+
 		return 0;
 	}
 
 	EM_BOOL Input::mouse_callback(int eventType, const EmscriptenMouseEvent* e, void* userData)
 	{
+		int left = EM_ASM_INT({
+			const rect = canvas.getBoundingClientRect();
+			return rect.left;
+		});
+
+		int top = EM_ASM_INT({
+			const rect = canvas.getBoundingClientRect();
+			return rect.top;
+		});
+
+
 		clicked = false;
 		if (eventType == EMSCRIPTEN_EVENT_CLICK) {
 			//printf("Mouse_clicked\n");
-			Input::touchPoint.x = e->screenX;
-			Input::touchPoint.y = e->screenY;
+			Input::touchPoint.x = e->clientX;
+			Input::touchPoint.y = e->clientY;
 
 			clicked = true;
 		}
 
 		if (eventType == EMSCRIPTEN_EVENT_MOUSEDOWN && e->buttons != 0) {
 			//printf("Mouse_down\n");
-			Input::touchPoint.x = e->screenX;
-			Input::touchPoint.y = e->screenY;
+			Input::touchPoint.x = e->clientX;
+			Input::touchPoint.y = e->clientY;
 
 			touched = true;
 		}
@@ -145,49 +171,16 @@ namespace air{
 		}
 		if (eventType == EMSCRIPTEN_EVENT_MOUSEMOVE && (e->movementX != 0 || e->movementY != 0)) {
 			//printf("Mouse_moved\n");
-			Input::touchPoint.x = e->screenX;
-			Input::touchPoint.y = e->screenY;
+			Input::touchPoint.x = e->clientX;
+			Input::touchPoint.y = e->clientY;
 		}
+
+		Input::touchPoint.x -= left;
+		Input::touchPoint.y -= top;
 
 		return 0;
 	}
-	static inline const char* emscripten_event_type_to_string(int eventType) {
-		const char* events[] = { "(invalid)", "(none)", "keypress", "keydown", "keyup", "click", "mousedown", "mouseup", "dblclick", "mousemove", "wheel", "resize",
-		  "scroll", "blur", "focus", "focusin", "focusout", "deviceorientation", "devicemotion", "orientationchange", "fullscreenchange", "pointerlockchange",
-		  "visibilitychange", "touchstart", "touchend", "touchmove", "touchcancel", "gamepadconnected", "gamepaddisconnected", "beforeunload",
-		  "batterychargingchange", "batterylevelchange", "webglcontextlost", "webglcontextrestored", "(invalid)" };
-		++eventType;
-		if (eventType < 0) eventType = 0;
-		if (eventType >= sizeof(events) / sizeof(events[0])) eventType = sizeof(events) / sizeof(events[0]) - 1;
-		return events[eventType];
-	}
-
-	EM_BOOL Input::touchMoveCallback(int eventType, const EmscriptenTouchEvent* e, void* userData) {
-		const EmscriptenTouchPoint* t = &e->touches[0];
-		touchPoint.x = t->screenX;
-		touchPoint.y = t->screenY;
-		printf("Mobile: %f %f \n", touchPoint.x, touchPoint.y);
-	}
-	EM_BOOL Input::mouseCallback(int eventType, const EmscriptenMouseEvent* e, void* userData) {
-		printf("%s, screen: (%ld,%ld), client: (%ld,%ld),%s%s%s%s button: %hu, buttons: %hu, movement: (%ld,%ld), target: (%ld, %ld)\n",
-			emscripten_event_type_to_string(eventType), e->screenX, e->screenY, e->clientX, e->clientY,
-			e->ctrlKey ? " CTRL" : "", e->shiftKey ? " SHIFT" : "", e->altKey ? " ALT" : "", e->metaKey ? " META" : "",
-			e->button, e->buttons, e->movementX, e->movementY, e->targetX, e->targetY);
-
-		//if (e->screenX != 0 && e->screenY != 0 && e->clientX != 0 && e->clientY != 0 && e->targetX != 0 && e->targetY != 0)
-		//{
-		//	if (eventType == EMSCRIPTEN_EVENT_CLICK) gotClick = 1;
-		//	if (eventType == EMSCRIPTEN_EVENT_MOUSEDOWN && e->buttons != 0) gotMouseDown = 1;
-		//	if (eventType == EMSCRIPTEN_EVENT_DBLCLICK) gotDblClick = 1;
-		//	if (eventType == EMSCRIPTEN_EVENT_MOUSEUP) gotMouseUp = 1;
-		//	if (eventType == EMSCRIPTEN_EVENT_MOUSEMOVE && (e->movementX != 0 || e->movementY != 0)) gotMouseMove = 1;
-		//}
-
-		if (eventType == EMSCRIPTEN_EVENT_CLICK && e->screenX == -500000)
-		{
-			printf("ERROR! Received an event to a callback that should have been unregistered!\n");
-		}
-	}
+	
 #endif
 
 }

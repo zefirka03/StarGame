@@ -45,6 +45,15 @@ namespace air {
 					script->OnUpdate(_deltaTime);
 				}
 			});
+
+			
+		}
+		void updateLast(float _deltaTime) override {
+			reg->view<_C_NativeScriptComponent>().each([&](auto& nsc) {
+				for (auto script : nsc.Instances) {
+					script->FixedUpdate(_deltaTime);
+				}
+				});
 		}
 		void terminate() override {
 			reg->view<_C_NativeScriptComponent>().each([&](auto& nsc) {

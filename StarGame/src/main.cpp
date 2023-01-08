@@ -1,6 +1,6 @@
 #include <iostream>
-#include "air.h"
 
+#include "air.h"
 #include "scenes/Scene_try1.h"
 
 using namespace air;

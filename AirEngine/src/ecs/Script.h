@@ -27,6 +27,7 @@ namespace air {
 	protected:
 		virtual void OnCreate() {}
 		virtual void OnUpdate(float _deltaTime) {}
+		virtual void FixedUpdate(float _deltaTime) {}
 		virtual void OnDestroy() {}
 
 		virtual void OnCollisionEnter(C_RigidBody& _other) {}

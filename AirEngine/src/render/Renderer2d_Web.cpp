@@ -50,29 +50,38 @@ namespace air {
 
 		quadInstanceWeb qiw;
 		locPos = -_vert.transform.origin + glm::vec2(0, 0);
+		locPos *= _vert.transform.scale;
 		qiw.verts[0] = { _vert.transform.position + glm::vec3(rot_mat * locPos, 0), _vert.color, glm::vec2(_vert.textureRect[0], _vert.textureRect[1] + _vert.textureRect[3]), _vert.tex, _vert.layer};
 		locPos = -_vert.transform.origin + glm::vec2(_vert.transform.size.x, 0);
+		locPos *= _vert.transform.scale;
 		qiw.verts[1] = { _vert.transform.position + glm::vec3(rot_mat * locPos, 0), _vert.color, glm::vec2(_vert.textureRect[0] + _vert.textureRect[2], _vert.textureRect[1] + _vert.textureRect[3]), _vert.tex, _vert.layer};
 		locPos = -_vert.transform.origin + glm::vec2(0, _vert.transform.size.y);
+		locPos *= _vert.transform.scale;
 		qiw.verts[2] = { _vert.transform.position + glm::vec3(rot_mat * locPos, 0), _vert.color, glm::vec2(_vert.textureRect[0], _vert.textureRect[1]), _vert.tex, _vert.layer};
 
 		locPos = -_vert.transform.origin + glm::vec2(_vert.transform.size.x, 0);
+		locPos *= _vert.transform.scale;
 		qiw.verts[3] = { _vert.transform.position + glm::vec3(rot_mat * locPos, 0), _vert.color, glm::vec2(_vert.textureRect[0] + _vert.textureRect[2], _vert.textureRect[1] + _vert.textureRect[3]), _vert.tex, _vert.layer};
 		locPos = -_vert.transform.origin + glm::vec2(0, _vert.transform.size.y);
+		locPos *= _vert.transform.scale;
 		qiw.verts[4] = { _vert.transform.position + glm::vec3(rot_mat * locPos, 0), _vert.color, glm::vec2(_vert.textureRect[0], _vert.textureRect[1]), _vert.tex, _vert.layer};
 		locPos = -_vert.transform.origin + glm::vec2(_vert.transform.size.x, _vert.transform.size.y);
+		locPos *= _vert.transform.scale;
 		qiw.verts[5] = { _vert.transform.position + glm::vec3(rot_mat * locPos, 0), _vert.color, glm::vec2(_vert.textureRect[0] + _vert.textureRect[2], _vert.textureRect[1]), _vert.tex, _vert.layer};
 
 		drawQueue[draw_it++] = qiw;
 	}
 
-	void Renderer2d_Web::submit(Camera2d& cam, C_RenderTexture* rendTex) {
-		stats.last_draw_count = draw_it;
-
+	void Renderer2d_Web::prepare() {
 		std::sort(drawQueue, drawQueue + draw_it, texture_sort_comparator);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, draw_it * sizeof(quadInstanceWeb), drawQueue);
+	}
+
+	void Renderer2d_Web::submit(Camera2d& cam, C_RenderTexture* rendTex) {
+		stats.last_draw_count = draw_it;
+
 		glBindVertexArray(vao_id);
 
 		Camera2d& tmp_cam = cam;

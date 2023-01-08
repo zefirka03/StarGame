@@ -129,8 +129,7 @@ namespace air {
 
 
 	void _System_Physics::update(float _deltaTime)  {
-
-		h_world->Step(_deltaTime, 4, 4);
+		h_world->Step(_deltaTime, 8, 8);
 
 		reg->view<C_RigidBody>().each([&](C_RigidBody& rigid) {
 			if (rigid._gameObject.hasComponent<_C_Destroyed>() && rigid.h_body != nullptr) {
@@ -146,7 +145,7 @@ namespace air {
 
 				const auto& n_pos = rigid.h_body->GetPosition();
 
-				tr.transform.position = { n_pos.x, n_pos.y, 0 };
+				tr.transform.position = { n_pos.x, n_pos.y, tr.transform.position.z };
 				tr.transform.rotation = -rigid.h_body->GetAngle();
 
 				//if (rigid.isSensor) {

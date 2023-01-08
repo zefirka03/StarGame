@@ -29,13 +29,14 @@ namespace air {
 		void submit(Camera2d& cam, C_RenderTexture* rendTex = nullptr) override;
 		void clear() override;
 
+		void prepare() override;
 		~Renderer2d_Web();
 	private:
 		static bool texture_sort_comparator(quadInstanceWeb const& a, quadInstanceWeb const& b) {
 			if (a.verts[0].layer == b.verts[0].layer) {
-				if (a.verts[0].position.z == b.verts[0].position.z)
-					return a.verts[0].tex < b.verts[0].tex;
-				else return a.verts[0].position.z < b.verts[0].position.z;
+				if(a.verts[0].tex == b.verts[0].tex)
+					return a.verts[0].position.z < b.verts[0].position.z;
+				else return a.verts[0].tex < b.verts[0].tex;
 			}
 			else return a.verts[0].layer > b.verts[0].layer;
 		}

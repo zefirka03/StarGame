@@ -9,8 +9,8 @@ void S_PlayerController::OnCreate() {
 
 	getEntity().getComponent<C_Tag>().tag = "Player";
 
-	*sp = C_Sprite(glm::vec4(1, 1, 1, 1), glm::vec4(0, 0, 5.f / 17.f, 1), TM.getTexture("2"));;
-	tr->transform = Transform2d(glm::vec3(250, 1500*16, 1), glm::vec2(14, 30), 0, glm::vec2(7.f, 15.f));
+	*sp = C_Sprite(glm::vec4(1, 1, 1, 1), glm::vec4(0, 0, 5.f / 17.f, 1), TM.getTexture("2"));
+	tr->transform = Transform2d(glm::vec3(250, 1500*16, -100), glm::vec2(14, 30), 0, glm::vec2(7.f, 15.f));
 	rg->Type = C_RigidBody::type::Dynamic;
 	rg->setFixedRotation(true);
 	rg->setGravityScale(40);

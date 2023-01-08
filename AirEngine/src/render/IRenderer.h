@@ -31,6 +31,8 @@ namespace air {
 		virtual void submit(Camera2d& cam, C_RenderTexture* rendTex = nullptr) = 0;
 		virtual void clear() = 0;
 
+		virtual void prepare() = 0;
+
 		RenderStats getStats() {
 			return stats;
 		}
